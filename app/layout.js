@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import { Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "./_Components/clientSide/Header";
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
