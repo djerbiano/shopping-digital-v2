@@ -39,22 +39,7 @@ img {
   max-width: 100%;
   height: auto;
 }
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 10vh;
-  background-color: var(--color-secondary);
-  color: var(--color-tertiary);
-  padding: 0px 20px;
-  z-index: 1000;
-}
-
-header h1 {
-  font-size: 24px;
-}
-
-header span {
-  color: var(--color-primary);
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }

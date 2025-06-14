@@ -7,27 +7,127 @@
   flex-direction: column;
   gap: 10px;
 }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 10vh;
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+  padding: 0px 20px;
+  z-index: 1000;
+  border-radius: 0 0 10px 10px;
+}
+.header span {
+  color: var(--color-primary);
+}
+.burgerButton {
+  display: none;
+}
+.iconHeader h1 {
+  font-size: 24px;
+}
+.navHeader {
+  width: 70%;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
 .inputSearchBarContainer {
-  width: 30vw;
+  min-width: 30vw;
+  height: 40px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-tertiary);
+  gap: 8px;
+  padding: 0 8px;
+}
+.searchIconWrapper {
+  font-size: 40px;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-foreground);
 }
 .inputSearchBarContainer label {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-secondary);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
 }
+
 .inputSearchBarContainer input {
   width: 100%;
+  height: 100%;
   border: none;
   outline: none;
   font-size: 20px;
   padding: 0 10px;
+  border-radius: 10px;
+}
+.linkIconHeader {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.linkIconHeader button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 25px;
+  color: var(--color-tertiary);
+}
+.linkIconHeader svg {
+  transition: all 0.3s ease-in-out;
+}
+.linkIconHeader svg:hover {
+  color: var(--color-primary);
+  transform: scale(1.2);
+}
+
+@media (max-width: 767.98px) {
+  .iconHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .iconHeader h1 {
+    width: max-content;
+    font-size: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 20px;
+  }
+  .burgerButton {
+    display: block;
+    font-size: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-tertiary);
+    display: inline-flex;
+    align-items: center;
+  }
+  .burgerButton svg {
+    transition: all 0.3s ease-in-out;
+  }
+  .burgerButton svg:hover {
+    color: var(--color-primary);
+    transform: scale(1.2);
+  }
+  .navHeader {
+    display: none;
+  }
 }
