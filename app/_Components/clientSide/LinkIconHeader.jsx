@@ -1,22 +1,33 @@
+"use client";
 import styles from "../../page.module.css";
 import { MdHeadsetMic } from "react-icons/md";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import { MdFavorite } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
+import { useContext } from "react";
+import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
+
 export default function LinkIconHeader() {
+  const { isMenuOpen, setIsMenuOpen, isDesktop } = useContext(MenuHamburgerContext);
+
+  if (!isDesktop && !isMenuOpen) return null;
+
+  const handleMenuClick = () => {
+    setIsMenuOpen(false);
+  };
   return (
     <div className={styles.linkIconHeader}>
-      <button type="button" aria-label="Contactez-nous">
-        <MdHeadsetMic  aria-hidden="true"/>
+      <button type="button" aria-label="Contactez-nous" onClick={handleMenuClick}>
+        <MdHeadsetMic aria-hidden="true" />
       </button>
 
-      <button type="button" aria-label="Panier">
+      <button type="button" aria-label="Panier" onClick={handleMenuClick}>
         <BsFillCartCheckFill aria-hidden="true" />
       </button>
-      <button type="button" aria-label="Favoris">
+      <button type="button" aria-label="Favoris" onClick={handleMenuClick}>
         <MdFavorite aria-hidden="true" />
       </button>
-      <button type="button" aria-label="Mon compte">
+      <button type="button" aria-label="Mon compte" onClick={handleMenuClick}>
         <FaUserAlt aria-hidden="true" />
       </button>
     </div>
