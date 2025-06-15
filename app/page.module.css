@@ -26,6 +26,9 @@
 .iconHeader h1 {
   font-size: 24px;
 }
+.textHiddenBeforeAnim {
+  opacity: 0;
+}
 .navHeader {
   width: 70%;
   padding: 0 10px;
@@ -73,6 +76,7 @@
   font-size: 20px;
   padding: 0 10px;
   border-radius: 10px;
+  background-color: var(--color-tertiary);
 }
 .linkIconHeader {
   display: flex;
