@@ -62,7 +62,7 @@ export default function NavBar() {
       <InputSearchBar />
       {isMenuOpen && (
         <div className={styles.navLinksMobile}>
-          {["Accueil", "Produits", "Femme", "Homme", "Informatique", "TV - Audio - Video", "Smartphones"].map(
+          {["Accueil", "Femme", "Homme", "Informatique", "TV - Audio - Video", "Smartphones"].map(
             (label) => (
               <button key={label} type="button" aria-label={label} onClick={handleMenuClick} ref={addToRefs}>
                 {label}
