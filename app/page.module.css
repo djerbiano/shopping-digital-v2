@@ -115,7 +115,7 @@
 }
 .asideBar button {
   width: max-content;
-
+  color: var(--color-foreground);
   text-align: left;
   background: none;
   border: none;

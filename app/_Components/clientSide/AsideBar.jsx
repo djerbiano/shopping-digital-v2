@@ -1,5 +1,3 @@
-
-
 "use client";
 import styles from "../../page.module.css";
 import { GiClothes } from "react-icons/gi";
@@ -8,11 +6,11 @@ import { MdOutlinePersonalVideo } from "react-icons/md";
 import { GiVibratingSmartphone } from "react-icons/gi";
 import { useContext } from "react";
 import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
-export default function AsideBar() {
+export default function AsideBar({asideRef}) {
   const { isDesktop } = useContext(MenuHamburgerContext);
 
   return (
-    <aside className={styles.asideBar}>
+    <aside className={styles.asideBar} ref={asideRef}>
       <button type="button" aria-label="Femme" aria-hidden={!isDesktop}>
         <GiClothes /> Femme
       </button>
