@@ -13,6 +13,7 @@ export default function HeroSection() {
   const asideRef = useRef();
   const bannerRef = useRef();
   useGSAP(() => {
+    document.fonts.ready.then(() => {
     if (container.current) {
       gsap.set(container.current, { opacity: 0 });
 
@@ -58,6 +59,7 @@ export default function HeroSection() {
         "-=0.5"
       );
     }
+    });
   });
 
   return (
