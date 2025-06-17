@@ -54,9 +54,8 @@ export default function NavBar() {
 
   return (
     <nav
-      role="navigation"
+    className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
       aria-label="Navigation principale"
-      className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
       ref={container}
     >
       <InputSearchBar />

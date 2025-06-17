@@ -1,4 +1,3 @@
-
 "use client";
 import styles from "../../page.module.css";
 import { MdHeadsetMic } from "react-icons/md";
@@ -18,19 +17,18 @@ export default function LinkIconHeader({ icons }) {
   return (
     <div className={styles.linkIconHeader} ref={icons}>
       <button type="button" aria-label="Contactez-nous" onClick={handleMenuClick}>
-        <MdHeadsetMic aria-hidden="true" />
+        <MdHeadsetMic aria-hidden="true" focusable="false" />
       </button>
 
       <button type="button" aria-label="Panier" onClick={handleMenuClick}>
-        <BsFillCartCheckFill aria-hidden="true" />
+        <BsFillCartCheckFill aria-hidden="true" focusable="false" />
       </button>
       <button type="button" aria-label="Favoris" onClick={handleMenuClick}>
-        <MdFavorite aria-hidden="true" />
+        <MdFavorite aria-hidden="true" focusable="false" />
       </button>
       <button type="button" aria-label="Mon compte" onClick={handleMenuClick}>
-        <FaUserAlt aria-hidden="true" />
+        <FaUserAlt aria-hidden="true" focusable="false" />
       </button>
     </div>
   );
 }
-

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Banner({ title, subtitle, buttonLabel, onClick, imageName, imageAlt, bannerRef }) {
   return (
-    <section className={styles.banner} role="region" aria-label={`${title} - ${subtitle}`} ref={bannerRef}>
+    <section className={styles.banner} aria-label={`${title} - ${subtitle}`} ref={bannerRef}>
       <div className={styles.imageWrapper}>
         <Image
           src={`/${imageName}`}

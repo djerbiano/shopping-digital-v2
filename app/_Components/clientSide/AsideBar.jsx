@@ -6,25 +6,25 @@ import { MdOutlinePersonalVideo } from "react-icons/md";
 import { GiVibratingSmartphone } from "react-icons/gi";
 import { useContext } from "react";
 import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
-export default function AsideBar({asideRef}) {
+export default function AsideBar({ asideRef }) {
   const { isDesktop } = useContext(MenuHamburgerContext);
 
   return (
-    <aside className={styles.asideBar} ref={asideRef}>
-      <button type="button" aria-label="Femme" aria-hidden={!isDesktop}>
-        <GiClothes /> Femme
+    <aside className={styles.asideBar} aria-label="Catégories de produits" ref={asideRef}>
+      <button type="button" aria-hidden={!isDesktop}>
+        <GiClothes aria-hidden="true" focusable="false" /> Femme
       </button>
-      <button type="button" aria-label="Homme" aria-hidden={!isDesktop}>
-        <GiClothes /> Homme
+      <button type="button" aria-hidden={!isDesktop}>
+        <GiClothes aria-hidden="true" focusable="false" /> Homme
       </button>
-      <button type="button" aria-label="Informatique" aria-hidden={!isDesktop}>
-        <FaComputer /> Informatique
+      <button type="button" aria-hidden={!isDesktop}>
+        <FaComputer aria-hidden="true" focusable="false" /> Informatique
       </button>
-      <button type="button" aria-label="TV - Audio - Video" aria-hidden={!isDesktop}>
-        <MdOutlinePersonalVideo /> TV - Audio - Video
+      <button type="button" aria-hidden={!isDesktop}>
+        <MdOutlinePersonalVideo aria-hidden="true" focusable="false" /> TV - Audio - Video
       </button>
-      <button type="button" aria-label="Smartphones" aria-hidden={!isDesktop}>
-        <GiVibratingSmartphone /> Smartphones
+      <button type="button" aria-hidden={!isDesktop}>
+        <GiVibratingSmartphone aria-hidden="true" focusable="false" /> Smartphones
       </button>
     </aside>
   );

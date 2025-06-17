@@ -40,9 +40,8 @@ export default function Header() {
   });
   return (
     <header
-      role="banner"
+    className={`${styles.header} ${!animStarted ? styles.textHiddenBeforeAnim : ""}`}
       aria-label="En-tête principal du site"
-      className={`${styles.header} ${!animStarted ? styles.textHiddenBeforeAnim : ""}`}
       ref={container}
     >
       <div className={styles.iconHeader}>
