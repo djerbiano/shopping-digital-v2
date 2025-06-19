@@ -45,7 +45,7 @@ export default function ProductCard({ title, price, imageUrl, status }) {
       {status && <span className={`${styles.statusBadge} ${getStatusStyle()}`}>{status.toUpperCase()}</span>}
 
       <div className={styles.imageContainer}>
-        <Image src={imageUrl} width={200} height={200} alt={title} className={styles.productImage} loading="lazy" />
+        <Image src={imageUrl} width={400} height={400} alt={title} className={styles.productImage} loading="lazy" />
       </div>
 
       <div className={styles.productInfo}>

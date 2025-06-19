@@ -10,7 +10,23 @@
   padding: 0;
   margin: 0;
 }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
 
+::-webkit-scrollbar-thumb {
+  background: #bdc0c3;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6e7072;
+}
+html {
+  scroll-behavior: smooth;
+}
 html,
 body {
   max-width: 100vw;

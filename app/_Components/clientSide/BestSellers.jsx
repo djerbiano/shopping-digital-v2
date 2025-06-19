@@ -19,7 +19,7 @@ export default function BestSellers() {
         </div>
       </div>
 
-      <div className={styles.productsContainer}>
+      <div className={styles.productsContainerBestSellers}>
         <ProductCard title="Product 1" price="19.99" imageUrl="/nouvelle-collection.webp" status="limited" />
       </div>
     </section>

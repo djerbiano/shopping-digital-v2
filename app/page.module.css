@@ -211,18 +211,24 @@
   margin: 30px 50px;
   display: flex;
   justify-content: space-between;
+  gap: 20px;
   border-radius: 10px;
   padding: 10px;
 }
-/* Best Sellers Section */
-
+/* Best Sellers & New Collection Section */
 .bestSellersSection {
+  background: linear-gradient(to right, rgb(255, 170, 85), rgb(251, 210, 199));
+}
+.newCollectionSection {
+  background: linear-gradient(to right, #fbd2c7, #b1b3b8ab);
+}
+.bestSellersSection,
+.newCollectionSection {
   width: calc(100% / 4);
   min-width: 220px;
   padding: 10px 0;
   position: relative;
   border-radius: 10px;
-  background: linear-gradient(to right, rgb(255, 170, 85), rgb(251, 210, 199));
 }
 .bestSellersSection::before {
   content: "";
@@ -241,10 +247,9 @@
   margin-bottom: 16px;
   padding: 0 16px;
 }
-/* 
 .sectionTitle {
-} */
-
+  font-size: 18px;
+}
 .navigationControls {
   display: flex;
   gap: 10px;
@@ -260,20 +265,29 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .navButton:hover,
 .navButton:focus {
   background-color: var(--color-secondary);
-  color: var(--color-primary);
-  outline: 2px solid var(--color-foreground);
+  color: var(--color-tertiary);
 }
-
-.productsContainer {
+.newCollectionSection {
+  width: calc((100% / 4) * 3);
+}
+.productsContainerBestSellers,
+.productsContainerNewCollection {
   padding: 0 15px;
 }
+.productsContainerNewCollection {
+  display: flex;
+  gap: 25px;
+}
 
+.productsContainerNewCollection > .productCard {
+  width: calc(100% / 3);
+}
 /* Product Card */
 .productCard {
   position: relative;
@@ -299,6 +313,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+
   transition: transform 0.3s ease;
 }
 
@@ -308,13 +324,13 @@
 
 .statusBadge {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 3%;
+  right: 3%;
+  transform: rotate(15deg);
   padding: 4px 8px;
   font-size: 12px;
   font-weight: bold;
   border-radius: 12px;
-  color: white;
   z-index: 1;
 }
 
@@ -419,6 +435,15 @@
   width: 16px;
   height: 16px;
 }
+
+@media (max-width: 1024px) {
+  .newCollectionSection {
+    width: 100%;
+  }
+  .bestSellersSection {
+    display: none;
+  }
+}
 @media (max-width: 767.98px) {
   .iconHeader {
     width: 100%;
@@ -517,5 +542,21 @@
   }
   .bannerContent {
     margin: auto;
+  }
+  .newAndBestsellersSection {
+    margin: 10px;
+  }
+  .productsContainerNewCollection {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+  }
+  .productsContainerNewCollection > .productCard {
+    min-width: calc((100% / 2) - 15px);
+  }
+}
+@media (max-width: 425px) {
+  .productsContainerNewCollection > .productCard {
+    min-width: 100%;
   }
 }
