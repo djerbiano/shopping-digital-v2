@@ -26,6 +26,7 @@
 }
 .iconHeader h1 {
   font-size: 24px;
+  cursor: pointer;
 }
 .textHiddenBeforeAnim {
   opacity: 0;
@@ -455,6 +456,7 @@
 .limitedEditionContainer > section {
   width: 100%;
 }
+/* Sale */
 .saleContainer {
   display: flex;
   gap: 20px;
@@ -463,7 +465,85 @@
 .saleContainer > article {
   width: 320px;
   min-width: 270px;
+}
 
+/* footer */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+  width: 100%;
+  min-height: 100px;
+  margin: 0;
+}
+.footerLinks {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+/* mentions legales */
+.mentions {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px 20px;
+  background-color: var(--color-tertiary);
+  color: var(--color-foreground);
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 28px;
+}
+
+.mentions h1 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.mentions section {
+  margin-bottom: 30px;
+}
+
+.mentions h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: var(--color-secondary);
+}
+
+.mentions p {
+  font-size: 16px;
+  margin: 0;
+  color: var(--color-foreground);
+}
+.mentions ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.mentions li {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--color-foreground);
+  list-style: disc;
+}
+
+.mentions a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.mentions a:hover {
+  color: var(--color-secondary);
 }
 @media (max-width: 1024px) {
   .heroSection {
@@ -592,9 +672,41 @@
   .productShowcaseContent > .productCard {
     min-width: calc((100% / 2) - 15px);
   }
+
+  .mentions {
+    padding: 30px 15px;
+  }
+
+  .mentions h1 {
+    font-size: 26px;
+  }
+
+  .mentions h2 {
+    font-size: 18px;
+  }
+
+  .mentions p {
+    font-size: 15px;
+    line-height: 24px;
+  }
 }
 @media (max-width: 425px) {
   .productShowcaseContent > .productCard {
     min-width: 100%;
+  }
+  .mentions {
+    padding: 20px 10px;
+  }
+
+  .mentions h1 {
+    font-size: 22px;
+  }
+
+  .mentions h2 {
+    font-size: 16px;
+  }
+
+  .mentions p {
+    font-size: 14px;
   }
 }

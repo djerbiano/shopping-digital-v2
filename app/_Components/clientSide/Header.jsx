@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(SplitText);
 
@@ -14,6 +15,7 @@ export default function Header() {
   const { isMenuOpen, setIsMenuOpen } = useContext(MenuHamburgerContext);
   const [animStarted, setAnimStarted] = useState(false);
   const container = useRef();
+  const router = useRouter();
   useGSAP(() => {
     if (container.current) {
       gsap.set(container.current, { opacity: 0 });
@@ -40,7 +42,7 @@ export default function Header() {
   });
   return (
     <header
-    className={`${styles.header} ${!animStarted ? styles.textHiddenBeforeAnim : ""}`}
+      className={`${styles.header} ${!animStarted ? styles.textHiddenBeforeAnim : ""}`}
       aria-label="En-tête principal du site"
       ref={container}
     >
@@ -53,7 +55,18 @@ export default function Header() {
         >
           <GiHamburgerMenu aria-hidden="true" />
         </button>
-        <h1 className={!animStarted ? styles.textHiddenBeforeAnim : ""}>
+        <h1
+          className={!animStarted ? styles.textHiddenBeforeAnim : ""}
+          onClick={() => router.push("/")}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              router.push("/");
+            }
+          }}
+          role="link"
+        >
           Shopping <span>Digital</span>
         </h1>
       </div>
