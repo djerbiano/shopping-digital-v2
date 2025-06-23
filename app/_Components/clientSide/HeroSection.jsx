@@ -8,6 +8,7 @@ import SplitText from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(SplitText);
 export default function HeroSection() {
+  
   const [animStarted, setAnimStarted] = useState(false);
   const container = useRef();
   const asideRef = useRef();

@@ -59,7 +59,7 @@
   cursor: pointer;
   color: var(--color-foreground);
 }
-.inputSearchBarContainer label {
+/* .inputSearchBarContainer label {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -68,7 +68,7 @@
   overflow: hidden;
   clip-path: inset(50%);
   border: 0;
-}
+} */
 
 .inputSearchBarContainer input {
   width: 100%;

@@ -2,6 +2,7 @@
 import styles from "../../page.module.css";
 import Banner from "./Banner";
 export default function PromotionalBanner({ title, subtitle, imageName, imageAlt }) {
+ 
   return (
     <div className={styles.promoBanner}>
       <Banner

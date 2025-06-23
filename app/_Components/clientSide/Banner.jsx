@@ -17,7 +17,7 @@ export default function Banner({ title, subtitle, buttonLabel, onClick, imageNam
       </div>
       <div className={styles.bannerContent}>
         <h2>{title}</h2>
-        <h3>{subtitle}</h3>
+        {subtitle.length > 0 && <h3>{subtitle}</h3>}
         <button type="button" onClick={onClick} aria-label={buttonLabel}>
           {buttonLabel}
         </button>

@@ -13,7 +13,7 @@ export default function InputSearchBar() {
   };
   return (
     <div className={styles.inputSearchBarContainer}>
-      <label htmlFor="search">Rechercher un produit</label>
+      <label htmlFor="search" className={styles.srOnly }>Rechercher un produit</label>
       <button onClick={handleIconClick} className={styles.searchIconWrapper} aria-label="Rechercher" type="button">
         <IoIosSearch aria-hidden="true" />
       </button>
