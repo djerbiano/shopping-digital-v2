@@ -78,7 +78,7 @@ export default function HeroSection() {
         subtitle="Découvrez notre toute nouvelle collection"
         buttonLabel="Achetez dès maintenant"
         imageName="nouvelle-collection.webp"
-        imageAlt="Homme habilé par une nouvelle collection"
+        imageAlt="Homme habilé avec la nouvelle collection"
         onClick={() => console.log("Bannière cliquée")}
       />
     </article>

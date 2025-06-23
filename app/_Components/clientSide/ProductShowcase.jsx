@@ -1,12 +1,12 @@
 import styles from "../../page.module.css";
 import ProductCard from "./ProductCard";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-export default function NewCollection() {
+export default function ProductShowcase({ ariaLabelledby, titleSection }) {
   return (
-    <section className={styles.newCollectionSection} aria-labelledby="nouvelle-collection">
+    <section className={styles.productShowcase} aria-labelledby={ariaLabelledby}>
       <div className={styles.sectionHeader}>
-        <h2 id="nouvelle-collection" className={styles.sectionTitle}>
-          Nouvelle Collection
+        <h2 id={ariaLabelledby} className={styles.sectionTitle}>
+          {titleSection}
         </h2>
         <div className={styles.navigationControls}>
           <button aria-label="Voir les produits précédents" className={styles.navButton}>
@@ -18,7 +18,7 @@ export default function NewCollection() {
         </div>
       </div>
 
-      <div className={styles.productsContainerNewCollection}>
+      <div className={styles.productShowcaseContent}>
         <ProductCard
           title="Product 1"
           price="29.99"

@@ -141,14 +141,15 @@
 .banner {
   position: relative;
   width: 70%;
-  height: 400px;
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
   border-radius: 10px;
   padding: 10px;
-  margin: 10px;
+  margin: 10px 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 .imageWrapper {
@@ -205,25 +206,29 @@
   white-space: nowrap;
   border: 0;
 }
-.newAndBestsellersSection {
+.newAndBestsellersSection,
+.promoBanner,
+.limitedEditionContainer,
+.saleContainer {
   background-color: rgb(255, 255, 255);
-  border-radius: 10px;
   margin: 30px 50px;
+  border-radius: 10px;
+  padding: 10px;
+}
+.newAndBestsellersSection {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  border-radius: 10px;
-  padding: 10px;
 }
 /* Best Sellers & New Collection Section */
 .bestSellersSection {
   background: linear-gradient(to right, rgb(255, 170, 85), rgb(251, 210, 199));
 }
-.newCollectionSection {
+.productShowcase {
   background: linear-gradient(to right, #fbd2c7, #b1b3b8ab);
 }
 .bestSellersSection,
-.newCollectionSection {
+.productShowcase {
   width: calc(100% / 4);
   min-width: 220px;
   padding: 10px 0;
@@ -273,19 +278,19 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
-.newCollectionSection {
+.productShowcase {
   width: calc((100% / 4) * 3);
 }
 .productsContainerBestSellers,
-.productsContainerNewCollection {
+.productShowcaseContent {
   padding: 0 15px;
 }
-.productsContainerNewCollection {
+.productShowcaseContent {
   display: flex;
   gap: 25px;
 }
 
-.productsContainerNewCollection > .productCard {
+.productShowcaseContent > .productCard {
   width: calc(100% / 3);
 }
 /* Product Card */
@@ -435,13 +440,50 @@
   width: 16px;
   height: 16px;
 }
+/* PromotionalBanner */
+.promoBanner > section {
+  width: 100%;
+  min-height: 85vh;
+  margin: 0;
+}
+.promoBanner > section > .bannerContent > h2 {
+  color: var(--color-tertiary);
+  font-weight: 400;
+}
 
+/* Limited Edition */
+.limitedEditionContainer > section {
+  width: 100%;
+}
+.saleContainer {
+  display: flex;
+  gap: 20px;
+  overflow-x: scroll;
+}
+.saleContainer > article {
+  width: 320px;
+  min-width: 270px;
+
+}
 @media (max-width: 1024px) {
-  .newCollectionSection {
+  .heroSection {
+    padding: 10px;
+  }
+  .heroSection,
+  .newAndBestsellersSection,
+  .promoBanner,
+  .limitedEditionContainer,
+  .saleContainer {
+    margin: 10px;
+  }
+  .productShowcase {
     width: 100%;
   }
   .bestSellersSection {
     display: none;
+  }
+  .promoBanner > section .bannerImage {
+    object-position: 70% 50%;
   }
 }
 @media (max-width: 767.98px) {
@@ -534,29 +576,25 @@
   .asideBar {
     display: none;
   }
-  .heroSection {
-    padding: 10px;
-  }
+
   .banner {
     width: 100%;
   }
   .bannerContent {
     margin: auto;
   }
-  .newAndBestsellersSection {
-    margin: 10px;
-  }
-  .productsContainerNewCollection {
+
+  .productShowcaseContent {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: hidden;
   }
-  .productsContainerNewCollection > .productCard {
+  .productShowcaseContent > .productCard {
     min-width: calc((100% / 2) - 15px);
   }
 }
 @media (max-width: 425px) {
-  .productsContainerNewCollection > .productCard {
+  .productShowcaseContent > .productCard {
     min-width: 100%;
   }
 }

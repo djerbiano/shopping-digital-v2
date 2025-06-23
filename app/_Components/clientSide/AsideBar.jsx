@@ -10,7 +10,7 @@ export default function AsideBar({ asideRef }) {
   const { isDesktop } = useContext(MenuHamburgerContext);
 
   return (
-    <aside className={styles.asideBar} aria-label="Catégories de produits" ref={asideRef}>
+    <aside className={styles.asideBar} aria-label="Catégories de produits" ref={asideRef}>
       <button type="button" aria-hidden={!isDesktop}>
         <GiClothes aria-hidden="true" focusable="false" /> Femme
       </button>

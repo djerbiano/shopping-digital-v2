@@ -1,6 +1,6 @@
 import styles from "../../page.module.css";
 import BestSellers from "./BestSellers";
-import NewCollection from "./NewCollection";
+import ProductShowcase from "./ProductShowcase";
 
 export default function NewAndBestsellers() {
   return (
@@ -9,7 +9,7 @@ export default function NewAndBestsellers() {
         Nouveautés et Best-Sellers
       </h2>
       <BestSellers />
-      <NewCollection />
+      <ProductShowcase ariaLabelledby="nouvelle-collection-section" titleSection="Nouvelle Collection" />
     </article>
   );
 }
