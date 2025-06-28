@@ -65,8 +65,6 @@ export default function Header() {
               router.push("/");
             }
           }}
-          role="button"
-          aria-label="Retour à la page d'accueil"
         >
           Shopping <span>Digital</span>
         </h1>

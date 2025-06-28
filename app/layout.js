@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "./_Components/clientSide/Header";
 import Footer from "./_Components/clientSide/Footer";
 import { MenuHamburgerContextProvider } from "./context/menuHamburgerContext";
+import {FilterProductsContextProvider} from "./context/filterProductsContext";
 
 const schibsted = Schibsted_Grotesk({ subsets: ["latin"], weight: ["400"] });
 export const metadata = {
@@ -29,7 +30,9 @@ export default function RootLayout({ children }) {
       <body className={schibsted.className}>
         <MenuHamburgerContextProvider>
         <Header />
+        <FilterProductsContextProvider>
         {children}
+        </FilterProductsContextProvider>
         </MenuHamburgerContextProvider>
         <Footer />
         <Analytics />

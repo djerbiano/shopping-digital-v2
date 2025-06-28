@@ -1,0 +1,51 @@
+"use client";
+import styles from "../page.module.css";
+import { useContext } from "react";
+import { FilterProductsContext } from "../context/filterProductsContext";
+import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
+
+export default function Produits() {
+  const { categories, setCategories } = useContext(FilterProductsContext);
+  const handleCategoryChange = (category) => {
+    setCategories((prevCategories) => ({
+      ...prevCategories,
+      [category]: !prevCategories[category],
+    }));
+  };
+  const categoryList = [
+    { key: "Femme", label: "Femme" },
+    { key: "Homme", label: "Homme" },
+    { key: "Informatique", label: "Informatique" },
+    { key: "TvSon", label: "TV - Audio - Video" },
+    { key: "Téléphonie", label: "Smartphones" },
+  ];
+  return (
+    <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
+      <h1>Tous les produits</h1>
+      <div className={styles.productsFilterContent}>
+        <aside aria-label="Filtres de produits">
+          <fieldset>
+            <legend>Catégories</legend>
+            {categoryList.map(({ key, label }) => (
+              <label key={key}>
+                <input type="checkbox" checked={categories[key]} onChange={() => handleCategoryChange(key)} />
+                {label}
+              </label>
+            ))}
+          </fieldset>
+          <fieldset>
+            <legend>Prix</legend>
+
+            <label>
+              <input type="number" placeholder="Min" min={0} />
+            </label>
+            <label>
+              <input type="number" placeholder="Max" min={0} />
+            </label>
+          </fieldset>
+        </aside>
+        <DisplayAllProducts />
+      </div>
+    </section>
+  );
+}
