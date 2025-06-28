@@ -5,11 +5,11 @@ export const FilterProductsContext = createContext();
 
 export const FilterProductsContextProvider = ({ children }) => {
   const [categories, setCategories] = useState({
-    Homme: true,
-    Femme: true,
-    Informatique: true,
-    TvSon: true,
-    Téléphonie: true,
+    Homme: false,
+    Femme: false,
+    Informatique: false,
+    TvSon: false,
+    Téléphonie: false,
   });
   return (
     <FilterProductsContext.Provider value={{ categories, setCategories }}>{children}</FilterProductsContext.Provider>

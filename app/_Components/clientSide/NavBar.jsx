@@ -1,21 +1,56 @@
+"use client";
 import styles from "../../page.module.css";
 import InputSearchBar from "./InputSearchBar";
 import LinkIconHeader from "./LinkIconHeader";
 import { useContext, useRef } from "react";
 import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
+import { FilterProductsContext } from "../../context/filterProductsContext";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 export default function NavBar() {
+  const router = useRouter();
   const { isMenuOpen, setIsMenuOpen, isDesktop } = useContext(MenuHamburgerContext);
+  const { setCategories } = useContext(FilterProductsContext);
   const container = useRef(null);
   const buttonsRef = useRef([]);
   const icons = useRef(null);
   buttonsRef.current = [];
+
+  const navItems = [
+    { label: "Accueil", category: null },
+    { label: "Femme", category: { Femme: true } },
+    { label: "Homme", category: { Homme: true } },
+    { label: "Informatique", category: { Informatique: true } },
+    { label: "TV - Audio - Video", category: { TvSon: true } },
+    { label: "Smartphones", category: { Téléphonie: true } },
+  ];
+
   const addToRefs = (el) => {
     if (el && !buttonsRef.current.includes(el)) {
       buttonsRef.current.push(el);
     }
   };
+
+  /*handle nav click */
+  const resetCategories = {
+    Homme: false,
+    Femme: false,
+    Informatique: false,
+    TvSon: false,
+    Téléphonie: false,
+  };
+  const handleNavClick = (category) => {
+    setIsMenuOpen(false);
+
+    setCategories({
+      ...resetCategories,
+      ...(category || {}),
+    });
+
+    router.push(category ? "/produits" : "/");
+  };
+  /* GSAP animation */
   useGSAP(() => {
     const tl = gsap.timeline();
     // nav container animation
@@ -46,28 +81,28 @@ export default function NavBar() {
         "-=0.8"
       );
     }
-  }, [isDesktop, isMenuOpen]);
-
-  const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  }, [isMenuOpen]);
 
   return (
     <nav
-    className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
+      className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
       aria-label="Navigation principale"
       ref={container}
     >
       <InputSearchBar />
       {isMenuOpen && (
         <div className={styles.navLinksMobile}>
-          {["Accueil", "Femme", "Homme", "Informatique", "TV - Audio - Video", "Smartphones"].map(
-            (label) => (
-              <button key={label} type="button" aria-label={label} onClick={handleMenuClick} ref={addToRefs}>
-                {label}
-              </button>
-            )
-          )}
+          {navItems.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              aria-label={item.label}
+              onClick={() => handleNavClick(item.category)}
+              ref={addToRefs}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
       )}
       <LinkIconHeader icons={icons} />

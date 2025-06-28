@@ -21,11 +21,11 @@ export default function Produits() {
   ];
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
-      <h1>Tous les produits</h1>
+      <h1 id="tous-les-produits">Tous les produits</h1>
       <div className={styles.productsFilterContent}>
         <aside aria-label="Filtres de produits">
           <fieldset>
-            <legend>Catégories</legend>
+            <legend>Catégories :</legend>
             {categoryList.map(({ key, label }) => (
               <label key={key}>
                 <input type="checkbox" checked={categories[key]} onChange={() => handleCategoryChange(key)} />
@@ -34,7 +34,7 @@ export default function Produits() {
             ))}
           </fieldset>
           <fieldset>
-            <legend>Prix</legend>
+            <legend>Prix :</legend>
 
             <label>
               <input type="number" placeholder="Min" min={0} />
