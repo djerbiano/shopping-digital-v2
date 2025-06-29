@@ -8,8 +8,10 @@ function Collapse({ title, data }) {
   const [collapseIcone, setCollapseIcone] = useState(false);
   return (
     <div className={styles.collapse}>
-      <div
+      <button
         className={styles.summary}
+        aria-expanded={isOpen}
+        aria-controls="collapse-content"
         onClick={() => {
           setCollapseIcone(!collapseIcone);
           setIsOpen(!isOpen);
@@ -17,9 +19,9 @@ function Collapse({ title, data }) {
       >
         {title}
         <span>{collapseIcone ? <FaChevronDown /> : <FaChevronUp />}</span>
-      </div>
+      </button>
 
-      <div className={`${styles.contentWrapper} ${isOpen ? styles.open : ""}`}>
+      <div id="collapse-content" aria-hidden={!isOpen}  className={`${styles.contentWrapper} ${isOpen ? styles.open : ""}`}>
         <div className={styles.content}>
           <div>{data && Object.values(data).map((value, index) => <p key={index}>{value}</p>)}</div>
         </div>
