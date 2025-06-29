@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaHeart, FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import styles from "../../page.module.css";
 import Image from "next/image";
 
 export default function ProductCard({ title, price, imageUrl, status }) {
+  const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -41,6 +43,7 @@ export default function ProductCard({ title, price, imageUrl, status }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       tabIndex={0}
+      onClick={() => router.push(`/produits/${status}`)}
     >
       {status && <span className={`${styles.statusBadge} ${getStatusStyle()}`}>{status.toUpperCase()}</span>}
 

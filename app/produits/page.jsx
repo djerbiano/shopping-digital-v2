@@ -21,7 +21,7 @@ export default function Produits() {
   ];
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
-      <h1 id="tous-les-produits">Tous les produits</h1>
+      <h2 id="tous-les-produits">Tous les produits</h2>
       <div className={styles.productsFilterContent}>
         <aside aria-label="Filtres de produits">
           <fieldset>
