@@ -37,10 +37,10 @@ export default function Produits() {
             <legend>Prix :</legend>
 
             <label>
-              <input type="number" placeholder="Min" min={0} />
+              Min :<input type="number" placeholder="0" min={0} />
             </label>
             <label>
-              <input type="number" placeholder="Max" min={0} />
+              Max :<input type="number" placeholder="0" min={0} />
             </label>
           </fieldset>
         </aside>
