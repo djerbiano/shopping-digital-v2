@@ -707,6 +707,67 @@
 .content p {
   margin-bottom: 10px;
 }
+/*contact page*/
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  min-height: calc(100vh - (10vh + 100px));
+  position: relative;
+  z-index: 10;
+  color: var(--color-tertiary);
+}
+.contactImageContainer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.contactImageContainer .contactImage {
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.5) contrast(1.2) saturate(1.2);
+}
+.contact form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  transition: none;
+}
+.contact form label {
+  font-size: 18px;
+  font-weight: bold;
+}
+.contact form input,
+.contact form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 18px;
+}
+.contact form textarea {
+  resize: none;
+}
+.contact form button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-foreground);
+  background-color: var(--color-primary);
+  transition: background-color 0.3s ease;
+}
+.contact form button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+}
 /* footer */
 .footer {
   display: flex;
@@ -1006,6 +1067,21 @@
   .productDetails .price {
     display: flex;
     gap: 10px;
+  }
+
+  .contact h2 {
+    font-size: 20px;
+  }
+
+  .contact form label {
+    font-size: 16px;
+  }
+  .contact form input,
+  .contact form textarea {
+    font-size: 16px;
+  }
+  .contact form button {
+    font-size: 16px;
   }
 }
 
