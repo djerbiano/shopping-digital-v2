@@ -1,3 +1,9 @@
+"use client";
+import { useState } from "react";
+import MyAccount from "../_Components/clientSide/MyAccount";
+import Login from "../_Components/clientSide/Login";
+
 export default function MonCompte() {
-    return <div>Mon Compte</div>;
+  const [auth, setAuth] = useState(false);
+  return auth ? <MyAccount /> : <Login />;
 }

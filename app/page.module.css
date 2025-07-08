@@ -861,6 +861,69 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
+
+/*login page*/
+.login {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  min-height: calc(100vh - (10vh + 100px));
+}
+.loginContent {
+  min-width: 280px;
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-tertiary);
+  color: var(--color-foreground);
+}
+.loginContent fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: none;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
+
+.loginContent label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 16px;
+  color: var(--color-foreground);
+}
+
+.loginContent input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--color-foreground);
+  color: var(--color-foreground);
+  background-color: var(--color-tertiary);
+}
+.loginContent button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-foreground);
+  background-color: var(--color-primary);
+  transition: background-color 0.3s ease;
+}
+.loginContent button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+}
 /* footer */
 .footer {
   display: flex;
