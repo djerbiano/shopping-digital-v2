@@ -888,9 +888,9 @@
 .loginContent fieldset {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   border: none;
-  margin: 0 0 20px 0;
+  margin: 20px 0;
   padding: 0;
 }
 
@@ -923,6 +923,18 @@
 .loginContent button:hover {
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
+}
+.loginContent .error {
+  color: #a30000;
+}
+.forgotPassword {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.forgotPassword:hover {
+  color: var(--color-primary);
 }
 /* footer */
 .footer {
