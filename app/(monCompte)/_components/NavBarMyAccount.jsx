@@ -1,6 +1,5 @@
 "use client";
 import styles from "../myAccount.module.css";
-import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 export default function NavBarMyAccount() {
   const router = useRouter();

@@ -9,7 +9,9 @@
   white-space: nowrap;
   border: 0;
 }
-
+.error {
+  color: var(--color-red);
+}
 .myAccountContainer {
   width: 100%;
   display: flex;
@@ -77,10 +79,97 @@
 }
 /*end navBarMyAccount skeleton*/
 .myAccountContent {
+  position: relative;
   min-width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 20px;
+}
+.myAccountContent button {
+  min-width: max-content;
+  align-self: flex-end;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-foreground);
+  background-color: var(--color-primary);
+  transition: background-color 0.3s ease;
+}
+.myAccountContent button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+}
+.updateProfileContainer {
+  position: absolute;
+  overflow: scroll;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-tertiary);
+  color: var(--color-foreground);
+}
+.updateProfile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.updateProfile form {
+  width: 100%;
+  display: flex;
+
+  flex-direction: column;
+  gap: 10px;
+}
+
+.updateProfile form label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 16px;
+  color: var(--color-foreground);
+}
+
+.updateProfile form input {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--color-tertiary);
+  color: var(--color-foreground);
+}
+.updateProfile form .buttonContainer {
+  margin-top: 30px; ;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.updateProfile form button {
+  width: max-content;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  background-color: var(--color-green);
+  color: var(--color-tertiary);
+  transition: background-color 0.3s ease;
+}
+.updateProfile form button:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+}
+
+.updateProfile form .cancel {
+  width: max-content;
+  background-color: var(--color-red);
+  color: var(--color-tertiary);
 }
