@@ -15,7 +15,7 @@ export default function Login() {
           <input type="text" id="username" name="username" required />
           <label htmlFor="password">Mot de passe:</label>
           <input type="password" id="password" name="password" required />
-          <button type="submit" aria-label="Se connecter">
+          <button type="submit" aria-label="Se connecter" onClick={() => router.push("/mon-compte")}>
             Se connecter
           </button>
         </fieldset>

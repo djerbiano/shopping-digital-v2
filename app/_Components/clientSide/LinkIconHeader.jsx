@@ -56,7 +56,7 @@ export default function LinkIconHeader({ icons }) {
         aria-label="Mon compte"
         onClick={() => {
           handleMenuClick();
-          router.push("/mon-compte");
+          router.push("/connexion");
         }}
       >
         <FaUserAlt aria-hidden="true" focusable="false" />
