@@ -12,7 +12,7 @@
 .error {
   color: var(--color-red);
 }
-.myAccountContainer {
+.adminContainer {
   width: 100%;
   display: flex;
   padding: 20px;
@@ -20,8 +20,8 @@
   min-height: calc(100vh - (10vh + 100px));
   background-color: var(--color-tertiary);
 }
-.navBarMyAccount {
-  min-width: 25%;
+.navBarAdmin {
+  min-width: 10%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
-.navBarMyAccount button {
+.navBarAdmin button {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -40,53 +40,21 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
-.navBarMyAccount button:hover,
-.navBarMyAccount button.active {
+.navBarAdmin button:hover,
+.navBarAdmin button.active {
   background-color: var(--color-primary);
   color: var(--color-foreground);
 }
-/*start navBarMyAccount skeleton*/
-.skeletonButton {
-  width: 100%;
-  height: 45px;
-  border-radius: 8px;
-  background-color: #e4e4e4;
-  position: relative;
-  overflow: hidden;
-}
 
-.skeletonButton::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, #e4e4e4 0%, #f0f0f0 50%, #e4e4e4 100%);
-  animation: loading 1.2s infinite;
-}
-
-@keyframes loading {
-  0% {
-    left: -100%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-/*end navBarMyAccount skeleton*/
-.myAccountContent {
-  min-width: 70%;
+.adminContent {
+  min-width: 85%;
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 20px;
 }
-.myAccountContent button {
+.adminContent button {
   min-width: max-content;
   align-self: flex-end;
   padding: 10px 20px;
@@ -98,111 +66,79 @@
   background-color: var(--color-primary);
   transition: background-color 0.3s ease;
 }
-.myAccountContent button:hover {
+.adminContent button:hover {
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
-
-.updateProfile,
-.claimForm {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-}
-.updateProfile form,
-.claimForm {
+.dashboardBannersContainer {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+.banner {
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.bannerLogo1 {
+  width: 40px;
+  height: 40px;
+}
+.bannerLogo1 svg {
+  width: 100%;
+  height: 100%;
+}
+.banner .bannerLogo2 {
+  width: 40px;
+  height: 40px;
+}
+.banner .bannerLogo2 svg {
+  fill: var(--color-green);
+  margin-right: 5px;
+  animation: loading 2s ease infinite;
 }
 
-.updateProfile form label,
-.claimForm label {
+.banner .negativePercentage svg {
+  fill: var(--color-red);
+}
+@keyframes loading {
+  0% {
+    transform: translateY(0%);
+  }
+
+  50% {
+    transform: translateY(30%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
+}
+.bannerContent {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  font-size: 16px;
-  color: var(--color-foreground);
 }
-
-.updateProfile form input,
-.claimForm input {
-  padding: 10px;
-  border-radius: 8px;
-  background-color: var(--color-tertiary);
-  color: var(--color-foreground);
-}
-.updateProfile form .buttonContainer {
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-.updateProfile form button {
-  width: max-content;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-  font-size: 18px;
-  background-color: var(--color-green);
-  color: var(--color-tertiary);
-  transition: background-color 0.3s ease;
-}
-.updateProfile form button:hover {
-  background-color: var(--color-secondary);
-  color: var(--color-tertiary);
-}
-
-.updateProfile form .cancel {
-  width: max-content;
-  background-color: var(--color-red);
-  color: var(--color-tertiary);
-}
-.myAccountTable {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-}
-.myAccountTable th,
-.myAccountTable td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-.myAccountTable p {
-  margin-bottom: 10px;
-}
-.claimForm select {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-
-
-}
-.claimForm textarea {
-  padding: 10px;
-  border-radius: 8px;
-  resize: none;
-  background-color: var(--color-tertiary);
-  color: var(--color-foreground);
+.bannerContent .revenue {
+  font-weight: bold;
 }
 @media (max-width: 767.98px) {
-  .myAccountContainer {
+  .adminContainer {
     flex-direction: column;
   }
-  .navBarMyAccount {
+  .navBarAdmin {
     min-width: 100%;
   }
-  .myAccountContent {
+  .adminContent {
     min-width: 100%;
   }
-  .myAccountContent button {
+  .adminContent button {
     align-self: center;
   }
 }

@@ -5,7 +5,7 @@ export default function NavBarAdmin() {
   const router = useRouter();
   const pathname = usePathname();
   const buttons = [
-    { text: "Dashboard", path: "/admin/dashboard" },
+    { text: "Dashboard", path: "/admin" },
     { text: "Utilisateurs", path: "/admin/users" },
     { text: "Produits", path: "/admin/products" },
     { text: "Stock", path: "/admin/stock" },
