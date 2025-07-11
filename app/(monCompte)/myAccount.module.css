@@ -103,21 +103,23 @@
   color: var(--color-tertiary);
 }
 
-.updateProfile {
+.updateProfile,
+.claimForm {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
 }
-.updateProfile form {
+.updateProfile form,
+.claimForm {
   width: 100%;
   display: flex;
-
   flex-direction: column;
   gap: 10px;
 }
 
-.updateProfile form label {
+.updateProfile form label,
+.claimForm label {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -125,7 +127,8 @@
   color: var(--color-foreground);
 }
 
-.updateProfile form input {
+.updateProfile form input,
+.claimForm input {
   padding: 10px;
   border-radius: 8px;
   background-color: var(--color-tertiary);
@@ -174,7 +177,21 @@
 .myAccountTable p {
   margin-bottom: 10px;
 }
+.claimForm select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
 
+
+}
+.claimForm textarea {
+  padding: 10px;
+  border-radius: 8px;
+  resize: none;
+  background-color: var(--color-tertiary);
+  color: var(--color-foreground);
+}
 @media (max-width: 767.98px) {
   .myAccountContainer {
     flex-direction: column;
