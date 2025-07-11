@@ -8,6 +8,7 @@ export default function NavBarMyAccount() {
     { text: "Mon compte", path: "/mon-compte" },
     { text: "Mes commandes", path: "/mon-compte/commandes" },
     { text: "Réclamations", path: "/mon-compte/reclamations" },
+    { text: "Se déconnecter", path: "/" },
   ];
   return (
     <aside aria-label="Navigation de mon compte" className={styles.navBarMyAccount}>
