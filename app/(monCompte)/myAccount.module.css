@@ -21,7 +21,7 @@
   background-color: var(--color-tertiary);
 }
 .navBarMyAccount {
-  min-width: 20%;
+  min-width: 25%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -79,8 +79,7 @@
 }
 /*end navBarMyAccount skeleton*/
 .myAccountContent {
-  position: relative;
-  min-width: 75%;
+  min-width: 70%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -103,27 +102,12 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
-.updateProfileContainer {
-  position: absolute;
-  overflow: scroll;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+
+.updateProfile {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  background-color: var(--color-tertiary);
-  color: var(--color-foreground);
-}
-.updateProfile {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 .updateProfile form {
   width: 100%;
@@ -148,7 +132,7 @@
   color: var(--color-foreground);
 }
 .updateProfile form .buttonContainer {
-  margin-top: 30px; ;
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -158,6 +142,7 @@
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+  border: none;
   font-size: 18px;
   background-color: var(--color-green);
   color: var(--color-tertiary);
@@ -172,4 +157,35 @@
   width: max-content;
   background-color: var(--color-red);
   color: var(--color-tertiary);
+}
+.myAccountTable {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.myAccountTable th,
+.myAccountTable td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.myAccountTable p {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 767.98px) {
+  .myAccountContainer {
+    flex-direction: column;
+  }
+  .navBarMyAccount {
+    min-width: 100%;
+  }
+  .myAccountContent {
+    min-width: 100%;
+  }
+  .myAccountContent button {
+    align-self: center;
+  }
 }

@@ -32,7 +32,7 @@ export default function UpdateProfile({ setIsOpen }) {
   };
   return (
     <section className={styles.updateProfile} aria-labelledby="updateProfile">
-      <h2 id="updateProfile">Modifier mes informations</h2>
+      <h3 id="updateProfile">Modifier mes informations</h3>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email:</label>
