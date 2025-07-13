@@ -7,6 +7,7 @@ import { HiOutlineShoppingCart } from "react-icons/hi2";
 import { ImSad } from "react-icons/im";
 import Banner from "../_components/DashboardComponent/Banner";
 import Statistical from "../_components/DashboardComponent/Statistical";
+import LatestOrders from "../_components/DashboardComponent/LatestOrders";
 export default function MonCompte() {
   return (
     <section aria-labelledby="section-admin" className={styles.adminContent}>
@@ -45,6 +46,7 @@ export default function MonCompte() {
         />
       </div>
       <Statistical />
+      <LatestOrders />
     </section>
   );
 }
