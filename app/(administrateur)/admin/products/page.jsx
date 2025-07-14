@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "../../admin.module.css";
 import productsStyles from "../../_components/ProductsComponent/productsComponent.module.css";
 import { CiSettings } from "react-icons/ci";
+import { useRouter } from "next/navigation";
 
 const fakeProducts = [
   {
@@ -353,6 +354,7 @@ const fakeProducts = [
 ];
 
 export default function Products() {
+  const router = useRouter();
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState({
     isOnSale: false,
@@ -361,11 +363,11 @@ export default function Products() {
     isLimitedEdition: false,
   });
   const filterLabels = {
-  isOnSale: "En promotion",
-  isTopSeller: "Top ventes",
-  isNewCollection: "Nouvelle collection",
-  isLimitedEdition: "Édition limitée",
-};
+    isOnSale: "En promotion",
+    isTopSeller: "Top ventes",
+    isNewCollection: "Nouvelle collection",
+    isLimitedEdition: "Édition limitée",
+  };
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const filteredProducts = fakeProducts.filter(
@@ -384,6 +386,9 @@ export default function Products() {
     }));
   };
 
+  const handleProductClick = (id) => {
+    router.push(`/admin/products/${id}`);
+  };
   return (
     <section aria-labelledby="section-products" className={styles.adminContent}>
       <h3 id="section-products">Produits</h3>
@@ -395,6 +400,7 @@ export default function Products() {
       </div>
 
       <div className={productsStyles.filterRow}>
+        <label htmlFor="categoryFilter" className={styles.srOnly}>Filtrer par catégorie :</label>
         <select
           id="categoryFilter"
           name="category"
@@ -451,9 +457,14 @@ export default function Products() {
               <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
               <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
               <td data-label="Modifier">
-                <span className={productsStyles.viewButton}>
+                <button
+                  type="button"
+                  className={productsStyles.viewButton}
+                  title="Modifier le produit"
+                  onClick={() => handleProductClick(product._id)}
+                >
                   <CiSettings />
-                </span>
+                </button>
               </td>
             </tr>
           ))}
