@@ -1,0 +1,141 @@
+.actionsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rightActions button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-secondary);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rightActions button:hover {
+  background-color: #2563eb;
+}
+
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filterRow select,
+.filterRow button {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.filterDropdown {
+  position: relative;
+  z-index: 1;
+}
+.checkboxFilters {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: absolute;
+  top: 100%;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.checkboxFilters label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.productsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.productsTable th,
+.productsTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.productsTable td:last-child {
+  text-align: center;
+}
+.productsTable thead {
+  background-color: #f5f5f5;
+}
+.viewButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-secondary);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.viewButton:hover {
+  background-color: #2563eb;
+}
+
+@media (max-width: 1160px) {
+  .productsTable thead {
+    display: none;
+  }
+
+  .productsTable,
+  .productsTable tbody,
+  .productsTable tr,
+  .productsTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .productsTable tr {
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .productsTable td {
+    text-align: right;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .productsTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .productsTable td:last-child {
+    text-align: right;
+  }
+}
