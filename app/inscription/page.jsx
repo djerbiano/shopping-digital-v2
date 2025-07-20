@@ -35,22 +35,22 @@ export default function Inscription() {
       <h2 id="inscription">Inscription</h2>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">Email * :</label>
         <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
 
-        <label htmlFor="name">Nom:</label>
+        <label htmlFor="name">Nom * :</label>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
 
-        <label htmlFor="lastName">Prénom:</label>
+        <label htmlFor="lastName">Prénom * :</label>
         <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
 
-        <label htmlFor="phone">Num&eacute;ro de t&eacute;l&eacute;phone:</label>
+        <label htmlFor="phone">Num&eacute;ro de t&eacute;l&eacute;phone * :</label>
         <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
 
-        <label htmlFor="address">Adresse:</label>
+        <label htmlFor="address">Adresse * :</label>
         <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
 
-        <label htmlFor="password">Mot de passe:</label>
+        <label htmlFor="password">Mot de passe * :</label>
         <input
           type="password"
           id="password"
@@ -60,7 +60,7 @@ export default function Inscription() {
           required
         />
 
-        <label htmlFor="confirmationPassword">Confirmation du mot de passe:</label>
+        <label htmlFor="confirmationPassword">Confirmation du mot de passe * :</label>
         <input
           type="password"
           id="confirmationPassword"
@@ -69,6 +69,7 @@ export default function Inscription() {
           onChange={handleChange}
           required
         />
+        <p>* Champs obligatoires</p>
 
         <button type="submit" aria-label="S'inscrire">
           S'inscrire
