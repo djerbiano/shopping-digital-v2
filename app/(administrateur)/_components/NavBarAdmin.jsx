@@ -8,7 +8,6 @@ export default function NavBarAdmin() {
     { text: "Dashboard", path: "/admin" },
     { text: "Utilisateurs", path: "/admin/users" },
     { text: "Produits", path: "/admin/products" },
-    { text: "Stock", path: "/admin/stock" },
     { text: "Suivis", path: "/admin/trackings" },
     { text: "Commandes", path: "/admin/orders" },
     { text: "Réclamations", path: "/admin/claims" },

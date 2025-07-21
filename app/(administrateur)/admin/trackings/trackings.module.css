@@ -1,0 +1,100 @@
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.error {
+  color: var(--color-red);
+}
+.searchBar {
+  margin-bottom: 20px;
+}
+.searchBar input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.trackingsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.trackingsTable th,
+.trackingsTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.trackingsTable td:last-child {
+  text-align: center;
+}
+.trackingsTable thead {
+  background-color: #f5f5f5;
+}
+.trackingsTable td:last-child .viewButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-secondary);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.trackingsTable td:last-child .viewButton:hover {
+  background-color: #2563eb;
+}
+@media (max-width: 767.98px) {
+  .trackingsTable thead {
+    display: none;
+  }
+
+  .trackingsTable,
+  .trackingsTable tbody,
+  .trackingsTable tr,
+  .trackingsTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .trackingsTable tr {
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .trackingsTable td {
+    text-align: right;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .trackingsTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .trackingsTable td:last-child {
+    text-align: right;
+  }
+}

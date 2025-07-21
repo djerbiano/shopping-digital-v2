@@ -65,7 +65,7 @@ const fakeProducts = [
     isNewCollection: false,
     isLimitedEdition: false,
     category: "Informatique",
-    stock: true,
+    stock: false,
     colors: [
       {
         color: "black",
@@ -361,12 +361,14 @@ export default function Products() {
     isTopSeller: false,
     isNewCollection: false,
     isLimitedEdition: false,
+    isOutOfStock: false,
   });
   const filterLabels = {
     isOnSale: "En promotion",
     isTopSeller: "Top ventes",
     isNewCollection: "Nouvelle collection",
     isLimitedEdition: "Édition limitée",
+    isOutOfStock: "En rupture de stock",
   };
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -376,6 +378,7 @@ export default function Products() {
       (!filters.isTopSeller || p.isTopSeller) &&
       (!filters.isNewCollection || p.isNewCollection) &&
       (!filters.isLimitedEdition || p.isLimitedEdition) &&
+      (!filters.isOutOfStock || !p.stock) &&
       (!selectedCategory || p.category === selectedCategory)
   );
 

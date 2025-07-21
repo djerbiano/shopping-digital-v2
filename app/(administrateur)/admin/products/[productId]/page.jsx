@@ -26,7 +26,7 @@ const fakeProduct = {
   isNewCollection: false,
   isLimitedEdition: true,
   category: "TvSon",
-  stock: false,
+  stock: true,
   colors: [
     {
       color: "black",
