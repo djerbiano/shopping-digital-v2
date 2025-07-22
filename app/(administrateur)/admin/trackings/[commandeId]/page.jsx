@@ -5,12 +5,20 @@ export default function CommandeTrackings() {
     _id: "670ad03962c4e9da42d41aa5",
     products: [
       {
-        product: "6587b4c4f47cf256dd5b6fef",
+        product: "Tablette Apple iPad 9th Gen 64 Go Gris",
         color: "Bleu",
-        size: '7"',
+        size: '12"',
         quantity: 1,
         price: 699,
         _id: "670ad03962c4e9da42d41aa6",
+      },
+      {
+        product: "Tablette Apple iPad 9th Gen 64 Go Gris",
+        color: "Bleu",
+        size: '12"',
+        quantity: 1,
+        price: 699,
+        _id: "670ad03962c4e9da42d41255",
       },
     ],
     user: "659f87d69822ba170095ea38",
@@ -59,7 +67,7 @@ export default function CommandeTrackings() {
 
   return (
     <section aria-labelledby="section-trackings-Commande" className={styles.adminContent}>
-      <h3 id="section-trackings-Commande">Suivi de la commande de {commande.email}</h3>
+      <h3 id="section-trackings-Commande" className={trackingsStyles.trackingsTableTitle}>Suivi de la commande de {commande.email}</h3>
       <p>User Id: {commande.user}</p>
       <p>Commande Id: {commande._id}</p>
       <p>Numéro de suivi: {commande.trackingNumber}</p>
@@ -69,10 +77,30 @@ export default function CommandeTrackings() {
       <p>Adresse de facturation: {commande.billingAddress}</p>
       <p>Date de commande: {commande.createdAt.replace("T", " ").slice(0, 16)}</p>
       <p>Dernière mise à jour: {commande.updatedAt.replace("T", " ").slice(0, 16)}</p>
-
-
-
-<h4>Historique de statut :</h4>
+      <h4 className={trackingsStyles.trackingsTableTitle}>Articles commandés :</h4>
+      <table className={trackingsStyles.trackingsTable}>
+        <thead>
+          <tr>
+            <th scope="col">Produit</th>
+            <th scope="col">Couleur</th>
+            <th scope="col">Taille</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Prix</th>
+          </tr>
+        </thead>
+        <tbody>
+          {commande.products.map((product) => (
+            <tr key={product._id}>
+              <td data-label="Produit">{product.product}</td>
+              <td data-label="Couleur">{product.color}</td>
+              <td data-label="Taille">{product.size}</td>
+              <td data-label="Quantité">{product.quantity}</td>
+              <td data-label="Prix">{product.price} €</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h4 className={trackingsStyles.trackingsTableTitle}>Historique de statut :</h4>
       <table className={trackingsStyles.trackingsTable}>
         <thead>
           <tr>

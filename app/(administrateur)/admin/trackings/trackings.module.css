@@ -57,6 +57,14 @@
 .trackingsTable td:last-child .viewButton:hover {
   background-color: #2563eb;
 }
+.trackingsTableTitle {
+  font-size: 18px;
+  color: var(--color-tertiary);
+  background-color: var(--color-secondary);
+  padding: 10px;
+  border-radius: 8px;
+
+}
 @media (max-width: 767.98px) {
   .trackingsTable thead {
     display: none;
