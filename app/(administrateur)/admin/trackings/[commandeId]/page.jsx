@@ -67,7 +67,9 @@ export default function CommandeTrackings() {
 
   return (
     <section aria-labelledby="section-trackings-Commande" className={styles.adminContent}>
-      <h3 id="section-trackings-Commande" className={trackingsStyles.trackingsTableTitle}>Suivi de la commande de {commande.email}</h3>
+      <h3 id="section-trackings-Commande" className={trackingsStyles.trackingsTableTitle}>
+        Suivi de la commande de {commande.email}
+      </h3>
       <p>User Id: {commande.user}</p>
       <p>Commande Id: {commande._id}</p>
       <p>Numéro de suivi: {commande.trackingNumber}</p>

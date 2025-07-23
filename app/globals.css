@@ -61,3 +61,9 @@ button:focus-visible,
 input:focus-visible {
   outline-offset: 1px;
 }
+select {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 16px;
+}

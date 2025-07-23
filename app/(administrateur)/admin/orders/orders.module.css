@@ -1,0 +1,92 @@
+.error {
+  color: var(--color-red);
+}
+.searchBar {
+  margin-bottom: 20px;
+}
+.searchBar input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.ordersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.ordersTable th,
+.ordersTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.ordersTable td:last-child {
+  text-align: center;
+}
+.ordersTable thead {
+  background-color: #f5f5f5;
+}
+.ordersTable td:last-child .viewButton {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-secondary);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ordersTable td:last-child .viewButton:hover {
+  background-color: #2563eb;
+}
+.ordersSelect {
+  width: max-content;
+}
+@media (max-width: 910px) {
+  .ordersTable thead {
+    display: none;
+  }
+
+  .ordersTable,
+  .ordersTable tbody,
+  .ordersTable tr,
+  .ordersTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .ordersTable tr {
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .ordersTable td {
+    text-align: right;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .ordersTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .ordersTable td:last-child {
+    text-align: right;
+  }
+}
