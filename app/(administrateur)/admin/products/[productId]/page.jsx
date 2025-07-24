@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "../../../admin.module.css";
 import productsStyles from "../../../_components/ProductsComponent/productsComponent.module.css";
+import BackBtn from "../../../_components/reusable/backBtn";
 
 const fakeProduct = {
   description: {
@@ -99,6 +100,7 @@ export default function SingleProduct() {
 
   return (
     <section aria-labelledby="section-singleProducts" className={styles.adminContent}>
+      <BackBtn path="/admin/products" text="Retour aux produits" />
       <h3 id="section-singleProducts">Mise à jour d'un produit</h3>
 
       <form className={productsStyles.formUpdate}>

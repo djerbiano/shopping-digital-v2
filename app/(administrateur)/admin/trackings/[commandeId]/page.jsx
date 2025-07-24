@@ -1,5 +1,7 @@
+
 import styles from "../../../admin.module.css";
 import trackingsStyles from "../trackings.module.css";
+import BackBtn from "../../../_components/reusable/backBtn";
 export default function CommandeTrackings() {
   const commande = {
     _id: "670ad03962c4e9da42d41aa5",
@@ -67,6 +69,8 @@ export default function CommandeTrackings() {
 
   return (
     <section aria-labelledby="section-trackings-Commande" className={styles.adminContent}>
+      <BackBtn path="/admin/trackings" text="Retour au suivis des commandes" />
+
       <h3 id="section-trackings-Commande" className={trackingsStyles.trackingsTableTitle}>
         Suivi de la commande de {commande.email}
       </h3>

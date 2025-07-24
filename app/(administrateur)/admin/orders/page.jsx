@@ -2,8 +2,10 @@
 import styles from "../../admin.module.css";
 import ordersStyles from "./orders.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Orders() {
+  const router = useRouter();
   const [orderCategory, setOrderCategory] = useState("all");
   const [emailSearch, setEmailSearch] = useState("");
   const orders = [
@@ -483,7 +485,7 @@ export default function Orders() {
               <td data-label="Total">{order.total}</td>
               <td data-label="Date">{order.createdAt.slice(0, 10)}</td>
               <td data-label="Actions">
-                <button type="button" title="Voir la commande" className={ordersStyles.viewButton}>
+                <button type="button" title="Voir la commande" className={ordersStyles.viewButton} onClick={() => router.push(`/admin/orders/${order._id}`)}>
                   Voir
                 </button>
               </td>
