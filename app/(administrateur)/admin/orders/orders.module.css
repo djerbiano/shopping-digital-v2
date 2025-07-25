@@ -1,16 +1,7 @@
 .error {
   color: var(--color-red);
 }
-.searchBar {
-  margin-bottom: 20px;
-}
-.searchBar input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
+
 .ordersTable {
   width: 100%;
   border-collapse: collapse;

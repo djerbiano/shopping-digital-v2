@@ -284,6 +284,16 @@
   transition: background-color 0.2s ease;
 }
 
+.adminContent .searchBar {
+  margin-bottom: 20px;
+}
+.adminContent .searchBar input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 .adminContent .updateBtn:hover {
   background-color: #2563eb;
 }

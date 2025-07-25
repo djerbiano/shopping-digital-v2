@@ -5,6 +5,7 @@ import styles from "../../admin.module.css";
 import trackingsStyles from "./trackings.module.css";
 import { CiSettings } from "react-icons/ci";
 import UpdateBtn from "../../_components/reusable/updateBtn";
+import InputSearchByEmail from "../../_components/reusable/inputSearchByEmail";
 export default function Trackings() {
   const router = useRouter();
   const [emailSearch, setEmailSearch] = useState("");
@@ -130,18 +131,7 @@ export default function Trackings() {
   return (
     <section aria-labelledby="section-trackings" className={styles.adminContent}>
       <h3 id="section-trackings">Suivis</h3>
-      <div className={trackingsStyles.searchBar}>
-        <label htmlFor="emailSearch" className={styles.srOnly}>
-          Rechercher par email:
-        </label>
-        <input
-          type="search"
-          id="emailSearch"
-          placeholder="Rechercher par email..."
-          value={emailSearch}
-          onChange={(e) => setEmailSearch(e.target.value)}
-        />
-      </div>
+      <InputSearchByEmail emailSearch={emailSearch} setEmailSearch={setEmailSearch} />
       <table className={trackingsStyles.trackingsTable}>
         <thead>
           <tr>

@@ -12,16 +12,7 @@
 .error {
   color: var(--color-red);
 }
-.searchBar {
-  margin-bottom: 20px;
-}
-.searchBar input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
+
 .trackingsTable {
   width: 100%;
   border-collapse: collapse;
@@ -47,7 +38,6 @@
   background-color: var(--color-secondary);
   padding: 10px;
   border-radius: 8px;
-
 }
 @media (max-width: 767.98px) {
   .trackingsTable thead {

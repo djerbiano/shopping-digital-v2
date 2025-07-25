@@ -4,6 +4,7 @@ import ordersStyles from "./orders.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ViewBtn from "../../_components/reusable/viewBtn";
+import InputSearchByEmail from "../../_components/reusable/inputSearchByEmail";
 
 export default function Orders() {
   const router = useRouter();
@@ -441,18 +442,8 @@ export default function Orders() {
   return (
     <section aria-labelledby="section-orders" className={styles.adminContent}>
       <h3 id="section-orders">Commandes</h3>
-      <div className={ordersStyles.searchBar}>
-        <label htmlFor="emailSearch" className={styles.srOnly}>
-          Rechercher par email:
-        </label>
-        <input
-          type="search"
-          id="emailSearch"
-          placeholder="Rechercher par email..."
-          value={emailSearch}
-          onChange={(e) => setEmailSearch(e.target.value)}
-        />
-      </div>
+      <InputSearchByEmail emailSearch={emailSearch} setEmailSearch={setEmailSearch} />
+
       <label htmlFor="orders" className={styles.srOnly}>
         Filtrer par statut:
       </label>

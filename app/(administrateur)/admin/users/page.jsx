@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "../../admin.module.css";
 import userStyles from "../../_components/UsersComponents/usersComponent.module.css";
 import UserDetailsModal from "../../_components/UsersComponents/UserDetailsModal";
+import InputSearchByEmail from "../../_components/reusable/inputSearchByEmail";
 
 const fakeUsers = [
   {
@@ -87,18 +88,7 @@ export default function Users() {
     <section aria-labelledby="section-users" className={styles.adminContent}>
       <h3 id="section-users">Utilisateurs</h3>
 
-      <div className={userStyles.searchBar}>
-        <label htmlFor="emailSearch" className={styles.srOnly}>
-          Rechercher par email:
-        </label>
-        <input
-          type="search"
-          id="emailSearch"
-          placeholder="Rechercher par email..."
-          value={emailSearch}
-          onChange={(e) => setEmailSearch(e.target.value)}
-        />
-      </div>
+      <InputSearchByEmail emailSearch={emailSearch} setEmailSearch={setEmailSearch} />
 
       <table className={userStyles.userTable}>
         <thead>
