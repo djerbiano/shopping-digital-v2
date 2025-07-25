@@ -270,6 +270,23 @@
 .adminContent .backButton:hover {
   background-color: #2563eb;
 }
+.adminContent .updateBtn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--color-secondary);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.adminContent .updateBtn:hover {
+  background-color: #2563eb;
+}
 @media (max-width: 1160px) and (min-width: 930px) {
   .dashboardBannersContainer {
     width: 70%;

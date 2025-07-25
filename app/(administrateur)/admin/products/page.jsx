@@ -4,6 +4,7 @@ import styles from "../../admin.module.css";
 import productsStyles from "../../_components/ProductsComponent/productsComponent.module.css";
 import { CiSettings } from "react-icons/ci";
 import { useRouter } from "next/navigation";
+import UpdateBtn from "../../_components/reusable/updateBtn";
 
 const fakeProducts = [
   {
@@ -403,7 +404,9 @@ export default function Products() {
       </div>
 
       <div className={productsStyles.filterRow}>
-        <label htmlFor="categoryFilter" className={styles.srOnly}>Filtrer par catégorie :</label>
+        <label htmlFor="categoryFilter" className={styles.srOnly}>
+          Filtrer par catégorie :
+        </label>
         <select
           id="categoryFilter"
           name="category"
@@ -460,14 +463,7 @@ export default function Products() {
               <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
               <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
               <td data-label="Modifier">
-                <button
-                  type="button"
-                  className={productsStyles.viewButton}
-                  title="Modifier le produit"
-                  onClick={() => handleProductClick(product._id)}
-                >
-                  <CiSettings />
-                </button>
+                <UpdateBtn action={() => handleProductClick(product._id)} text="Modifier le produit" />
               </td>
             </tr>
           ))}

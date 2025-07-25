@@ -3,6 +3,7 @@ import styles from "../../admin.module.css";
 import ordersStyles from "./orders.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ViewBtn from "../../_components/reusable/viewBtn";
 
 export default function Orders() {
   const router = useRouter();
@@ -485,9 +486,7 @@ export default function Orders() {
               <td data-label="Total">{order.total}</td>
               <td data-label="Date">{order.createdAt.slice(0, 10)}</td>
               <td data-label="Actions">
-                <button type="button" title="Voir la commande" className={ordersStyles.viewButton} onClick={() => router.push(`/admin/orders/${order._id}`)}>
-                  Voir
-                </button>
+                <ViewBtn action={() => router.push(`/admin/orders/${order._id}`)} text="Voir la commande" />
               </td>
             </tr>
           ))}
