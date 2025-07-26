@@ -17,28 +17,28 @@ export default function Header() {
   const container = useRef();
   const router = useRouter();
   useGSAP(() => {
-    if (container.current) {
-      gsap.set(container.current, { opacity: 0 });
+    if (typeof window === "undefined" || !container.current) return;
 
-      const textElements = container.current.querySelectorAll("h1");
+    gsap.set(container.current, { opacity: 0 });
 
-      let split = new SplitText(textElements, {
-        type: "chars, words",
-      });
+    const textElements = container.current.querySelectorAll("h1");
 
-      const tl = gsap.timeline({
-        onStart: () => setAnimStarted(true),
-      });
+    let split = new SplitText(textElements, {
+      type: "chars, words",
+    });
 
-      tl.fromTo(container.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 });
+    const tl = gsap.timeline({
+      onStart: () => setAnimStarted(true),
+    });
 
-      tl.fromTo(
-        split.chars,
-        { y: 10, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, stagger: { amount: 0.5, from: "random" }, duration: 1 },
-        "-=0.8"
-      );
-    }
+    tl.fromTo(container.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1 });
+
+    tl.fromTo(
+      split.chars,
+      { y: 10, autoAlpha: 0 },
+      { y: 0, autoAlpha: 1, stagger: { amount: 0.5, from: "random" }, duration: 1 },
+      "-=0.8"
+    );
   });
   return (
     <header

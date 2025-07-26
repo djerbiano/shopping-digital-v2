@@ -144,7 +144,7 @@ export default function OneOrder() {
 
   return (
     <section aria-labelledby="section-one-order" className={styles.adminContent}>
-      <BackBtn path="/admin/orders" text="Retour aux commandes" />
+      <BackBtn />
       <h3 id="section-one-order">Commande de {oneOrder.email}</h3>
       <h4 className={ordersStyles.ordersTableTitle}>Articles commandés :</h4>
       <table className={ordersStyles.ordersTable}>
@@ -211,12 +211,8 @@ export default function OneOrder() {
           <option value="reçue">reçue</option>
           <option value="annulée">annulée</option>
         </select>
-        <button className={ordersStyles.statusFormBtn} aria-label="Modifier la commande">
-          Modifier
-        </button>
-        <button className={ordersStyles.statusFormBtn} aria-label="Supprimer la commande">
-          Supprimer
-        </button>
+        <button aria-label="Modifier la commande">Modifier</button>
+        <button aria-label="Supprimer la commande">Supprimer</button>
       </div>
     </section>
   );

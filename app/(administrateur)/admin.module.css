@@ -297,6 +297,7 @@
 .adminContent .updateBtn:hover {
   background-color: #2563eb;
 }
+
 @media (max-width: 1160px) and (min-width: 930px) {
   .dashboardBannersContainer {
     width: 70%;

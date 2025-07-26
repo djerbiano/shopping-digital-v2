@@ -100,7 +100,7 @@ export default function SingleProduct() {
 
   return (
     <section aria-labelledby="section-singleProducts" className={styles.adminContent}>
-      <BackBtn path="/admin/products" text="Retour aux produits" />
+      <BackBtn />
       <h3 id="section-singleProducts">Mise à jour d'un produit</h3>
 
       <form className={productsStyles.formUpdate}>

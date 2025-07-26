@@ -52,6 +52,7 @@ export default function NavBar() {
   };
   /* GSAP animation */
   useGSAP(() => {
+    if (typeof window === "undefined") return;
     const tl = gsap.timeline();
     // nav container animation
     if (container.current && isDesktop) {

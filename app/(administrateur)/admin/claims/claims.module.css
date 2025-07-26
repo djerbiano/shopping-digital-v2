@@ -1,0 +1,133 @@
+.error {
+  color: var(--color-red);
+}
+
+.claimsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.claimsTable th,
+.claimsTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+.claimsTable td:last-child {
+  text-align: center;
+}
+.claimsTable thead {
+  background-color: #f5f5f5;
+}
+
+.claimsSelect {
+  width: max-content;
+}
+.claimsTableTitle {
+  font-size: 18px;
+  color: var(--color-tertiary);
+  background-color: var(--color-secondary);
+  padding: 10px;
+  border-radius: 8px;
+}
+.addressInfo {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+.statusForm {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.statusForm button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: var(--color-red);
+  color: rgb(255, 255, 255);
+}
+.claimContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+.claimStatus,
+.claimOrder,
+.claimMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.claimOrder .claimOrderBtn {
+  align-self: center;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--color-tertiary);
+  background-color: var(--color-secondary);
+  transition: background-color 0.3s ease;
+}
+.claimOrder .claimOrderBtn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+@media (max-width: 910px) {
+  .claimsTable thead {
+    display: none;
+  }
+
+  .claimsTable,
+  .claimsTable tbody,
+  .claimsTable tr,
+  .claimsTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .claimsTable tr {
+    margin-bottom: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  .claimsTable td {
+    text-align: right;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .claimsTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 16px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+  .claimsTable td:last-child {
+    text-align: right;
+  }
+}
