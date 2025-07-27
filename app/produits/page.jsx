@@ -1,11 +1,15 @@
 "use client";
 import styles from "../page.module.css";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FilterProductsContext } from "../context/filterProductsContext";
 import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
 
 export default function Produits() {
   const { categories, setCategories } = useContext(FilterProductsContext);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const handleCategoryChange = (category) => {
     setCategories((prevCategories) => ({
       ...prevCategories,
@@ -19,6 +23,38 @@ export default function Produits() {
     { key: "TvSon", label: "TV - Audio - Video" },
     { key: "Téléphonie", label: "Smartphones" },
   ];
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+
+      // catégories sélectionnées
+      Object.entries(categories).forEach(([key, isChecked]) => {
+        if (isChecked) params.append("category", key);
+      });
+
+      // filtres prix
+      if (minPrice) params.append("minPrice", minPrice);
+      if (maxPrice) params.append("maxPrice", maxPrice);
+
+      const res = await fetch(`/api/products?${params.toString()}`);
+      const data = await res.json();
+
+      if (data.success) {
+        setProducts(data.data);
+      } else {
+        console.error("Erreur de chargement :", data.error);
+      }
+    } catch (err) {
+      console.error("Erreur serveur :", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [categories, minPrice, maxPrice]);
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
       <h2 id="tous-les-produits">Tous les produits</h2>
@@ -37,14 +73,28 @@ export default function Produits() {
             <legend>Prix :</legend>
 
             <label>
-              Min :<input type="number" placeholder="0" min={0} />
+              Min :
+              <input
+                type="number"
+                placeholder="0"
+                min={0}
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+              />
             </label>
             <label>
-              Max :<input type="number" placeholder="0" min={0} />
+              Max :
+              <input
+                type="number"
+                placeholder="0"
+                min={0}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+              />
             </label>
           </fieldset>
         </aside>
-        <DisplayAllProducts />
+        <DisplayAllProducts products={products} isLoading={isLoading} />
       </div>
     </section>
   );

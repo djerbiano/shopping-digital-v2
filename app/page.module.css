@@ -278,6 +278,7 @@
 .productsContainerBestSellers,
 .productShowcaseContent {
   padding: 0 15px;
+
 }
 .productShowcaseContent {
   display: flex;
@@ -532,9 +533,7 @@
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
-.displayAllProducts {
-  margin: 0 auto;
-}
+
 
 .allProducts {
   display: flex;
@@ -1196,6 +1195,7 @@
   }
   .productShowcase {
     width: 100%;
+   
   }
   .bestSellersSection {
     display: none;

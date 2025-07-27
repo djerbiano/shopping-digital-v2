@@ -64,7 +64,7 @@ const ProductsSchema = mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie", "ObjetsConnectés"],
+      enum: ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie"],
     },
     stock: {
       type: Boolean,
@@ -95,5 +95,5 @@ const ProductsSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const Product = mongoose.model("Product", ProductsSchema);
+const Product = mongoose.models.Product || mongoose.model("Product", ProductsSchema);
 module.exports = Product;

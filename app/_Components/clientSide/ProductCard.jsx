@@ -5,11 +5,18 @@ import { FaHeart, FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import styles from "../../page.module.css";
 import Image from "next/image";
 
-export default function ProductCard({ title, price, imageUrl, status }) {
+export default function ProductCard({ product }) {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  const getPriorityStatus = (product) => {
+    if (product.isOnSale) return "sale";
+    if (product.isNewCollection) return "new";
+    if (product.isLimitedEdition) return "limited";
+    return null;
+  };
+  const status = getPriorityStatus(product);
   const handleFavoriteKeyDown = (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -24,7 +31,7 @@ export default function ProductCard({ title, price, imageUrl, status }) {
     }
   };
 
-  const getStatusStyle = () => {
+  const getStatusStyle = (status) => {
     switch (status) {
       case "limited":
         return styles.statusLimited;
@@ -36,23 +43,30 @@ export default function ProductCard({ title, price, imageUrl, status }) {
         return "";
     }
   };
-
+  const price = product.isOnSale ? product.salePrice : product.regularPrice;
   return (
     <article
       className={styles.productCard}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       tabIndex={0}
-      onClick={() => router.push(`/produits/${status}`)}
+      onClick={() => router.push(`/produits/${product._id}`)}
     >
-      {status && <span className={`${styles.statusBadge} ${getStatusStyle()}`}>{status.toUpperCase()}</span>}
+      {status && <span className={`${styles.statusBadge} ${getStatusStyle(status)}`}>{status.toUpperCase()}</span>}
 
       <div className={styles.imageContainer}>
-        <Image src={imageUrl} width={400} height={400} alt={title} className={styles.productImage} loading="lazy" />
+        <Image
+          src={`/${product.pictures.pic1}`}
+          width={400}
+          height={400}
+          alt={product.title}
+          className={styles.productImage}
+          priority
+        />
       </div>
 
       <div className={styles.productInfo}>
-        <h2 className={styles.productTitle}>{title}</h2>
+        <h2 className={styles.productTitle}>{product.title}</h2>
         <p className={styles.productPrice}>{price} €</p>
       </div>
 
@@ -61,7 +75,7 @@ export default function ProductCard({ title, price, imageUrl, status }) {
           onClick={() => setIsFavorite(!isFavorite)}
           onKeyDown={handleFavoriteKeyDown}
           className={styles.favoriteButton}
-          aria-label={isFavorite ? `Retirer ${title} des favoris` : `Ajouter ${title} aux favoris`}
+          aria-label={isFavorite ? `Retirer ${product.title} des favoris` : `Ajouter ${product.title} aux favoris`}
           tabIndex={0}
         >
           {isFavorite ? (
@@ -74,7 +88,7 @@ export default function ProductCard({ title, price, imageUrl, status }) {
         <button
           className={styles.cartButton}
           onKeyDown={handleCartKeyDown}
-          aria-label={`Acheter ${title} pour ${price} €`}
+          aria-label={`Acheter ${product.title} pour ${price} €`}
           tabIndex={0}
           onClick={() => {
             /* Ajout au panier */
