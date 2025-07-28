@@ -346,6 +346,10 @@
 
 .productInfo {
   padding: 16px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .productTitle {
@@ -604,6 +608,7 @@
   min-height: 400px;
   font-size: 1.2rem;
   margin-bottom: 20px;
+  width: 40%;
 }
 .priceContainer .regularPrice {
   text-decoration: line-through;

@@ -43,6 +43,7 @@ export default function ProductCard({ product }) {
     }
   };
   const price = product?.isOnSale ? product?.salePrice : product?.regularPrice;
+ 
   return (
     <article
       className={styles.productCard}

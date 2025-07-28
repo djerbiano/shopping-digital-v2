@@ -64,7 +64,7 @@ export default function Produits() {
             <legend>Catégories :</legend>
             {categoryList.map(({ key, label }) => (
               <label key={key}>
-                <input type="checkbox" checked={categories[key]} onChange={() => handleCategoryChange(key)} />
+                <input type="checkbox" checked={categories[key] || false} onChange={() => handleCategoryChange(key)} />
                 {label}
               </label>
             ))}
@@ -78,7 +78,7 @@ export default function Produits() {
                 type="number"
                 placeholder="0"
                 min={0}
-                value={minPrice}
+                value={minPrice || ""}
                 onChange={(e) => setMinPrice(e.target.value)}
               />
             </label>
@@ -88,7 +88,7 @@ export default function Produits() {
                 type="number"
                 placeholder="0"
                 min={0}
-                value={maxPrice}
+                value={maxPrice || ""}
                 onChange={(e) => setMaxPrice(e.target.value)}
               />
             </label>

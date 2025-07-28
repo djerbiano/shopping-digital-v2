@@ -1,4 +1,4 @@
-// app/api/products/route.js
+
 import { NextResponse } from "next/server";
 import connectToDb from "../../../_backend/config/db";
 import { getAllProducts } from "../../../_backend/controllers/productsController";

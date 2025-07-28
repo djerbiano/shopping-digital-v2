@@ -1,6 +1,7 @@
 import styles from "../../page.module.css";
 import ProductCard from "./ProductCard";
-export default function Sale() {
+import ProductSkeleton from "./loader/ProductSkeleton";
+export default function Sale({ products, isLoading }) {
   const product = {
     description: {
       desc1: "Composition: 100% polyester",
@@ -41,9 +42,11 @@ export default function Sale() {
   };
   return (
     <div className={styles.saleContainer}>
-      {Array.from({ length: 10 }).map((_, index) => (
-        <ProductCard key={index} product={product} />
-      ))}
+      {isLoading || !products.length ? (
+        <ProductSkeleton />
+      ) : (
+        products.map((product) => <ProductCard key={product._id} product={product} />)
+      )}
     </div>
   );
 }
