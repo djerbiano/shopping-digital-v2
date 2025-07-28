@@ -9,11 +9,10 @@ export default function ProductCard({ product }) {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
   const getPriorityStatus = (product) => {
-    if (product.isOnSale) return "sale";
-    if (product.isNewCollection) return "new";
-    if (product.isLimitedEdition) return "limited";
+    if (product?.isOnSale) return "sale";
+    if (product?.isNewCollection) return "new";
+    if (product?.isLimitedEdition) return "limited";
     return null;
   };
   const status = getPriorityStatus(product);
@@ -43,7 +42,7 @@ export default function ProductCard({ product }) {
         return "";
     }
   };
-  const price = product.isOnSale ? product.salePrice : product.regularPrice;
+  const price = product?.isOnSale ? product?.salePrice : product?.regularPrice;
   return (
     <article
       className={styles.productCard}
@@ -56,17 +55,17 @@ export default function ProductCard({ product }) {
 
       <div className={styles.imageContainer}>
         <Image
-          src={`/${product.pictures.pic1}`}
+          src={`/${product?.pictures?.pic1}`}
           width={400}
           height={400}
-          alt={product.title}
+          alt={product?.title || "Image produit"}
           className={styles.productImage}
           priority
         />
       </div>
 
       <div className={styles.productInfo}>
-        <h2 className={styles.productTitle}>{product.title}</h2>
+        <h2 className={styles.productTitle}>{product?.title}</h2>
         <p className={styles.productPrice}>{price} €</p>
       </div>
 
@@ -75,7 +74,7 @@ export default function ProductCard({ product }) {
           onClick={() => setIsFavorite(!isFavorite)}
           onKeyDown={handleFavoriteKeyDown}
           className={styles.favoriteButton}
-          aria-label={isFavorite ? `Retirer ${product.title} des favoris` : `Ajouter ${product.title} aux favoris`}
+          aria-label={isFavorite ? `Retirer ${product?.title} des favoris` : `Ajouter ${product?.title} aux favoris`}
           tabIndex={0}
         >
           {isFavorite ? (
@@ -88,7 +87,7 @@ export default function ProductCard({ product }) {
         <button
           className={styles.cartButton}
           onKeyDown={handleCartKeyDown}
-          aria-label={`Acheter ${product.title} pour ${price} €`}
+          aria-label={`Acheter ${product?.title} pour ${price} €`}
           tabIndex={0}
           onClick={() => {
             /* Ajout au panier */

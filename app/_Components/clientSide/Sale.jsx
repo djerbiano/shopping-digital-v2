@@ -8,7 +8,7 @@ export default function Sale() {
       desc3: "Motif / Couleur: Couleur unie",
     },
     pictures: {
-      pic1: "avatarDefault1.webp",
+      pic1: "3eda46ff106e4e29b31e4f5dcc2b63d61703393155732.webp",
       pic2: "avatarDefault1.webp",
       pic3: "avatarDefault1.webp",
     },
