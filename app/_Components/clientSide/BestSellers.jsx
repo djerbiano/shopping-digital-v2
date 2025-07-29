@@ -5,7 +5,7 @@ import ProductCard from "./ProductCard";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductSkeleton from "./loader/ProductSkeleton";
 
-export default function BestSellers({ products, isLoading }) {
+export default function BestSellers({ products }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % products.length);
@@ -14,7 +14,7 @@ export default function BestSellers({ products, isLoading }) {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + products.length) % products.length);
   };
 
-  if (isLoading || !products.length) return;
+  if (!products.length) return;
   return (
     <section className={styles.bestSellersSection} aria-labelledby="top-ventes">
       <div className={styles.sectionHeader}>

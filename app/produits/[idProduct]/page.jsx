@@ -3,23 +3,27 @@ import styles from "../../page.module.css";
 import Image from "next/image";
 import Collapse from "@/app/_Components/clientSide/Collapse";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import ProductSkeleton from "@/app/_Components/clientSide/loader/ProductSkeleton";
 
 export default function DisplaySelectedProduct() {
   const [showPicture, setShowPicture] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dataContent, setDataContent] = useState(null);
-
+    const [error, setError] = useState(false);
+  const router = useRouter();
   const { idProduct } = useParams();
+
   const fetchProduct = async () => {
     setIsLoading(true);
     try {
       const res = await fetch(`/api/products/${idProduct}`);
       const data = await res.json();
 
-      if (data.success) {
-        setDataContent(data.data);
+      if (res.ok) {
+        setDataContent(data);
       } else {
+       setError(true);
         console.error("Erreur de chargement :", data.error);
       }
     } catch (err) {
@@ -53,6 +57,13 @@ export default function DisplaySelectedProduct() {
       event.currentTarget.click();
     }
   };
+  // skeleton à adapter
+  if (isLoading) {
+    return <ProductSkeleton />;
+  }
+  if (error) {
+    return router.replace("/404");
+  }
   return (
     <section className={styles.oneProduct} aria-labelledby="product-title">
       <div className={styles.productImage}>

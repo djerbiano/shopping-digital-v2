@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import connectToDb from "../../../_backend/config/db";
 import { getAllProducts } from "../../../_backend/controllers/productsController";
@@ -22,7 +21,7 @@ export async function GET(req) {
 
     const result = await getAllProducts(page, filters);
 
-    return NextResponse.json(result.body, { status: result.status });
+    return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
   }

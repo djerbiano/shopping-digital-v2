@@ -9,13 +9,17 @@ export async function GET(req, { params }) {
     const id = resolvedParams.id;
 
     if (!id) {
-      return NextResponse.json({ message: "ID de produit manquant" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "ID manquant" }, { status: 400 });
     }
 
-    const result = await getProductById(id);
+    const product = await getProductById(id);
 
-    return NextResponse.json(result.body, { status: result.status });
+    return NextResponse.json(product);
   } catch (error) {
-    return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
+    if (error.message === "NOT_FOUND") {
+      return NextResponse.json({message: "Produit introuvable"}, {status: 404});
+    }
+    console.error("Erreur serveur :", error);
+    return NextResponse.json({ success: false, error: "Erreur serveur" }, { status: 500 });
   }
 }

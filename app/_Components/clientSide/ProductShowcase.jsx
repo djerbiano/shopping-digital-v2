@@ -5,7 +5,7 @@ import ProductCard from "./ProductCard";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductSkeleton from "./loader/ProductSkeleton";
 
-export default function ProductShowcase({ ariaLabelledby, titleSection, products, isLoading }) {
+export default function ProductShowcase({ ariaLabelledby, titleSection, products }) {
   const [itemsToShow, setItemsToShow] = useState(3);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -39,7 +39,7 @@ export default function ProductShowcase({ ariaLabelledby, titleSection, products
     setCurrentPage((prev) => (prev + 1) % totalPages);
   };
 
-  if (isLoading || !products.length) return <ProductSkeleton />;
+  if (!products.length) return <ProductSkeleton />;
 
   return (
     <section className={styles.productShowcase} aria-labelledby={ariaLabelledby}>

@@ -3,6 +3,7 @@ import styles from "../page.module.css";
 import { useContext, useEffect, useState } from "react";
 import { FilterProductsContext } from "../context/filterProductsContext";
 import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
+import { useRouter } from "next/navigation";
 
 export default function Produits() {
   const { categories, setCategories } = useContext(FilterProductsContext);
@@ -10,6 +11,8 @@ export default function Produits() {
   const [maxPrice, setMaxPrice] = useState("");
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const router = useRouter();
   const handleCategoryChange = (category) => {
     setCategories((prevCategories) => ({
       ...prevCategories,
@@ -40,12 +43,14 @@ export default function Produits() {
       const res = await fetch(`/api/products?${params.toString()}`);
       const data = await res.json();
 
-      if (data.success) {
-        setProducts(data.data);
+      if (res.ok) {
+        setProducts(data.products);
       } else {
+        setError(true);
         console.error("Erreur de chargement :", data.error);
       }
     } catch (err) {
+      setError(true);
       console.error("Erreur serveur :", err);
     } finally {
       setIsLoading(false);
@@ -55,6 +60,8 @@ export default function Produits() {
   useEffect(() => {
     fetchProducts();
   }, [categories, minPrice, maxPrice]);
+
+  if (error) return router.replace("/404");
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
       <h2 id="tous-les-produits">Tous les produits</h2>

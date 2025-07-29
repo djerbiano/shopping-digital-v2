@@ -1,7 +1,7 @@
 import styles from "../../page.module.css";
 import ProductCard from "./ProductCard";
 import ProductSkeleton from "./loader/ProductSkeleton";
-export default function Sale({ products, isLoading }) {
+export default function Sale({ products }) {
   const product = {
     description: {
       desc1: "Composition: 100% polyester",
@@ -42,7 +42,7 @@ export default function Sale({ products, isLoading }) {
   };
   return (
     <div className={styles.saleContainer}>
-      {isLoading || !products.length ? (
+      { !products.length ? (
         <ProductSkeleton />
       ) : (
         products.map((product) => <ProductCard key={product._id} product={product} />)
