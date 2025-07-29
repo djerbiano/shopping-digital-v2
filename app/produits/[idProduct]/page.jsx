@@ -4,13 +4,12 @@ import Image from "next/image";
 import Collapse from "@/app/_Components/clientSide/Collapse";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import ProductSkeleton from "@/app/_Components/clientSide/loader/ProductSkeleton";
-
+import SkeletonProductIdPage from "../../_Components/clientSide/SkeletonElements/SkeletonProductIdPage/SkeletonProductIdPage";
 export default function DisplaySelectedProduct() {
   const [showPicture, setShowPicture] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dataContent, setDataContent] = useState(null);
-    const [error, setError] = useState(false);
+  const [error, setError] = useState(false);
   const router = useRouter();
   const { idProduct } = useParams();
 
@@ -23,7 +22,7 @@ export default function DisplaySelectedProduct() {
       if (res.ok) {
         setDataContent(data);
       } else {
-       setError(true);
+        setError(true);
         console.error("Erreur de chargement :", data.error);
       }
     } catch (err) {
@@ -57,9 +56,9 @@ export default function DisplaySelectedProduct() {
       event.currentTarget.click();
     }
   };
-  // skeleton à adapter
+
   if (isLoading) {
-    return <ProductSkeleton />;
+    return <SkeletonProductIdPage />;
   }
   if (error) {
     return router.replace("/404");

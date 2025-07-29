@@ -43,14 +43,13 @@ export default function ProductCard({ product }) {
     }
   };
   const price = product?.isOnSale ? product?.salePrice : product?.regularPrice;
- 
+
   return (
     <article
       className={styles.productCard}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       tabIndex={0}
-      onClick={() => router.push(`/produits/${product._id}`)}
     >
       {status && <span className={`${styles.statusBadge} ${getStatusStyle(status)}`}>{status.toUpperCase()}</span>}
 
@@ -90,9 +89,7 @@ export default function ProductCard({ product }) {
           onKeyDown={handleCartKeyDown}
           aria-label={`Acheter ${product?.title} pour ${price} €`}
           tabIndex={0}
-          onClick={() => {
-            /* Ajout au panier */
-          }}
+          onClick={() => router.push(`/produits/${product._id}`)}
         >
           <FaShoppingCart className={styles.cartIcon} aria-hidden="true" />
           Acheter
