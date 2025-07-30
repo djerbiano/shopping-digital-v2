@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { FilterProductsContext } from "../context/filterProductsContext";
 import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
 import { useRouter } from "next/navigation";
+import NotFound from "../_Components/clientSide/404NotFound";
 
 export default function Produits() {
   const { categories, setCategories } = useContext(FilterProductsContext);
@@ -61,7 +62,7 @@ export default function Produits() {
     fetchProducts();
   }, [categories, minPrice, maxPrice]);
 
-  if (error) return router.replace("/404");
+  if (error) return <NotFound />;
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
       <h2 id="tous-les-produits">Tous les produits</h2>

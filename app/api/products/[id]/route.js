@@ -17,9 +17,9 @@ export async function GET(req, { params }) {
     return NextResponse.json(product);
   } catch (error) {
     if (error.message === "NOT_FOUND") {
-      return NextResponse.json({message: "Produit introuvable"}, {status: 404});
+      return NextResponse.json({ message: "Produit introuvable" }, { status: 404 });
     }
     console.error("Erreur serveur :", error);
-    return NextResponse.json({ success: false, error: "Erreur serveur" }, { status: 500 });
+    return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
   }
 }

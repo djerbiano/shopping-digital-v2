@@ -1,7 +1,11 @@
 .page {
   margin: 0 auto;
 }
-
+.lottieContainer{
+  width: 70px;
+  height: 70px;
+  margin: auto;
+}
 .main {
   display: flex;
   flex-direction: column;
