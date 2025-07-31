@@ -16,6 +16,7 @@ export default function DisplaySelectedProduct() {
   const { idProduct } = useParams();
   const [commande, setCommande] = useState({
     id: idProduct,
+    title: "",
     quantity: 1,
     color: "",
     size: "",
@@ -110,6 +111,8 @@ export default function DisplaySelectedProduct() {
     } else {
       cartItems.push({
         id: dataContent._id,
+        title: dataContent.title,
+        imgPath: dataContent.pictures.pic1,
         color: commande.color,
         size: commande.size,
         quantity: quantityToAdd > maxQuantity ? maxQuantity : quantityToAdd,
@@ -129,6 +132,7 @@ export default function DisplaySelectedProduct() {
       return () => clearTimeout(timer);
     }
   }, [animationAdded]);
+
   if (isLoading) {
     return <SkeletonProductIdPage />;
   }
