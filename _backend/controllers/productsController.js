@@ -1,6 +1,7 @@
 const Product = require("../../_backend/models/Product");
 
 async function getAllProducts(page = 1, filters = {}) {
+
   const limit = 50;
   const skip = (page - 1) * limit;
 
@@ -29,6 +30,8 @@ async function getAllProducts(page = 1, filters = {}) {
   const totalProducts = await Product.countDocuments(query);
   const totalPages = Math.ceil(totalProducts / limit);
   const products = await Product.find(query).skip(skip).limit(limit);
+
+ 
 
   return {
     products,

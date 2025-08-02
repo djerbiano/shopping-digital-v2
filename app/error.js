@@ -1,13 +1,16 @@
 "use client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import styles from "./page.module.css";
-export default function NotFound() {
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+export default function Error({ error, reset }) {
   const router = useRouter();
   return (
     <section className={styles.notFoundPage}>
-      <h2>404 - Page non trouvée</h2>
-      <p>La page que vous recherchez n&#39;existe pas.</p>
+      <h2>Une erreur est survenue</h2>
+      <p>{error.message}</p>
+      <button onClick={() => reset()}>Réessayer de nouveau</button>
       <Link
         href="/"
         onClick={(e) => {

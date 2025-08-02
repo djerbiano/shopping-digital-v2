@@ -2,8 +2,8 @@
   margin: 0 auto;
 }
 .lottieContainer{
-  width: 70px;
-  height: 70px;
+  width: 150px;
+  height: 150px;
   margin: auto;
 }
 .main {
@@ -1150,13 +1150,14 @@
   color: var(--color-tertiary);
   min-height: calc(100vh - (10vh + 100px));
 }
-.notFoundPage h1 {
+.notFoundPage h2 {
   font-size: 32px;
 }
 .notFoundPage p {
   font-size: 18px;
 }
-.notFoundPage a {
+.notFoundPage a,
+.notFoundPage button {
   background-color: var(--color-primary);
   color: var(--color-foreground);
   padding: 8px 16px;
@@ -1167,7 +1168,9 @@
 }
 
 .notFoundPage a:hover,
-.notFoundPage a:focus {
+.notFoundPage button:hover,
+.notFoundPage a:focus,
+.notFoundPage button:focus {
   background-color: var(--color-tertiary);
   outline: 2px solid #000;
 }
@@ -1476,7 +1479,7 @@
   .mentions p {
     font-size: 14px;
   }
-  .notFoundPage h1 {
+  .notFoundPage h2 {
     font-size: 24px;
     text-align: center;
   }
@@ -1484,7 +1487,8 @@
     font-size: 16px;
     text-align: center;
   }
-  .notFoundPage a {
+  .notFoundPage a,
+  .notFoundPage button {
     font-size: 14px;
     text-align: center;
   }
