@@ -10,7 +10,7 @@ export default function Error({ error, reset }) {
     <section className={styles.notFoundPage}>
       <h2>Une erreur est survenue</h2>
       <p>{error.message}</p>
-      <button onClick={() => reset()}>Réessayer de nouveau</button>
+      <button onClick={() => reset()} aria-label="Réessayer de nouveau">Réessayer de nouveau</button>
       <Link
         href="/"
         onClick={(e) => {

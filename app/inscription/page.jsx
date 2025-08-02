@@ -1,7 +1,10 @@
 "use client";
 import styles from "../page.module.css";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 export default function Inscription() {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -9,27 +12,73 @@ export default function Inscription() {
     phone: "",
     address: "",
     password: "",
-    confirmationPassword: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleSubmit = (e) => {
+  function validateForm(data) {
+    if (!data.email || data.email.length < 5 || !data.email.includes("@")) {
+      return "L'email doit être une adresse valide.";
+    }
+    if (!data.name || data.name.length < 4) {
+      return "Le nom doit contenir au moins 4 caractères.";
+    }
+    if (!data.lastName || data.lastName.length < 4) {
+      return "Le prénom doit contenir au moins 4 caractères.";
+    }
+    if (!data.phone || data.phone.length < 5) {
+      return "Le numéro de téléphone est invalide.";
+    }
+    if (!data.address || data.address.length < 5) {
+      return "L'adresse est invalide.";
+    }
+    if (!data.password || data.password.length < 6) {
+      return "Le mot de passe doit contenir au moins 6 caractères.";
+    }
+
+    return null;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const error = validateForm(formData);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
 
-    console.log(formData);
+      if (response.ok) {
+        toast.success(data.message || "Inscription réussie");
 
-    setFormData({
-      email: "",
-      name: "",
-      lastName: "",
-      phone: "",
-      address: "",
-      password: "",
-      confirmationPassword: "",
-    });
+        setFormData({
+          email: "",
+          name: "",
+          lastName: "",
+          phone: "",
+          address: "",
+          password: "",
+        });
+      } else {
+        toast.error(data.error || "Une erreur est survenue");
+      }
+    } catch (error) {
+      toast.error(error.message || "Une erreur est survenue");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
     <section className={styles.inscription} aria-labelledby="inscription">
       <h2 id="inscription">Inscription</h2>
@@ -60,21 +109,18 @@ export default function Inscription() {
           required
         />
 
-        <label htmlFor="confirmationPassword">Confirmation du mot de passe * :</label>
-        <input
-          type="password"
-          id="confirmationPassword"
-          name="confirmationPassword"
-          value={formData.confirmationPassword}
-          onChange={handleChange}
-          required
-        />
         <p>* Champs obligatoires</p>
-
-        <button type="submit" aria-label="S'inscrire">
-          S'inscrire
-        </button>
+        {isLoading ? (
+          <div className={styles.lottieContainer}>
+            <DotLottieReact src="/animationFiles/LoadingDotsBlue.lottie" autoplay loop={true} />
+          </div>
+        ) : (
+          <button type="submit" aria-label="S'inscrire">
+            S'inscrire
+          </button>
+        )}
       </form>
+      <Toaster position="top-center" reverseOrder={false} />
     </section>
   );
 }
