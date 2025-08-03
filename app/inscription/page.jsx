@@ -61,6 +61,10 @@ export default function Inscription() {
       if (response.ok) {
         toast.success(data.message || "Inscription réussie");
 
+
+        console.log("token", data.user.token);
+
+        
         setFormData({
           email: "",
           name: "",
@@ -120,7 +124,7 @@ export default function Inscription() {
           </button>
         )}
       </form>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="bottom-center" reverseOrder={false} />
     </section>
   );
 }

@@ -7,10 +7,22 @@ export async function POST(req) {
     await connectToDb();
     const body = await req.json();
     const user = await createUser(body);
-    return NextResponse.json(
+    const token = user.token;
+
+    const response = NextResponse.json(
       { user, message: ` Bienvenue ${user.name}, votre compte a bien été créé` },
       { status: 201 }
     );
+
+    response.cookies.set("access_token", token, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 5, // 5h like jwt
+    });
+
+    return response;
   } catch (error) {
     console.error("Erreur serveur :", error);
     return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
