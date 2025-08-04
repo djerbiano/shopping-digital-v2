@@ -3,7 +3,11 @@ import styles from "../page.module.css";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
 export default function Inscription() {
+  const { refreshAuth } = useAuth();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -54,6 +58,7 @@ export default function Inscription() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
       const data = await response.json();
@@ -69,6 +74,8 @@ export default function Inscription() {
           address: "",
           password: "",
         });
+        await refreshAuth();
+        router.replace("/mon-compte");
       } else {
         toast.error(data.error || "Une erreur est survenue");
       }

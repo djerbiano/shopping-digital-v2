@@ -16,7 +16,7 @@ export default function NavBarMyAccount() {
       });
       if (!response.ok) throw new Error("Logout failed");
       setIsAuthenticated(false);
-      router.push("/");
+      router.replace("/");
       router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);

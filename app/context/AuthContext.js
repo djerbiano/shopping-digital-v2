@@ -17,37 +17,43 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const checkTokenValidity = async () => {
+    try {
+      const response = await fetch("/api/verifyToken", {
+        method: "POST",
+        credentials: "include",
+      });
+      const result = await response.json();
 
-  useEffect(() => {
-    const checkTokenValidity = async () => {
-      try {
-        const response = await fetch("/api/verifyToken", {
-          method: "POST",
-          credentials: "include",
-        });
-        const result = await response.json();
-        // result = { success: boolean, isAdmin?: boolean }
-        if (response.ok && result.success === true) {
-          setIsAuthenticated(true);
-          setIsAdmin(result?.isAdmin || false);
-        } else {
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-        }
-      } catch (error) {
-        console.error("Erreur de vérification du token :", error);
+      // result = { success: boolean, isAdmin?: boolean }
+      if (response.ok && result.success === true) {
+        setIsAuthenticated(true);
+        setIsAdmin(result?.isAdmin || false);
+      } else {
         setIsAuthenticated(false);
         setIsAdmin(false);
-      } finally {
-        setLoading(false);
       }
-    };
-
+    } catch (error) {
+      console.error("Erreur de vérification du token :", error);
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     checkTokenValidity();
   }, []);
 
+  const refreshAuth = async () => {
+    setLoading(true);
+    await checkTokenValidity();
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading, setLoading, isAdmin, setIsAdmin }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, loading, setLoading, isAdmin, setIsAdmin, refreshAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );
