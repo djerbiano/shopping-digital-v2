@@ -1,7 +1,8 @@
 "use client";
 import styles from "../../page.module.css";
-import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
-import { useContext, useRef, useState } from "react";
+import { useMenuHamburger } from "../../context/menuHamburgerContext";
+
+import {  useRef, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import NavBar from "./NavBar";
 import gsap from "gsap";
@@ -12,12 +13,12 @@ import { useRouter } from "next/navigation";
 gsap.registerPlugin(SplitText);
 
 export default function Header() {
-  const { isMenuOpen, setIsMenuOpen } = useContext(MenuHamburgerContext);
+  const { isMenuOpen, setIsMenuOpen } = useMenuHamburger();
   const [animStarted, setAnimStarted] = useState(false);
   const container = useRef();
   const router = useRouter();
   useGSAP(() => {
-    if (typeof window === "undefined" || !container.current) return;
+  
 
     gsap.set(container.current, { opacity: 0 });
 

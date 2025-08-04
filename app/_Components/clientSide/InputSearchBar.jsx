@@ -1,11 +1,10 @@
 "use client";
 import styles from "../../page.module.css";
 import { IoIosSearch } from "react-icons/io";
-import { useRef, useContext } from "react";
-import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
+import { useRef } from "react";
+import { useMenuHamburger } from "../../context/menuHamburgerContext";
 export default function InputSearchBar() {
-  const { isMenuOpen, setIsMenuOpen, isDesktop } = useContext(MenuHamburgerContext);
-
+  const { isMenuOpen, setIsMenuOpen, isDesktop } = useMenuHamburger();
   const inputRef = useRef(null);
   if (!isDesktop && !isMenuOpen) return null;
   const handleIconClick = () => {

@@ -7,15 +7,18 @@ import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { useRouter } from "next/navigation";
+
 gsap.registerPlugin(SplitText);
+
 export default function HeroSection() {
+   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const [animStarted, setAnimStarted] = useState(false);
   const container = useRef();
   const asideRef = useRef();
   const bannerRef = useRef();
+
   useGSAP(() => {
-    if (typeof window === "undefined" || !container.current) return;
     document.fonts.ready.then(() => {
       if (container.current) {
         gsap.set(container.current, { opacity: 0 });

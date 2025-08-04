@@ -1,17 +1,18 @@
 "use client";
 import styles from "../../page.module.css";
+import { useMenuHamburger } from "../../context/menuHamburgerContext";
 import { GiClothes } from "react-icons/gi";
 import { FaComputer } from "react-icons/fa6";
 import { MdOutlinePersonalVideo } from "react-icons/md";
 import { GiVibratingSmartphone } from "react-icons/gi";
-import { useContext } from "react";
+import { useFilterProducts } from "../../context/filterProductsContext";
 import { useRouter } from "next/navigation";
 import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
-import { FilterProductsContext } from "../../context/filterProductsContext";
+
 export default function AsideBar({ asideRef }) {
   const router = useRouter();
-  const { isDesktop } = useContext(MenuHamburgerContext);
-  const { setCategories } = useContext(FilterProductsContext);
+  const { isDesktop } = useMenuHamburger();
+  const { setCategories } = useFilterProducts();
 
   const buttons = [
     {

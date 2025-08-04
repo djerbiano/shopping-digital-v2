@@ -1,4 +1,4 @@
-const { User, validateRegisterUser } = require("../models/Users");
+const { User, validateRegisterUser, validateLoginUser } = require("../models/Users");
 const { generateToken } = require("../utils/helpers");
 const bcrypt = require("bcryptjs");
 async function createUser(body) {
@@ -13,9 +13,9 @@ async function createUser(body) {
 
   const user = new User(body);
   const result = await user.save();
-  
+
   if (!result) throw new Error("Une erreur est survenue lors de la sauvegarde de l'utilisateur");
-  
+
   const token = generateToken(result);
   // exclude certain properties from the user object
   const { password, updatedAt, __v, ...other } = result.toObject();
@@ -23,4 +23,23 @@ async function createUser(body) {
   return { ...other, token };
 }
 
-export { createUser };
+async function getUserByEmail(body) {
+  const { error } = validateLoginUser(body);
+  if (error) throw new Error(error.details[0].message);
+  // get user by email
+  const user = await User.findOne({ email: body.email });
+
+  if (!user) throw new Error("Utilisateur ou mot de passe incorrect");
+
+  const validPassword = await bcrypt.compare(body.password, user.password);
+  if (!validPassword) throw new Error("Utilisateur ou mot de passe incorrect");
+
+  // exclude certain properties from the user object
+  const { password, updatedAt, __v, ...other } = user.toObject();
+
+  const token = generateToken(user);
+
+  return { ...other, token };
+}
+
+export { createUser, getUserByEmail };

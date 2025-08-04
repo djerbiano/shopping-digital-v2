@@ -2,16 +2,16 @@
 import styles from "../../page.module.css";
 import InputSearchBar from "./InputSearchBar";
 import LinkIconHeader from "./LinkIconHeader";
-import { useContext, useRef } from "react";
-import { MenuHamburgerContext } from "../../context/menuHamburgerContext";
-import { FilterProductsContext } from "../../context/filterProductsContext";
+import {  useRef } from "react";
+import { useMenuHamburger } from "../../context/menuHamburgerContext";
+import { useFilterProducts } from "../../context/filterProductsContext";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 export default function NavBar() {
   const router = useRouter();
-  const { isMenuOpen, setIsMenuOpen, isDesktop } = useContext(MenuHamburgerContext);
-  const { setCategories } = useContext(FilterProductsContext);
+  const { isMenuOpen, setIsMenuOpen, isDesktop } = useMenuHamburger();
+  const { setCategories } = useFilterProducts();
   const container = useRef(null);
   const buttonsRef = useRef([]);
   const icons = useRef(null);
@@ -52,7 +52,7 @@ export default function NavBar() {
   };
   /* GSAP animation */
   useGSAP(() => {
-    if (typeof window === "undefined") return;
+ 
     const tl = gsap.timeline();
     // nav container animation
     if (container.current && isDesktop) {

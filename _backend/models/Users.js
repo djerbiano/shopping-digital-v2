@@ -128,8 +128,19 @@ function validateNewPassword(obj) {
 // validate login user
 function validateLoginUser(obj) {
   const schema = joi.object({
-    email: joi.string().trim().min(5).max(100).required().email(),
-    password: joi.string().trim().min(6).required(),
+    email: joi.string().trim().min(5).max(100).required().email().messages({
+      "string.base": "L'email doit être une chaîne de caractères.",
+      "string.empty": "L'email est obligatoire.",
+      "string.min": "L'email doit contenir au moins 5 caractères.",
+      "string.max": "L'email ne doit pas dépasser 100 caractères.",
+      "string.email": "L'email doit être une adresse valide.",
+      "any.required": "L'email est obligatoire.",
+    }),
+    password: joi.string().trim().min(6).required().messages({
+      "string.empty": "Le mot de passe est obligatoire.",
+      "string.min": "Le mot de passe doit contenir au moins 6 caractères.",
+      "any.required": "Le mot de passe est obligatoire.",
+    }),
   });
   return schema.validate(obj);
 }

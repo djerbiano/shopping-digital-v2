@@ -1,3 +1,4 @@
+"use client";
 import styles from "../../page.module.css";
 import ProductCard from "./ProductCard";
 import ProductSkeleton from "./loader/ProductSkeleton";

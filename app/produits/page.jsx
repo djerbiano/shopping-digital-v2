@@ -1,13 +1,14 @@
 "use client";
 import styles from "../page.module.css";
-import { useContext, useEffect, useState } from "react";
+import { useFilterProducts } from "../context/filterProductsContext";
+import {  useEffect, useState } from "react";
 import { FilterProductsContext } from "../context/filterProductsContext";
 import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
 import { useRouter } from "next/navigation";
 import NotFound from "../_Components/clientSide/404NotFound";
 
 export default function Produits() {
-  const { categories, setCategories } = useContext(FilterProductsContext);
+  const { categories, setCategories } = useFilterProducts();
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [products, setProducts] = useState([]);

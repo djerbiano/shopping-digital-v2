@@ -1,10 +1,11 @@
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import { Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "./_Components/clientSide/Header";
 import Footer from "./_Components/clientSide/Footer";
 import { MenuHamburgerContextProvider } from "./context/menuHamburgerContext";
-import {FilterProductsContextProvider} from "./context/filterProductsContext";
+import { FilterProductsContextProvider } from "./context/filterProductsContext";
+import { AuthProvider } from "./context/AuthContext";
 
 const schibsted = Schibsted_Grotesk({ subsets: ["latin"], weight: ["400"] });
 export const metadata = {
@@ -28,12 +29,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body className={schibsted.className}>
-        <MenuHamburgerContextProvider>
-        <FilterProductsContextProvider>
-        <Header />
-        {children}
-        </FilterProductsContextProvider>
-        </MenuHamburgerContextProvider>
+        <AuthProvider>
+          <MenuHamburgerContextProvider>
+            <FilterProductsContextProvider>
+              <Header />
+              {children}
+            </FilterProductsContextProvider>
+          </MenuHamburgerContextProvider>
+        </AuthProvider>
+
         <Footer />
         <Analytics />
       </body>

@@ -61,10 +61,6 @@ export default function Inscription() {
       if (response.ok) {
         toast.success(data.message || "Inscription réussie");
 
-
-        console.log("token", data.user.token);
-
-        
         setFormData({
           email: "",
           name: "",

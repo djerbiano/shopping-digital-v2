@@ -1,5 +1,4 @@
 "use client";
-
 import styles from "../../page.module.css";
 import HeroSection from "./HeroSection";
 import NewAndBestsellers from "./NewAndBestsellers";

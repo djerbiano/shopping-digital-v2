@@ -1,9 +1,16 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 import useIsDesktop from "../_Components/hook/useIsDesktop";
 
-export const MenuHamburgerContext = createContext();
+const throwMissingProviderError = () => {
+  throw new Error("MenuHamburgerContext doit être utilisé dans MenuHamburgerContextProvider");
+};
 
+export const MenuHamburgerContext = createContext({
+  isMenuOpen: false,
+  setIsMenuOpen: throwMissingProviderError,
+  isDesktop: false,
+});
 export const MenuHamburgerContextProvider = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isDesktop = useIsDesktop();
@@ -12,4 +19,13 @@ export const MenuHamburgerContextProvider = ({ children }) => {
       {children}
     </MenuHamburgerContext.Provider>
   );
+};
+
+// hook personnalisé
+export const useMenuHamburger = () => {
+  const context = useContext(MenuHamburgerContext);
+  if (!context) {
+    throwMissingProviderError();
+  }
+  return context;
 };
