@@ -1,8 +1,7 @@
 "use client";
 import styles from "./myAccount.module.css";
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { UserProvider } from "../context/UserContext";
 import ClientOnly from "./_components/ClientOnly";
 import NavBarMyAccount from "./_components/NavBarMyAccount";
 import NavBarMyAccountSkeleton from "./_components/NavBarMyAccountSkeleton";
@@ -15,15 +14,17 @@ export default function RootLayout({ children }) {
     return <Loading />;
   }
   return (
-    <section className={styles.myAccountContainer} aria-labelledby="page-myAccount">
-      <h2 id="page-myAccount" className={styles.srOnly}>
-        Mon Compte
-      </h2>
+    <UserProvider>
+      <section className={styles.myAccountContainer} aria-labelledby="page-myAccount">
+        <h2 id="page-myAccount" className={styles.srOnly}>
+          Mon Compte
+        </h2>
 
-      <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
-        <NavBarMyAccount />
-      </ClientOnly>
-      {children}
-    </section>
+        <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
+          <NavBarMyAccount />
+        </ClientOnly>
+        {children}
+      </section>
+    </UserProvider>
   );
 }

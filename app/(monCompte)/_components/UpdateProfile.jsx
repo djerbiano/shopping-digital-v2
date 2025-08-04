@@ -1,7 +1,7 @@
 "use client";
 import styles from "../myAccount.module.css";
 import { useState } from "react";
-export default function UpdateProfile({ setIsOpen }) {
+export default function UpdateProfile({ setIsOpen, dataProfile }) {
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -37,18 +37,23 @@ export default function UpdateProfile({ setIsOpen }) {
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email:</label>
         <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+        <p className={styles.information}>** {dataProfile?.email}</p>
 
         <label htmlFor="name">Nom:</label>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+        <p className={styles.information}>** {dataProfile?.name}</p>
 
         <label htmlFor="lastName">Prénom:</label>
         <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} required />
+        <p className={styles.information}>** {dataProfile?.lastName}</p>
 
         <label htmlFor="phone">Num&eacute;ro de t&eacute;l&eacute;phone:</label>
         <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required />
+        <p className={styles.information}>** {dataProfile?.phone}</p>
 
         <label htmlFor="address">Adresse:</label>
         <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
+        <p className={styles.information}>** {dataProfile?.address}</p>
 
         <label htmlFor="password">Mot de passe actuel:</label>
         <input
@@ -69,7 +74,7 @@ export default function UpdateProfile({ setIsOpen }) {
           onChange={handleChange}
           required
         />
-
+        <p>** Information actuelle</p>
         <p className={styles.error}>Erreur: Le mot de passe actuel est incorrect</p>
         <div className={styles.buttonContainer}>
           <button type="submit" aria-label="Enregistrer">

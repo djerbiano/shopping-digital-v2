@@ -1,6 +1,7 @@
 const { User, validateRegisterUser, validateLoginUser } = require("../models/Users");
 const { generateToken } = require("../utils/helpers");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 async function createUser(body) {
   const { error } = validateRegisterUser(body);
   if (error) throw new Error(error.details[0].message);
@@ -23,7 +24,7 @@ async function createUser(body) {
   return { ...other, token };
 }
 
-async function getUserByEmail(body) {
+async function loginByEmail(body) {
   const { error } = validateLoginUser(body);
   if (error) throw new Error(error.details[0].message);
   // get user by email
@@ -41,5 +42,19 @@ async function getUserByEmail(body) {
 
   return { ...other, token };
 }
+async function getDataUserById(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("ID utilisateur invalide");
+  }
+  // get user by id
+  const user = await User.findOne({ _id: id });
 
-export { createUser, getUserByEmail };
+  if (!user) throw new Error("Utilisateur introuvable");
+
+  // exclude certain properties from the user object
+  const { password, updatedAt, __v, ...other } = user.toObject();
+
+  return { ...other };
+}
+
+export { createUser, loginByEmail, getDataUserById };

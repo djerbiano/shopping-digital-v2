@@ -102,7 +102,34 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
+.myAccountContent .skeletonLine {
+  height: 16px;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
 
+.myAccountContent .skeletonButton {
+  margin-top: 10px;
+  width: 150px;
+  height: 36px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+  align-self: self-end;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 .updateProfile,
 .claimForm {
   display: flex;
@@ -161,6 +188,10 @@
   background-color: var(--color-red);
   color: var(--color-tertiary);
 }
+.updateProfile .information {
+  color: #595959;
+  font-size: 14px;
+}
 .myAccountTable {
   width: 100%;
   border-collapse: collapse;
@@ -182,8 +213,6 @@
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-
-
 }
 .claimForm textarea {
   padding: 10px;

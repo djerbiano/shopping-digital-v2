@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../_backend/config/db";
-import { getUserByEmail } from "../../../../_backend/controllers/usersController";
+import { loginByEmail } from "../../../../_backend/controllers/usersController";
 
 export async function POST(req) {
   try {
     await connectToDb();
     const body = await req.json();
-    const result = await getUserByEmail(body);
+    const result = await loginByEmail(body);
 
     const response = NextResponse.json({ result, message: ` Bienvenue ${result.name}` });
 

@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 gsap.registerPlugin(SplitText);
 
 export default function HeroSection() {
-   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const [animStarted, setAnimStarted] = useState(false);
   const container = useRef();
