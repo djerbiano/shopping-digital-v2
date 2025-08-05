@@ -1,5 +1,7 @@
 "use client";
 import styles from "./myAccount.module.css";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import { UserProvider } from "../context/UserContext";
 import ClientOnly from "./_components/ClientOnly";
@@ -8,10 +10,21 @@ import NavBarMyAccountSkeleton from "./_components/NavBarMyAccountSkeleton";
 import Loading from "../loading";
 
 export default function RootLayout({ children }) {
+  const router = useRouter();
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading || !isAuthenticated) {
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace("/");
+    }
+  }, [loading, isAuthenticated, router]);
+
+  if (loading) {
     return <Loading />;
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
   return (
     <UserProvider>

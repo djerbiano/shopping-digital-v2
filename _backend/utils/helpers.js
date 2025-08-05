@@ -9,6 +9,7 @@ function generateToken(user) {
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "5h" }
+ 
   );
 }
 

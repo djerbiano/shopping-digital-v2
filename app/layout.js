@@ -8,6 +8,7 @@ import { FilterProductsContextProvider } from "./context/filterProductsContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ModalProvider } from "./context/ModalContext";
 import Modal from "./_Components/clientSide/modal/ModalYesNO";
+import { Toaster } from "react-hot-toast";
 
 const schibsted = Schibsted_Grotesk({ subsets: ["latin"], weight: ["400"] });
 export const metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
             <MenuHamburgerContextProvider>
               <FilterProductsContextProvider>
                 <Header />
+                 <Toaster position="bottom-center" />
                 {children}
                 <Modal />
               </FilterProductsContextProvider>
