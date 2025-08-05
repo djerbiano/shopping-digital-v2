@@ -13,12 +13,10 @@ function generateToken(user) {
   );
 }
 
-export function validateObjectId(id) {
+function validateObjectId(id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("ID utilisateur invalide");
   }
 }
-
-
 
 export { generateToken, validateObjectId };
