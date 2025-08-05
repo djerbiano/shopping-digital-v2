@@ -130,6 +130,25 @@
     background-position: -200% 0;
   }
 }
+.myAccountButtonsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+.myAccountContainer .dangerButton {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.myAccountContainer .dangerButton:hover {
+  background-color: #c9302c;
+}
 .updateProfile,
 .claimForm {
   display: flex;

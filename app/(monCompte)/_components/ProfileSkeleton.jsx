@@ -10,8 +10,10 @@ export default function ProfileSkeleton() {
       <div className={styles.skeletonLine} style={{ width: "80%" }}></div>
       <div className={styles.skeletonLine} style={{ width: "40%" }}></div>
       <div className={styles.skeletonLine} style={{ width: "70%" }}></div>
-
-      <div className={styles.skeletonButton}></div>
+      <div className={styles.myAccountButtonsContainer}>
+        <div className={styles.skeletonButton} style={{ width: "30%" }}></div>
+        <div className={styles.skeletonButton} style={{ width: "30%" }}></div>
+      </div>
     </section>
   );
 }

@@ -6,6 +6,8 @@ import Footer from "./_Components/clientSide/Footer";
 import { MenuHamburgerContextProvider } from "./context/menuHamburgerContext";
 import { FilterProductsContextProvider } from "./context/filterProductsContext";
 import { AuthProvider } from "./context/AuthContext";
+import { ModalProvider } from "./context/ModalContext";
+import Modal from "./_Components/clientSide/modal/ModalYesNO";
 
 const schibsted = Schibsted_Grotesk({ subsets: ["latin"], weight: ["400"] });
 export const metadata = {
@@ -30,12 +32,15 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body className={schibsted.className}>
         <AuthProvider>
-          <MenuHamburgerContextProvider>
-            <FilterProductsContextProvider>
-              <Header />
-              {children}
-            </FilterProductsContextProvider>
-          </MenuHamburgerContextProvider>
+          <ModalProvider>
+            <MenuHamburgerContextProvider>
+              <FilterProductsContextProvider>
+                <Header />
+                {children}
+                <Modal />
+              </FilterProductsContextProvider>
+            </MenuHamburgerContextProvider>
+          </ModalProvider>
         </AuthProvider>
 
         <Footer />
