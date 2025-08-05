@@ -1,14 +1,17 @@
 "use client";
 import styles from "../myAccount.module.css";
 import { useUser } from "../../context/UserContext";
+import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import UpdateProfile from "../_components/UpdateProfile";
 import ProfileSkeleton from "../_components/ProfileSkeleton";
 import { useModal } from "../../context/ModalContext";
+import toast from "react-hot-toast";
 export default function MonCompte() {
   const { dataProfile, loadingProfile, errorProfile } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
+  const { refreshAuth } = useAuth();
 
   const deleteAccount = async () => {
     try {
@@ -17,14 +20,17 @@ export default function MonCompte() {
         credentials: "include",
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
+        toast.error(data?.error || "Une erreur est survenue.");
         throw new Error(data?.error || "Erreur lors de la suppression.");
       }
 
-      alert("Compte supprimé avec succès !");
-      //redirection ou déconnexion
+      toast.success(data?.message || "Compte supprimé.");
+      refreshAuth();
     } catch (err) {
+      toast.error(err.message || "Une erreur est survenue.");
       console.error("Erreur suppression :", err.message);
     }
   };

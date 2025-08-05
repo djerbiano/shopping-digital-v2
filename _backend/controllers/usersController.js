@@ -1,7 +1,6 @@
 const { User, validateRegisterUser, validateLoginUser } = require("../models/Users");
-const { generateToken } = require("../utils/helpers");
+const { generateToken, validateObjectId } = require("../utils/helpers");
 const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
 async function createUser(body) {
   const { error } = validateRegisterUser(body);
   if (error) throw new Error(error.details[0].message);
@@ -43,9 +42,7 @@ async function loginByEmail(body) {
   return { ...other, token };
 }
 async function getDataUserById(id) {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error("ID utilisateur invalide");
-  }
+  validateObjectId(id);
   // get user by id
   const user = await User.findOne({ _id: id });
 
@@ -57,4 +54,20 @@ async function getDataUserById(id) {
   return { ...other };
 }
 
-export { createUser, loginByEmail, getDataUserById };
+async function deleteAccount(id) {
+  validateObjectId(id);
+
+  const user = await User.findOne({ _id: id });
+
+  if (!user) throw new Error("Utilisateur introuvable");
+
+  const result = await User.deleteOne({ _id: id });
+
+  if (result.deletedCount === 0) {
+    throw new Error("Impossible de supprimer le compte, veuillez réessayer plus tard");
+  }
+
+  return result;
+}
+
+export { createUser, loginByEmail, getDataUserById, deleteAccount };

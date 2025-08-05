@@ -8,10 +8,7 @@ export async function GET(request) {
     await connectToDb();
     const token = request.cookies.get("access_token")?.value;
 
-    if (!token) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
+   
     const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
     const { payload } = await jwtVerify(token, secret);

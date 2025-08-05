@@ -17,7 +17,7 @@ export default function NavBarMyAccount() {
       if (!response.ok) throw new Error("Logout failed");
       setIsAuthenticated(false);
       router.replace("/");
-      router.refresh();
+      window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
@@ -30,6 +30,7 @@ export default function NavBarMyAccount() {
     { text: "Réclamations", path: "/mon-compte/reclamations" },
     { text: "Se déconnecter", action: handleLogout },
   ];
+
   return (
     <aside aria-label="Navigation de mon compte" className={styles.navBarMyAccount}>
       {buttons.map((button) => (

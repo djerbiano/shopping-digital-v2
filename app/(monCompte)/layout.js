@@ -19,12 +19,8 @@ export default function RootLayout({ children }) {
     }
   }, [loading, isAuthenticated, router]);
 
-  if (loading) {
+  if (loading || !isAuthenticated) {
     return <Loading />;
-  }
-
-  if (!isAuthenticated) {
-    return null;
   }
   return (
     <UserProvider>

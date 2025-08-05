@@ -8,7 +8,7 @@ export async function POST(req) {
     const body = await req.json();
     const result = await loginByEmail(body);
 
-    const response = NextResponse.json({ result, message: ` Bienvenue ${result.name}` });
+    const response = NextResponse.json({ result, message: ` Bienvenue ${result.email}` });
 
     response.cookies.set("access_token", result.token, {
       httpOnly: true,

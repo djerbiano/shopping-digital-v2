@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 function generateToken(user) {
   return jwt.sign(
@@ -9,8 +10,15 @@ function generateToken(user) {
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "5h" }
- 
   );
 }
 
-export { generateToken };
+export function validateObjectId(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("ID utilisateur invalide");
+  }
+}
+
+
+
+export { generateToken, validateObjectId };

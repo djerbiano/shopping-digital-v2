@@ -28,6 +28,7 @@ export async function middleware(request) {
     console.error("JWT expired or invalid:", error);
     const response = NextResponse.redirect(redirectUrl, 302);
     response.headers.set("Cache-Control", "no-store");
+
     return response;
   }
 }
