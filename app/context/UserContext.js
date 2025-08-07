@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
       if (response.ok) {
         setDataProfile(result);
       } else {
-        setErrorProfile(result.error || "Erreur lors de la récupération du profil");
+        setErrorProfile(result.message || "Erreur lors de la récupération du profil");
       }
     } catch (error) {
       console.error("Erreur lors de la récupération du profil :", error);

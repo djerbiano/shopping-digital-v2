@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
-
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 function generateToken(user) {
   return jwt.sign(
     {
@@ -12,11 +12,20 @@ function generateToken(user) {
     { expiresIn: "5h" }
   );
 }
-
+function createHttpError(message, statusCode = 500) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+}
 function validateObjectId(id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error("ID utilisateur invalide");
+    throw createHttpError("ID invalide", 400);
+    // throw new Error("ID utilisateur invalide");
   }
 }
+function handleError(error) {
+  console.error("Erreur serveur :", error);
 
-export { generateToken, validateObjectId };
+  return NextResponse.json({ message: error.message || "Erreur serveur" }, { status: error.statusCode || 500 });
+}
+export { generateToken, validateObjectId, createHttpError, handleError };

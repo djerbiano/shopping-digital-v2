@@ -1,8 +1,7 @@
 "use client";
 import styles from "../page.module.css";
 import { useFilterProducts } from "../context/filterProductsContext";
-import {  useEffect, useState } from "react";
-import { FilterProductsContext } from "../context/filterProductsContext";
+import { useEffect, useState } from "react";
 import DisplayAllProducts from "../_Components/clientSide/DisplayAllProducts";
 import { useRouter } from "next/navigation";
 import NotFound from "../_Components/clientSide/404NotFound";
@@ -14,6 +13,7 @@ export default function Produits() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const handleCategoryChange = (category) => {
     setCategories((prevCategories) => ({
@@ -29,7 +29,27 @@ export default function Produits() {
     { key: "Téléphonie", label: "Smartphones" },
   ];
   const fetchProducts = async () => {
+    setError(false);
+    setErrorMessage("");
     setIsLoading(true);
+
+    // vérif prix négatifs ou non numériques
+    if (
+      (minPrice && (isNaN(minPrice) || Number(minPrice) < 0)) ||
+      (maxPrice && (isNaN(maxPrice) || Number(maxPrice) < 0))
+    ) {
+      setError(true);
+      setErrorMessage("Les prix doivent être des nombres positifs.");
+      setIsLoading(false);
+      return;
+    }
+    // vérif max < min
+    if (minPrice && maxPrice && Number(minPrice) > Number(maxPrice)) {
+      setError(true);
+      setErrorMessage("Le prix maximum ne peut pas être inférieur au prix minimum");
+      setIsLoading(false);
+      return;
+    }
     try {
       const params = new URLSearchParams();
 
@@ -49,10 +69,11 @@ export default function Produits() {
         setProducts(data.products);
       } else {
         setError(true);
-        console.error("Erreur de chargement :", data.error);
+        setErrorMessage(data.message || "Erreur inconnue");
       }
     } catch (err) {
       setError(true);
+      setErrorMessage("Erreur serveur");
       console.error("Erreur serveur :", err);
     } finally {
       setIsLoading(false);
@@ -60,10 +81,13 @@ export default function Produits() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    const timeout = setTimeout(() => {
+      fetchProducts();
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, [categories, minPrice, maxPrice]);
 
-  if (error) return <NotFound />;
   return (
     <section className={styles.productsFilterContainer} aria-labelledby="tous-les-produits">
       <h2 id="tous-les-produits">Tous les produits</h2>
@@ -103,7 +127,14 @@ export default function Produits() {
             </label>
           </fieldset>
         </aside>
-        <DisplayAllProducts products={products} isLoading={isLoading} />
+
+        {error ? (
+          <p className={styles.error} style={{ marginBottom: "50vh" }}>
+            {errorMessage}
+          </p>
+        ) : (
+          <DisplayAllProducts products={products} isLoading={isLoading} />
+        )}
       </div>
     </section>
   );

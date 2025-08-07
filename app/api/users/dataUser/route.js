@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import connectToDb from "../../../../_backend/config/db";
 import { getDataUserById } from "../../../../_backend/controllers/usersController";
+import { handleError } from "../../../../_backend/utils/helpers";
 
 export async function GET(request) {
   try {
@@ -26,7 +27,6 @@ export async function GET(request) {
     if (error.code === "ERR_JWT_EXPIRED") {
       return NextResponse.json({ message: "Session expirée, veuillez vous reconnecter." }, { status: 401 });
     }
-    console.error("Erreur serveur :", error);
-    return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
+    return handleError(error);
   }
 }

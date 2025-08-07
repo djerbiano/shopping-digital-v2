@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../_backend/config/db";
 import { createUser } from "../../../../_backend/controllers/usersController";
+import { handleError } from "../../../../_backend/utils/helpers";
 
 export async function POST(req) {
   try {
@@ -24,7 +25,6 @@ export async function POST(req) {
 
     return response;
   } catch (error) {
-    console.error("Erreur serveur :", error);
-    return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
+   return handleError(error);
   }
 }

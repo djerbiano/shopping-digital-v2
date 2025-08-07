@@ -1,7 +1,7 @@
-const Product = require("../../_backend/models/Product");
+import Product from "../../_backend/models/Product";
+import { createHttpError } from "../../_backend/utils/helpers";
 
 async function getAllProducts(page = 1, filters = {}) {
-
   const limit = 50;
   const skip = (page - 1) * limit;
 
@@ -31,8 +31,6 @@ async function getAllProducts(page = 1, filters = {}) {
   const totalPages = Math.ceil(totalProducts / limit);
   const products = await Product.find(query).skip(skip).limit(limit);
 
- 
-
   return {
     products,
     pagination: {
@@ -44,8 +42,8 @@ async function getAllProducts(page = 1, filters = {}) {
 }
 async function getProductById(id) {
   const product = await Product.findById(id);
-  if (!product) throw new Error("NOT_FOUND");
+  if (!product) throw createHttpError("Produit introuvable", 404);
   return product;
 }
 
-module.exports = { getAllProducts, getProductById };
+export { getAllProducts, getProductById };

@@ -1,25 +1,20 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../_backend/config/db";
 import { getProductById } from "../../../../_backend/controllers/productsController";
+import { validateObjectId, handleError } from "../../../../_backend/utils/helpers";
 
 export async function GET(req, { params }) {
   try {
     await connectToDb();
-    const resolvedParams = await params;
-    const id = resolvedParams.id;
+    const { id } = await params;
 
-    if (!id) {
-      return NextResponse.json({ success: false, error: "ID manquant" }, { status: 400 });
-    }
+    //validate mongoDB ID before fetching product
+    validateObjectId(id);
 
     const product = await getProductById(id);
 
     return NextResponse.json(product);
   } catch (error) {
-    if (error.message === "NOT_FOUND") {
-      return NextResponse.json({ message: "Produit introuvable" }, { status: 404 });
-    }
-    console.error("Erreur serveur :", error);
-    return NextResponse.json({ message: "Erreur serveur", error: error.message }, { status: 500 });
+    return handleError(error);
   }
 }

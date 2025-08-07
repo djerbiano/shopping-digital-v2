@@ -5,7 +5,7 @@ export default function DisplayAllProducts({ products, isLoading }) {
   if (isLoading) return <ProductSkeleton />;
 
   if (!products.length) {
-    return <p>Aucun produit trouvé</p>;
+    return <p style={{ marginBottom: "50vh" }}>Aucun produit trouvé</p>;
   }
   return (
     <div className={styles.displayAllProducts}>

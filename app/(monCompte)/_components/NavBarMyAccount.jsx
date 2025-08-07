@@ -1,8 +1,8 @@
 "use client";
 import styles from "../myAccount.module.css";
 import { usePathname, useRouter } from "next/navigation";
-
 import { useAuth } from "../../context/AuthContext";
+
 export default function NavBarMyAccount() {
   const { setIsAuthenticated, setLoading } = useAuth();
   const router = useRouter();

@@ -1,10 +1,10 @@
 "use client";
 import styles from "../page.module.css";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "../context/AuthContext";
 export default function Inscription() {
   const { refreshAuth } = useAuth();
   const router = useRouter();
@@ -77,7 +77,7 @@ export default function Inscription() {
         await refreshAuth();
         router.replace("/mon-compte");
       } else {
-        toast.error(data.error || "Une erreur est survenue");
+        toast.error(data.message || "Une erreur est survenue");
       }
     } catch (error) {
       toast.error(error.message || "Une erreur est survenue");

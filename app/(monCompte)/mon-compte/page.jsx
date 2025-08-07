@@ -2,10 +2,10 @@
 import styles from "../myAccount.module.css";
 import { useUser } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
+import { useModal } from "../../context/ModalContext";
 import { useState } from "react";
 import UpdateProfile from "../_components/UpdateProfile";
 import ProfileSkeleton from "../_components/ProfileSkeleton";
-import { useModal } from "../../context/ModalContext";
 import toast from "react-hot-toast";
 export default function MonCompte() {
   const { dataProfile, loadingProfile, errorProfile } = useUser();
@@ -23,8 +23,8 @@ export default function MonCompte() {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data?.error || "Une erreur est survenue.");
-        throw new Error(data?.error || "Erreur lors de la suppression.");
+        toast.error(data?.message || "Une erreur est survenue.");
+        throw new Error(data?.message || "Erreur lors de la suppression.");
       }
 
       toast.success(data?.message || "Compte supprimé.");

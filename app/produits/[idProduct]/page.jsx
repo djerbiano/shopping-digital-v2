@@ -32,7 +32,6 @@ export default function DisplaySelectedProduct() {
       } else {
         setError(true);
         setDataContent(data);
-        console.error("Erreur de chargement :", data.error);
       }
     } catch (err) {
       console.error("Erreur serveur :", err);

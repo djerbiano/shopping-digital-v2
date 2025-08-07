@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
 import styles from "../../page.module.css";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
+import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../loading";
 
 export default function Login() {
@@ -37,7 +37,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`/api/users/${login.email}`, {
+      const response = await fetch("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export default function Login() {
 
         router.replace("/mon-compte");
       } else {
-        toast.error(data.error || "Connexion echouée");
+        toast.error(data.message || "Connexion echouée");
       }
     } catch (error) {
       console.error("Erreur serveur :", error);

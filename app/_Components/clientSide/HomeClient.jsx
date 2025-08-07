@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "../../context/AuthContext";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import styles from "../../page.module.css";
@@ -8,7 +9,6 @@ import PromotionalBanner from "./PromotionalBanner";
 import LimitedEdition from "./LimitedEdition";
 import Sale from "./Sale";
 import toast from "react-hot-toast";
-import { useAuth } from "../../context/AuthContext";
 
 export default function HomeClient({ products }) {
   const { refreshAuth } = useAuth();

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 let isConnected = false;
 
@@ -27,4 +27,4 @@ async function connectToDb() {
   }
 }
 
-module.exports = connectToDb;
+export default connectToDb;
