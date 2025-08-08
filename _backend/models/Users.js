@@ -120,7 +120,10 @@ function validateNewMail(obj) {
 // validate new password
 function validateNewPassword(obj) {
   const schema = joi.object({
-    password: joi.string().trim().min(6),
+    password: joi.string().trim().min(6).messages({
+      "string.empty": "Le mot de passe est obligatoire.",
+      "string.min": "Le mot de passe doit contenir au moins 6 caractères.",
+    }),
   });
   return schema.validate(obj);
 }

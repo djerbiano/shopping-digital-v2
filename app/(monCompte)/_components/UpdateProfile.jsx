@@ -9,7 +9,7 @@ export default function UpdateProfile({ setIsOpen, dataProfile }) {
     phone: "",
     address: "",
     password: "",
-    confirmationPassword: "",
+    newPassword: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,7 +27,7 @@ export default function UpdateProfile({ setIsOpen, dataProfile }) {
       phone: "",
       address: "",
       password: "",
-      confirmationPassword: "",
+      newPassword: "",
     });
   };
   return (
@@ -65,15 +65,21 @@ export default function UpdateProfile({ setIsOpen, dataProfile }) {
           required
         />
 
-        <label htmlFor="confirmationPassword">Nouveau mot de passe:</label>
+        <label htmlFor="newPassword">Nouveau mot de passe:</label>
         <input
           type="password"
-          id="confirmationPassword"
-          name="confirmationPassword"
-          value={formData.confirmationPassword}
+          id="newPassword"
+          name="newPassword"
+          value={formData.newPassword}
           onChange={handleChange}
           required
         />
+
+
+
+
+
+
         <p>** Information actuelle</p>
         <p className={styles.error}>Erreur: Le mot de passe actuel est incorrect</p>
         <div className={styles.buttonContainer}>
