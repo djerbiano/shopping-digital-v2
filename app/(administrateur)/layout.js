@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import Loading from "../loading";
 import NavBarAdmin from "./_components/NavBarAdmin";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({ children }) {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
         Administrateur
       </h2>
       <NavBarAdmin />
+       <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
       {children}
     </section>
   );

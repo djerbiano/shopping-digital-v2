@@ -1,5 +1,6 @@
 "use client";
 import styles from "./myAccount.module.css";
+import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
         <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
           <NavBarMyAccount />
         </ClientOnly>
+       <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
         {children}
       </section>
     </UserProvider>

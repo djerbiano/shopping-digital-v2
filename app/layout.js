@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
             <MenuHamburgerContextProvider>
               <FilterProductsContextProvider>
                 <Header />
-                 <Toaster position="bottom-center" />
+                 <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
                 {children}
                 <Modal />
               </FilterProductsContextProvider>

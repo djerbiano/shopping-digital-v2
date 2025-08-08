@@ -3,7 +3,7 @@ import styles from "../../page.module.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Loading from "../../loading";
 
 export default function Login() {
@@ -116,8 +116,6 @@ export default function Login() {
         <button type="submit" aria-label="S'inscrire" onClick={() => router.push("/inscription")}>
           S'inscrire
         </button>
-
-        <Toaster position="bottom-center" reverseOrder={false} />
       </div>
     </section>
   );
