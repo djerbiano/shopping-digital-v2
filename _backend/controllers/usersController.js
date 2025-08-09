@@ -15,7 +15,7 @@ async function createUser(body) {
     password: body.password.trim(),
   };
   const { error } = validateRegisterUser(data);
-  if (error) throw createHttpError(error.details[0].message || "Une erreur est survenue", 400);
+  if (error) throw createHttpError(error.details?.[0]?.message || "Une erreur est survenue", 400);
 
   const userExists = await User.findOne({ email: data.email });
   if (userExists) throw createHttpError("Veuillez utiliser une autre adresse mail", 400);
@@ -42,7 +42,7 @@ async function loginByEmail(body) {
     password: body.password.trim(),
   };
   const { error } = validateLoginUser(data);
-  if (error) throw createHttpError(error.details[0].message || "Une erreur est survenue", 400);
+  if (error) throw createHttpError(error.details?.[0]?.message || "Une erreur est survenue", 400);
   // get user by email
   const user = await User.findOne({ email: data.email });
 
@@ -110,8 +110,8 @@ async function updateAccount(data) {
   if (data.password) data.password = data.password.trim();
   if (data.newPassword) data.newPassword = data.newPassword.trim();
 
-  if (data.password) {
-    if (!data.newPassword) throw createHttpError("Veuillez fournir le nouveau mot de passe", 400);
+  if (data.password || data.newPassword) {
+    if (!data.newPassword || !data.password) throw createHttpError("Veuillez fournir les deux mots de passe", 400);
 
     const validPassword = await bcrypt.compare(data.password, user.password);
     if (!validPassword) throw createHttpError("Ancien mot de passe incorrect", 400);
@@ -120,7 +120,7 @@ async function updateAccount(data) {
 
     if (error)
       throw createHttpError(
-        error.details[0].message || "Une erreur est survenue lors de la modification du mot de passe",
+        error.details?.[0]?.message || "Une erreur est survenue lors de la modification du mot de passe",
         400
       );
 
@@ -133,7 +133,7 @@ async function updateAccount(data) {
     console.log(error);
     if (error)
       throw createHttpError(
-        error.details[0].message || "Une erreur est survenue lors de la modification de l'email",
+        error.details?.[0]?.message || "Une erreur est survenue lors de la modification de l'email",
         400
       );
     // check if email already exists $ne = not equal
