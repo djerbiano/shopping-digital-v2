@@ -116,7 +116,8 @@ async function updateAccount(data) {
     const validPassword = await bcrypt.compare(data.password, user.password);
     if (!validPassword) throw createHttpError("Ancien mot de passe incorrect", 400);
 
-    const { error } = validateNewPassword(data.newPassword);
+    const { error } = validateNewPassword({ password: data.newPassword });
+
     if (error)
       throw createHttpError(
         error.details[0].message || "Une erreur est survenue lors de la modification du mot de passe",
@@ -128,7 +129,8 @@ async function updateAccount(data) {
   }
 
   if (data.email) {
-    const { error } = validateNewMail(data.email);
+    const { error } = validateNewMail({ email: data.email });
+    console.log(error);
     if (error)
       throw createHttpError(
         error.details[0].message || "Une erreur est survenue lors de la modification de l'email",
@@ -137,7 +139,7 @@ async function updateAccount(data) {
     // check if email already exists $ne = not equal
     const emailExists = await User.findOne({
       email: data.email,
-      _id: { $ne: mongoose.Types.ObjectId(id) },
+      _id: { $ne: new mongoose.Types.ObjectId(id) },
     });
     if (emailExists) throw createHttpError("Cet email est déjà utilisé", 400);
 

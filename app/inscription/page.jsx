@@ -127,7 +127,6 @@ export default function Inscription() {
           </button>
         )}
       </form>
-      <Toaster position="bottom-center" reverseOrder={false} />
     </section>
   );
 }

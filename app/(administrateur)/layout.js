@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
         Administrateur
       </h2>
       <NavBarAdmin />
-       <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
       {children}
     </section>
   );

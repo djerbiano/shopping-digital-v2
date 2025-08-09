@@ -33,7 +33,6 @@ export default function RootLayout({ children }) {
         <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
           <NavBarMyAccount />
         </ClientOnly>
-       <Toaster position="bottom-center" toastOptions={{ duration: 4000 }} />
         {children}
       </section>
     </UserProvider>

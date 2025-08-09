@@ -113,7 +113,13 @@ function validateRegisterUser(obj) {
 // validate new email
 function validateNewMail(obj) {
   const schema = joi.object({
-    email: joi.string().trim().min(5).max(100).email(),
+    email: joi.string().trim().min(5).max(100).email().messages({
+      "string.base": "L'email doit être une chaîne de caractères.",
+      "string.empty": "L'email est obligatoire.",
+      "string.min": "L'email doit contenir au moins 5 caractères.",
+      "string.max": "L'email ne doit pas dépasser 100 caractères.",
+      "string.email": "L'email doit être une adresse valide.",
+    }),
   });
   return schema.validate(obj);
 }
