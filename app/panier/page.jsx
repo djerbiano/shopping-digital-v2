@@ -3,10 +3,15 @@ import Image from "next/image";
 import styles from "../page.module.css";
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Paiement from "../_Components/clientSide/Paiement/Paiement";
+import toast from "react-hot-toast";
+import Loading from "../loading";
 export default function Panier() {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+  const [showPaiement, setShowPayment] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //get items from sessionStorage
   useEffect(() => {
@@ -19,6 +24,7 @@ export default function Panier() {
   //get products from api
   useEffect(() => {
     if (cartItems.length > 0) {
+      setLoading(true);
       const fetchUpdatedItems = async () => {
         const updatedItems = await Promise.all(
           cartItems.map(async (item) => {
@@ -33,6 +39,7 @@ export default function Panier() {
           })
         );
         setProducts(updatedItems.filter(Boolean));
+        setLoading(false);
       };
 
       fetchUpdatedItems();
@@ -69,66 +76,82 @@ export default function Panier() {
     sessionStorage.setItem("cartItems", JSON.stringify(newCart));
   };
 
+  const handleShowPaiement = () => {
+    if (cartItems.length > 0) {
+      setShowPayment(true);
+    } else {
+      toast("Panier vide", { icon: "⚠️" });
+    }
+  };
+
+  if (loading) return <Loading />;
+
   return (
-    <section className={styles.panier} aria-labelledby="panier">
-      <h2 id="panier">Panier</h2>
-      <h3>
-        {cartItems?.length} article{cartItems?.length > 1 && "s"}
-      </h3>
-      <div className={styles.panierContainer}>
-        <div className={styles.panierContent}>
-          {cartItems.map((cartItem, index) => {
-            const dbProduct = productMap.get(cartItem.id);
-            if (!dbProduct) return null;
+    <>
+      {showPaiement ? (
+        <Paiement totalPanier={totalPanier} cartItems={cartItems} setShowPayment={setShowPayment} />
+      ) : (
+        <section className={styles.panier} aria-labelledby="panier">
+          <h2 id="panier">Panier</h2>
+          <h3>
+            {cartItems?.length} article{cartItems?.length > 1 && "s"}
+          </h3>
+          <div className={styles.panierContainer}>
+            <div className={styles.panierContent}>
+              {cartItems.map((cartItem, index) => {
+                const dbProduct = productMap.get(cartItem.id);
+                if (!dbProduct) return null;
 
-            const unitPrice = dbProduct?.isOnSale ? dbProduct?.salePrice : dbProduct?.regularPrice;
-            const totalPrice = unitPrice * cartItem.quantity;
+                const unitPrice = dbProduct?.isOnSale ? dbProduct?.salePrice : dbProduct?.regularPrice;
+                const totalPrice = unitPrice * cartItem.quantity;
 
-            return (
-              <article className={styles.panierItem} key={index}>
-                <div className={styles.panierItemContent}>
-                  <div className={styles.panierItemImage} onClick={() => router.push(`/produits/${dbProduct._id}`)}>
-                    <Image
-                      src={`/${dbProduct?.pictures?.pic1}`}
-                      alt={dbProduct?.title}
-                      width={400}
-                      height={400}
-                      priority
-                    />
-                  </div>
+                return (
+                  <article className={styles.panierItem} key={index}>
+                    <div className={styles.panierItemContent}>
+                      <div className={styles.panierItemImage} onClick={() => router.push(`/produits/${dbProduct._id}`)}>
+                        <Image
+                          src={`/${dbProduct?.pictures?.pic1}`}
+                          alt={dbProduct?.title}
+                          width={400}
+                          height={400}
+                          priority
+                        />
+                      </div>
 
-                  <div className={styles.panierItemDescription}>
-                    <h4>{dbProduct?.title}</h4>
-                    <p>{unitPrice} €</p>
-                    <p>Couleur: {cartItem?.color}</p>
-                    <p>Taille: {cartItem?.size}</p>
-                    <p>Quantité : {cartItem?.quantity}</p>
-                    <p>Total : {totalPrice} €</p>
-                  </div>
-                </div>
+                      <div className={styles.panierItemDescription}>
+                        <h4>{dbProduct?.title}</h4>
+                        <p>{unitPrice} €</p>
+                        <p>Couleur: {cartItem?.color}</p>
+                        <p>Taille: {cartItem?.size}</p>
+                        <p>Quantité : {cartItem?.quantity}</p>
+                        <p>Total : {totalPrice} €</p>
+                      </div>
+                    </div>
 
-                <button
-                  type="button"
-                  aria-label="Supprimer l'article"
-                  className={styles.panierDeleteItem}
-                  onClick={() => handleDeleteItem(cartItem)}
-                >
-                  Supprimer
-                </button>
-              </article>
-            );
-          })}
-        </div>
+                    <button
+                      type="button"
+                      aria-label="Supprimer l'article"
+                      className={styles.panierDeleteItem}
+                      onClick={() => handleDeleteItem(cartItem)}
+                    >
+                      Supprimer
+                    </button>
+                  </article>
+                );
+              })}
+            </div>
 
-        <section className={styles.panierSummary} aria-labelledby="recap">
-          <h3 id="recap">Récapitulatif du paiement</h3>
-          <p>Expédition gratuite</p>
-          <p>Total : {totalPanier} €</p>
-          <button type="button" aria-label="Passer au paiement">
-            Paiement
-          </button>
+            <section className={styles.panierSummary} aria-labelledby="recap">
+              <h3 id="recap">Récapitulatif du paiement</h3>
+              <p>Expédition gratuite</p>
+              <p>Total : {totalPanier} €</p>
+              <button type="button" aria-label="Passer au paiement" onClick={handleShowPaiement}>
+                Paiement
+              </button>
+            </section>
+          </div>
         </section>
-      </div>
-    </section>
+      )}
+    </>
   );
 }

@@ -1,0 +1,123 @@
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.paiementContainer button {
+  cursor: pointer;
+  padding: 10px;
+  color: var(--color-tertiary);
+  background-color: var(--color-secondary);
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+.paiementContainer button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-foreground);
+}
+.paiementContainer {
+  position: relative;
+  min-height: calc((90vh - 100px) - 100px);
+  margin: 50px;
+  display: flex;
+  background-color: var(--color-tertiary);
+  border-radius: 20px;
+}
+.backButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.backButton:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+}
+.paiementContainer input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #e8e6e6;
+  color: #000000;
+}
+.paiementContainer .content {
+  padding: 60px;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.paiementContainer .contentLeft {
+  background-color: #e8e6e6;
+  border-radius: 20px 0 0 20px;
+}
+.paiementContainer .contentRight {
+  border-radius: 0 20px 20px 0;
+}
+.paiementContainer .paymentLogo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.paiementContainer .paymentLogo img {
+  width: auto;
+  max-width: 50%;
+  height: auto;
+}
+
+.paiementContainer .cardPayment,
+.paiementContainer .payPal {
+  max-height: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.paiementContainer .cardPaymentActive,
+.paiementContainer .payPalActive {
+  height: auto;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+  transition: all 0.5s ease;
+}
+.payBtn {
+  min-width: 100px;
+  align-self: center;
+}
+
+@media (max-width: 767.98px) {
+  .paiementContainer {
+    flex-direction: column;
+    font-size: 14px;
+  }
+  .paiementContainer .content {
+    padding: 20px;
+    width: 100%;
+  }
+  .paiementContainer .contentLeft {
+    border-radius: 20px 20px 0 0;
+  }
+  .paiementContainer .contentRight {
+    border-radius: 0 0 20px 20px;
+  }
+}
+@media (max-width: 425px){
+  .paiementContainer {
+   margin: 20px;
+  }
+
+}

@@ -9,7 +9,7 @@ import ProfileSkeleton from "../_components/ProfileSkeleton";
 import toast from "react-hot-toast";
 
 export default function MonCompte() {
-  const { dataProfile, loadingProfile, errorProfile,  } = useUser();
+  const { dataProfile, loadingProfile, errorProfile } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
   const { refreshAuth } = useAuth();
@@ -52,7 +52,6 @@ export default function MonCompte() {
   if (errorProfile) {
     return <p>Error: {errorProfile}</p>;
   }
-
 
   return (
     <>
