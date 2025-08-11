@@ -4,6 +4,7 @@ import { useUser } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
 import { useModal } from "../../context/ModalContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import UpdateProfile from "../_components/UpdateProfile";
 import ProfileSkeleton from "../_components/ProfileSkeleton";
 import toast from "react-hot-toast";
@@ -13,6 +14,7 @@ export default function MonCompte() {
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
   const { refreshAuth } = useAuth();
+  const router = useRouter();
 
   const deleteAccount = async () => {
     try {
@@ -70,6 +72,12 @@ export default function MonCompte() {
             <button type="submit" aria-label="Modifier mes informations" onClick={() => setIsOpen(true)}>
               Modifier mes informations
             </button>
+
+            {dataProfile?.isAdmin && (
+              <button type="submit" aria-label="Admin" onClick={() => router.push("/admin")}>
+                Admin
+              </button>
+            )}
 
             <button
               className={styles.dangerButton}

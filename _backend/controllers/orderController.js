@@ -1,0 +1,183 @@
+import mongoose from "mongoose";
+import Order from "../../_backend/models/Order";
+import Product from "../../_backend/models/Product";
+import User from "../../_backend/models/Users";
+import { createHttpError } from "../utils/helpers";
+
+export async function addOrder(cart) {
+  if (!cart || !Array.isArray(cart.products) || cart.products.length === 0) {
+    throw createHttpError("Panier vide", 400);
+  }
+
+  const aggregated = {}; // exemple : { "<productId>|<color>|<size>": totalQuantity }
+
+  for (const line of cart.products) {
+    const { product, color, size, quantity } = line;
+
+    if (!product || !color || !size || !Number.isInteger(quantity) || quantity <= 0) {
+      throw createHttpError(" Données invalides dans le panier", 400);
+    }
+
+    const key = `${product}|${color}|${size}`; // unique key for product/color/size to accumulate quantity
+    aggregated[key] = (aggregated[key] || 0) + quantity; // accumulate quantities for identical keys
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    // Extract unique product IDs from aggregated keys
+    const productIds = Array.from(new Set(Object.keys(aggregated).map((k) => k.split("|")[0])));
+
+    // Fetch all products in this order in current session
+    const productsInDb = await Product.find({ _id: { $in: productIds } }).session(session);
+
+    // Create a Map for fast access by product ID
+    const productMap = new Map(productsInDb.map((p) => [p._id.toString(), p]));
+
+    // Verify stock availability for each aggregated product/color/size combination
+    for (const [key, totalQuantity] of Object.entries(aggregated)) {
+      const [productId, color, size] = key.split("|");
+      const prod = productMap.get(productId);
+
+      if (!prod) {
+        await session.abortTransaction();
+        throw createHttpError(" Un des produits de votre panier n'existe pas", 404);
+      }
+
+      const colorObj = prod.colors.find((c) => c.color === color);
+      if (!colorObj) {
+        await session.abortTransaction();
+        throw createHttpError(`Couleur ${color} n'existe pas pour le produit ${productId}`, 404);
+      }
+
+      const sizeObj = colorObj.sizes.find((s) => s.size === size);
+      if (!sizeObj || sizeObj.quantity < totalQuantity) {
+        await session.abortTransaction();
+        throw createHttpError(` Stock insuffisant pour ${prod.title || productId} (${color}/${size})`, 409);
+      }
+    }
+
+    const order = new Order({
+      products: cart.products,
+      user: cart.id,
+      email: cart.email,
+      total: cart.total,
+      billingAddress: cart.billingAddress || cart.shippingAddress,
+      shippingAddress: cart.shippingAddress,
+      statusHistory: [{ status: "payée", startDate: new Date() }],
+    });
+
+    const savedOrder = await order.save({ session });
+
+    // decrement stock quantities line by line
+    for (const [key, totalQuantity] of Object.entries(aggregated)) {
+      const [productId, color, size] = key.split("|");
+
+      // Use $elemMatch in query to decrement quantity for matching color and size with sufficient stock in the transaction.
+      const updateResult = await Product.findOneAndUpdate(
+        {
+          _id: productId,
+          colors: {
+            $elemMatch: {
+              color: color,
+              sizes: {
+                $elemMatch: {
+                  size: size,
+                  quantity: { $gte: totalQuantity },
+                },
+              },
+            },
+          },
+        },
+
+        {
+          $inc: { "colors.$[c].sizes.$[s].quantity": -totalQuantity },
+        },
+        {
+          new: true,
+          arrayFilters: [{ "c.color": color }, { "s.size": size }],
+          session,
+        }
+      );
+
+      if (!updateResult) {
+        await session.abortTransaction();
+        throw createHttpError(`Stock insuffisant ou produit introuvable pour ${productId}`, 409);
+      }
+      /********** Concurrency check start ********/
+      const colorObj = updateResult.colors.find((c) => c.color === color);
+      const sizeObj = colorObj?.sizes.find((s) => s.size === size);
+
+      if (!sizeObj) {
+        await session.abortTransaction();
+        throw createHttpError(
+          `Erreur interne lors de la lecture de la taille après mise à jour du produit ${productId}`,
+          500
+        );
+      }
+      if (typeof sizeObj.quantity !== "number" || sizeObj.quantity < 0) {
+        await session.abortTransaction();
+        throw createHttpError(`Stock incohérent après mise à jour pour la taille ${size} du produit ${productId}`, 500);
+      }
+
+      /********** Concurrency check end **********/
+
+      // If quantity is 0 or less, mark product as out of stock
+      if (sizeObj.quantity <= 0 && updateResult.stock !== false) {
+        await Product.findByIdAndUpdate(productId, { $set: { stock: false } }, { session });
+      }
+    }
+
+    // Commit transaction
+    await session.commitTransaction();
+
+    return savedOrder;
+  } catch (err) {
+    /*********  Do NOT hide the original err *******************/
+    try {
+      await session.abortTransaction();
+    } catch (e) {
+      console.error("Erreur lors de la annulation de la transaction :", e);
+    }
+
+    /********* End: Do NOT hide the original err *******/
+
+    if (err && typeof err.statusCode === "number") {
+      throw err;
+    }
+
+    throw createHttpError(
+      (err && err.message) || "Une erreur est survenue lors de la création de la commande",
+      (err && err.statusCode) || 500
+    );
+  } finally {
+    session.endSession();
+  }
+}
+
+async function getAllOrdersForAdmin(page = 1, filters = {}) {
+  const limit = 50;
+  const skip = (page - 1) * limit;
+  const query = {};
+
+  if (Array.isArray(filters.status) && filters.status.length > 0) {
+    query.status = { $in: filters.status };
+  }
+
+  const totalOrders = await Order.countDocuments(query);
+  const totalPages = Math.ceil(totalOrders / limit);
+  const orders = await Order.find(query).skip(skip).limit(limit);
+
+  return {
+    orders,
+    pagination: {
+      totalOrders,
+      totalPages,
+      currentPage: page,
+    },
+  };
+}
+
+export { getAllOrders };
