@@ -59,6 +59,17 @@
   background-color: #e8e6e6;
   border-radius: 20px 0 0 20px;
 }
+
+.paiementContainer .contentLeft fieldset {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+}
+.paiementContainer .contentLeft .billingAddressInput {
+  border: 1px solid #000000;
+}
+
 .paiementContainer .contentRight {
   border-radius: 0 20px 20px 0;
 }
@@ -115,9 +126,8 @@
     border-radius: 0 0 20px 20px;
   }
 }
-@media (max-width: 425px){
+@media (max-width: 425px) {
   .paiementContainer {
-   margin: 20px;
+    margin: 20px;
   }
-
 }

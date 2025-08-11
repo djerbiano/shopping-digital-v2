@@ -1,12 +1,12 @@
 import Product from "../../_backend/models/Product";
 import { createHttpError } from "../../_backend/utils/helpers";
 
-async function getAllProducts(page = 1, filters = {}) {
+async function getAllProductsForUser(page = 1, filters = {}) {
   const limit = 50;
   const skip = (page - 1) * limit;
 
   const query = {};
-
+  query.stock = { $ne: false };
   // catégories
   if (Array.isArray(filters.categories) && filters.categories.length > 0) {
     query.category = { $in: filters.categories };
@@ -46,4 +46,4 @@ async function getProductById(id) {
   return product;
 }
 
-export { getAllProducts, getProductById };
+export { getAllProductsForUser, getProductById };

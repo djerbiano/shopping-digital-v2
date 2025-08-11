@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../_backend/config/db";
-import { getAllProducts } from "../../../_backend/controllers/productsController";
+import { getAllProductsForUser } from "../../../_backend/controllers/productsController";
 import { createHttpError, handleError } from "../../../_backend/utils/helpers";
 
 export async function GET(req) {
@@ -38,7 +38,7 @@ export async function GET(req) {
       maxPrice: maxPrice !== null ? Number(maxPrice) : undefined,
     };
 
-    const result = await getAllProducts(page, filters);
+    const result = await getAllProductsForUser(page, filters);
 
     return NextResponse.json(result);
   } catch (error) {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Order from "../../_backend/models/Order";
 import Product from "../../_backend/models/Product";
-import User from "../../_backend/models/Users";
+import { User } from "../../_backend/models/Users";
 import { createHttpError } from "../utils/helpers";
 
 export async function addOrder(cart) {
@@ -9,16 +9,22 @@ export async function addOrder(cart) {
     throw createHttpError("Panier vide", 400);
   }
 
+  const user = await User.findById(cart.id);
+
+  if (!user) {
+    throw createHttpError("Utilisateur introuvable", 404);
+  }
+
   const aggregated = {}; // exemple : { "<productId>|<color>|<size>": totalQuantity }
 
   for (const line of cart.products) {
-    const { product, color, size, quantity } = line;
+    const { id, color, size, quantity } = line;
 
-    if (!product || !color || !size || !Number.isInteger(quantity) || quantity <= 0) {
+    if (!id || !color || !size || !Number.isInteger(quantity) || quantity <= 0) {
       throw createHttpError(" Données invalides dans le panier", 400);
     }
 
-    const key = `${product}|${color}|${size}`; // unique key for product/color/size to accumulate quantity
+    const key = `${id}|${color}|${size}`; // unique key for product/color/size to accumulate quantity
     aggregated[key] = (aggregated[key] || 0) + quantity; // accumulate quantities for identical keys
   }
 
@@ -42,30 +48,39 @@ export async function addOrder(cart) {
       const prod = productMap.get(productId);
 
       if (!prod) {
-        await session.abortTransaction();
+     
         throw createHttpError(" Un des produits de votre panier n'existe pas", 404);
       }
 
       const colorObj = prod.colors.find((c) => c.color === color);
       if (!colorObj) {
-        await session.abortTransaction();
+      
         throw createHttpError(`Couleur ${color} n'existe pas pour le produit ${productId}`, 404);
       }
 
       const sizeObj = colorObj.sizes.find((s) => s.size === size);
       if (!sizeObj || sizeObj.quantity < totalQuantity) {
-        await session.abortTransaction();
+      
         throw createHttpError(` Stock insuffisant pour ${prod.title || productId} (${color}/${size})`, 409);
       }
     }
-
+    const enrichedProducts = cart.products.map((line) => {
+      const prodDb = productMap.get(line.id);
+      return {
+        product: prodDb._id,
+        price: prodDb.isOnSale ? prodDb.salePrice : prodDb.regularPrice,
+        color: line.color,
+        size: line.size,
+        quantity: line.quantity,
+      };
+    });
     const order = new Order({
-      products: cart.products,
-      user: cart.id,
-      email: cart.email,
+      products: enrichedProducts,
+      user: user._id,
+      email: user.email,
       total: cart.total,
-      billingAddress: cart.billingAddress || cart.shippingAddress,
-      shippingAddress: cart.shippingAddress,
+      billingAddress: cart.billingAddress || user.address,
+      shippingAddress: user.address,
       statusHistory: [{ status: "payée", startDate: new Date() }],
     });
 
@@ -103,7 +118,7 @@ export async function addOrder(cart) {
       );
 
       if (!updateResult) {
-        await session.abortTransaction();
+      
         throw createHttpError(`Stock insuffisant ou produit introuvable pour ${productId}`, 409);
       }
       /********** Concurrency check start ********/
@@ -111,14 +126,14 @@ export async function addOrder(cart) {
       const sizeObj = colorObj?.sizes.find((s) => s.size === size);
 
       if (!sizeObj) {
-        await session.abortTransaction();
+    
         throw createHttpError(
           `Erreur interne lors de la lecture de la taille après mise à jour du produit ${productId}`,
           500
         );
       }
       if (typeof sizeObj.quantity !== "number" || sizeObj.quantity < 0) {
-        await session.abortTransaction();
+  
         throw createHttpError(`Stock incohérent après mise à jour pour la taille ${size} du produit ${productId}`, 500);
       }
 

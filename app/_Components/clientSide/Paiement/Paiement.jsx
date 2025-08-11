@@ -1,10 +1,13 @@
 import Image from "next/image";
 import styles from "./paiement.module.css";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
   const [cardPayment, setCardPayment] = useState(false);
   const [payPal, setPayPal] = useState(false);
+  const [billingAddressCheckbox, setBillingAddressCheckbox] = useState(false);
+  const [billingAddress, setBillingAddress] = useState("");
 
   const handlePayPal = () => {
     setPayPal(!payPal);
@@ -16,8 +19,25 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
     setPayPal(false);
   };
 
-  const handlePaiement = () => {
-    console.log("paiement");
+  const handlePaiement = async () => {
+    if (billingAddressCheckbox && !billingAddress) return toast.error("Veuillez renseigner votre adresse de livraison.");
+    const cartItemsAndTotal = {
+      cart: cartItems,
+      totalPanier,
+      billingAddress: billingAddressCheckbox ? billingAddress : null,
+    };
+
+    const response = await fetch("/api/orders/addOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItemsAndTotal),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    /* a prevoir********************* */
   };
   return (
     <section className={styles.paiementContainer} aria-labelledby="paiement">
@@ -35,6 +55,33 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
         <p>{cartItems?.length}</p>
         <h3>Total:</h3>
         <p>{totalPanier} €</p>
+
+        <fieldset className={styles.billingAddress}>
+          <input
+            type="checkbox"
+            name="billingAddressCheckbox"
+            id="billingAddressCheckbox"
+            checked={billingAddressCheckbox}
+            onChange={(e) => setBillingAddressCheckbox(e.target.checked)}
+          />
+          <label htmlFor="billingAddressCheckbox">Adresse de facturation différente</label>
+        </fieldset>
+
+        {billingAddressCheckbox && (
+          <>
+            <label htmlFor="billingAddress" className={styles.srOnly}>
+              Adresse de facturation
+            </label>
+            <input
+              type="text"
+              id="billingAddress"
+              placeholder="Adresse de facturation"
+              onChange={(e) => setBillingAddress(e.target.value)}
+              value={billingAddress}
+              className={styles.billingAddressInput}
+            />
+          </>
+        )}
       </div>
       <div className={` ${styles.content} ${styles.contentRight}`}>
         <button type="button" className={styles.backButton} onClick={() => setShowPayment(false)}>
