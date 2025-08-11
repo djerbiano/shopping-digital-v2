@@ -4,7 +4,7 @@ import Product from "../../_backend/models/Product";
 import { User } from "../../_backend/models/Users";
 import { createHttpError } from "../utils/helpers";
 
-export async function addOrder(cart) {
+async function addOrder(cart) {
   if (!cart || !Array.isArray(cart.products) || cart.products.length === 0) {
     throw createHttpError("Panier vide", 400);
   }
@@ -48,19 +48,18 @@ export async function addOrder(cart) {
       const prod = productMap.get(productId);
 
       if (!prod) {
-     
-        throw createHttpError(" Un des produits de votre panier n'existe pas", 404);
+        throw createHttpError(`${prod.title} n'existe plus`, 404);
       }
-
+      if (!prod.stock) {
+        throw createHttpError(`"${prod.title} n'est plus proposé à la vente"`, 404);
+      }
       const colorObj = prod.colors.find((c) => c.color === color);
       if (!colorObj) {
-      
-        throw createHttpError(`Couleur ${color} n'existe pas pour le produit ${productId}`, 404);
+        throw createHttpError(`Couleur ${color} n'existe pas pour le produit ${prod.title}`, 404);
       }
 
       const sizeObj = colorObj.sizes.find((s) => s.size === size);
       if (!sizeObj || sizeObj.quantity < totalQuantity) {
-      
         throw createHttpError(` Stock insuffisant pour ${prod.title || productId} (${color}/${size})`, 409);
       }
     }
@@ -118,23 +117,23 @@ export async function addOrder(cart) {
       );
 
       if (!updateResult) {
-      
-        throw createHttpError(`Stock insuffisant ou produit introuvable pour ${productId}`, 409);
+        throw createHttpError(`Stock insuffisant ou produit introuvable pour ${updateResult.title}`, 409);
       }
       /********** Concurrency check start ********/
       const colorObj = updateResult.colors.find((c) => c.color === color);
       const sizeObj = colorObj?.sizes.find((s) => s.size === size);
 
       if (!sizeObj) {
-    
         throw createHttpError(
-          `Erreur interne lors de la lecture de la taille après mise à jour du produit ${productId}`,
+          `Erreur interne lors de la lecture de la taille après mise à jour du produit ${updateResult.title}`,
           500
         );
       }
       if (typeof sizeObj.quantity !== "number" || sizeObj.quantity < 0) {
-  
-        throw createHttpError(`Stock incohérent après mise à jour pour la taille ${size} du produit ${productId}`, 500);
+        throw createHttpError(
+          `Stock incohérent après mise à jour pour la taille ${size} du produit ${updateResult.title}`,
+          500
+        );
       }
 
       /********** Concurrency check end **********/
@@ -168,7 +167,7 @@ export async function addOrder(cart) {
       (err && err.statusCode) || 500
     );
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 }
 
@@ -195,4 +194,4 @@ async function getAllOrdersForAdmin(page = 1, filters = {}) {
   };
 }
 
-export { getAllOrders };
+export { addOrder, getAllOrdersForAdmin };

@@ -1,13 +1,17 @@
 import Image from "next/image";
 import styles from "./paiement.module.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
+  const [loading, setLoading] = useState(false);
   const [cardPayment, setCardPayment] = useState(false);
   const [payPal, setPayPal] = useState(false);
   const [billingAddressCheckbox, setBillingAddressCheckbox] = useState(false);
   const [billingAddress, setBillingAddress] = useState("");
+
+  const router = useRouter();
 
   const handlePayPal = () => {
     setPayPal(!payPal);
@@ -20,24 +24,41 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
   };
 
   const handlePaiement = async () => {
-    if (billingAddressCheckbox && !billingAddress) return toast.error("Veuillez renseigner votre adresse de livraison.");
+    setLoading(true);
+    if (billingAddressCheckbox && !billingAddress)
+      return toast.error("Veuillez renseigner votre adresse de livraison.");
     const cartItemsAndTotal = {
       cart: cartItems,
       totalPanier,
       billingAddress: billingAddressCheckbox ? billingAddress : null,
     };
+    try {
+      const response = await fetch("/api/orders/addOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItemsAndTotal),
+      });
 
-    const response = await fetch("/api/orders/addOrder", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cartItemsAndTotal),
-    });
+      const data = await response.json();
 
-    const data = await response.json();
-    console.log(data);
-    /* a prevoir********************* */
+      if (!response.ok) {
+        toast.error(data?.message || "Une erreur est survenue.");
+      } else {
+        toast.success("Commande effectuée.");
+        setBillingAddressCheckbox(false);
+        setBillingAddress("");
+        setCardPayment(false);
+        setPayPal(false);
+        sessionStorage.removeItem("cartItems");
+        router.replace("/mon-compte/commandes");
+      }
+    } catch (error) {
+      toast.error(error.message || "Une erreur est survenue.");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <section className={styles.paiementContainer} aria-labelledby="paiement">
@@ -109,8 +130,14 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
             CVV
           </label>
           <input id="cvv" type="text" placeholder="1234" maxLength={4} />
-          <button type="button" className={styles.payBtn} onClick={() => handlePaiement()}>
-            Payer
+          <button
+            type="button"
+            className={styles.payBtn}
+            onClick={() => handlePaiement()}
+            disabled={loading}
+            aria-label="Payer"
+          >
+            {loading ? "Paiement en cours..." : "Payer"}
           </button>
         </div>
         <button type="button" onClick={() => handlePayPal()}>
@@ -121,8 +148,14 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
             paypal
           </label>
           <input id="paypal" type="text" placeholder="PayPal email" />
-          <button type="button" className={styles.payBtn} onClick={() => handlePaiement()}>
-            Payer
+          <button
+            type="button"
+            className={styles.payBtn}
+            onClick={() => handlePaiement()}
+            disabled={loading}
+            aria-label="Payer"
+          >
+            {loading ? "Paiement en cours..." : "Payer"}
           </button>
         </div>
       </div>

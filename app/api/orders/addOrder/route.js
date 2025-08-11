@@ -10,7 +10,7 @@ export async function POST(request) {
 
     const token = request.cookies.get("access_token")?.value;
     if (!token) {
-      return NextResponse.json({ message: "Token manquant" }, { status: 401 });
+      return NextResponse.json({ message: "Veuillez vous connecter pour poursuivre la commande" }, { status: 401 });
     }
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
