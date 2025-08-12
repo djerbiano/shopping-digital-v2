@@ -1,0 +1,32 @@
+.wrapper {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.skeletonBox {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 37%, #e0e0e0 63%);
+  border-radius: 4px;
+  height: 16px;
+  animation: skeleton-loading 1.4s ease infinite;
+  background-size: 400px 100%;
+}
+
+.skeletonButton {
+  height: 40px;
+  width: 220px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f0ad64 25%, #f8d3a6 37%, #f0ad64 63%);
+  animation: skeleton-loading 1.4s ease infinite;
+  background-size: 400px 100%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}

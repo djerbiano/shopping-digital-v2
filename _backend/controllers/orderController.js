@@ -170,6 +170,21 @@ async function addOrder(cart) {
     await session.endSession();
   }
 }
+async function showOrderForUser(userId) {
+  if (!userId) {
+    throw createHttpError("Id introuvable", 404);
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw createHttpError("Utilisateur introuvable", 404);
+  }
+
+  const orders = await Order.find({ user: userId }).populate("products.product").sort({ createdAt: -1 });
+
+  return orders;
+}
 
 async function getAllOrdersForAdmin(page = 1, filters = {}) {
   const limit = 50;
@@ -194,4 +209,4 @@ async function getAllOrdersForAdmin(page = 1, filters = {}) {
   };
 }
 
-export { addOrder, getAllOrdersForAdmin };
+export { addOrder, getAllOrdersForAdmin, showOrderForUser };

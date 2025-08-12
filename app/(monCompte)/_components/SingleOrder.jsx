@@ -12,16 +12,16 @@ export default function SingleOrder({ commande }) {
 
       <tbody>
         <tr>
-          <td>{commande.createdAt.slice(0, 10)}</td>
-          <td>{commande.total} €</td>
-          <td>{commande.status}</td>
+          <td>{new Date(commande?.createdAt).toLocaleString("fr-FR", { timeZone: "Europe/Paris" })}</td>
+          <td>{commande?.total} €</td>
+          <td className={commande?.status === "reçue" ? styles.statusValidated : ""}>{commande?.status}</td>
         </tr>
 
         <tr>
           <td colSpan="3">
-            {commande.products.map((product) => (
-              <p key={product._id}>
-                {product.quantity} x {product.product.title}
+            {commande?.products.map((product) => (
+              <p key={product?._id}>
+                {product?.quantity} x {product?.product?.title}
               </p>
             ))}
           </td>
@@ -30,9 +30,7 @@ export default function SingleOrder({ commande }) {
 
       <tfoot>
         <tr>
-          <td colSpan="3">
-            <button>Confirmer la réception</button>
-          </td>
+          <td colSpan="3">{commande?.status !== "reçue" && <button>Confirmer la réception</button>}</td>
         </tr>
       </tfoot>
     </table>

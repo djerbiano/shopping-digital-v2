@@ -24,7 +24,6 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
   };
 
   const handlePaiement = async () => {
-    setLoading(true);
     if (billingAddressCheckbox && !billingAddress)
       return toast.error("Veuillez renseigner votre adresse de livraison.");
     const cartItemsAndTotal = {
@@ -32,6 +31,7 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
       totalPanier,
       billingAddress: billingAddressCheckbox ? billingAddress : null,
     };
+    setLoading(true);
     try {
       const response = await fetch("/api/orders/addOrder", {
         method: "POST",

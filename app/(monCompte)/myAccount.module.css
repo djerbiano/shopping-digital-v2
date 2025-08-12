@@ -261,6 +261,10 @@
   border-radius: 8px;
   cursor: pointer;
 }
+.myAccountTable .statusValidated{
+ background-color: #00800061;
+}
+
 .claimForm textarea {
   padding: 10px;
   border-radius: 8px;
