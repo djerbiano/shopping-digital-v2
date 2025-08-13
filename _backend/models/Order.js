@@ -44,7 +44,7 @@ const orderSchema = new mongoose.Schema(
           type: String,
           enum: ["payée", "expédiée", "reçue"],
         },
-        startDate: { type: Date, default: new Date() },
+        startDate: { type: Date, default: () => new Date() },
       },
     ],
     total: { type: Number, required: true },
