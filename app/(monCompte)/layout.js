@@ -1,6 +1,6 @@
 "use client";
 import styles from "./myAccount.module.css";
-import { Toaster } from "react-hot-toast";
+import { OrdersProvider } from "../context/OrdersContext";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
@@ -25,16 +25,18 @@ export default function RootLayout({ children }) {
   }
   return (
     <UserProvider>
-      <section className={styles.myAccountContainer} aria-labelledby="page-myAccount">
-        <h2 id="page-myAccount" className={styles.srOnly}>
-          Mon Compte
-        </h2>
+      <OrdersProvider>
+        <section className={styles.myAccountContainer} aria-labelledby="page-myAccount">
+          <h2 id="page-myAccount" className={styles.srOnly}>
+            Mon Compte
+          </h2>
 
-        <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
-          <NavBarMyAccount />
-        </ClientOnly>
-        {children}
-      </section>
+          <ClientOnly fallback={<NavBarMyAccountSkeleton />}>
+            <NavBarMyAccount />
+          </ClientOnly>
+          {children}
+        </section>
+      </OrdersProvider>
     </UserProvider>
   );
 }

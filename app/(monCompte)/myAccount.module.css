@@ -281,6 +281,8 @@
   }
   .myAccountContent {
     min-width: 100%;
+    padding: 0px;
+    font-size: 14px;
   }
   .myAccountContent button {
     align-self: center;

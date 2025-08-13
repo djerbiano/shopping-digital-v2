@@ -3,11 +3,13 @@ import Image from "next/image";
 import styles from "../page.module.css";
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
 import Paiement from "../_Components/clientSide/Paiement/Paiement";
 import toast from "react-hot-toast";
 import Loading from "../loading";
 export default function Panier() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
   const [showPaiement, setShowPayment] = useState(false);
@@ -77,6 +79,11 @@ export default function Panier() {
   };
 
   const handleShowPaiement = () => {
+    if (!isAuthenticated) {
+      router.replace("/connexion");
+      toast("Veuillez vous connecter pour passer une commande", { icon: "⚠️" });
+      return;
+    }
     if (cartItems.length > 0) {
       setShowPayment(true);
     } else {

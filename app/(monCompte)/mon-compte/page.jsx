@@ -3,7 +3,8 @@ import styles from "../myAccount.module.css";
 import { useUser } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
 import { useModal } from "../../context/ModalContext";
-import { useState } from "react";
+import { useOrders } from "../../context/OrdersContext";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import UpdateProfile from "../_components/UpdateProfile";
 import ProfileSkeleton from "../_components/ProfileSkeleton";
@@ -14,7 +15,12 @@ export default function MonCompte() {
   const [isOpen, setIsOpen] = useState(false);
   const { openModal } = useModal();
   const { refreshAuth } = useAuth();
+  const { refetchOrders } = useOrders();
   const router = useRouter();
+
+  useEffect(() => {
+    refetchOrders();
+  }, []);
 
   const deleteAccount = async () => {
     try {
