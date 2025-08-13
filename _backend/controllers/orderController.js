@@ -170,20 +170,51 @@ async function addOrder(cart) {
     await session.endSession();
   }
 }
-async function showOrderForUser(userId) {
-  if (!userId) {
-    throw createHttpError("Id introuvable", 404);
+async function showOrderForUser(email) {
+  if (!email) {
+    throw createHttpError("Une adresse mail est requise", 404);
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw createHttpError("Utilisateur introuvable", 404);
   }
 
-  const orders = await Order.find({ user: userId }).populate("products.product").sort({ createdAt: -1 });
+  const orders = await Order.find({ email }).populate("products.product").sort({ createdAt: -1 });
 
   return orders;
+}
+
+async function validateOrderShipping(validateShipping) {
+  const { email, orderId } = validateShipping;
+  if (!email || !orderId) {
+    throw createHttpError("email et orderId sont requis", 404);
+  }
+
+  const order = await Order.findById(orderId);
+
+  if (!order || order.email !== email) {
+    throw createHttpError("Commande introuvable", 404);
+  }
+
+  if (order.status === "payée") {
+    throw createHttpError("La commande n'a pas encore été expédiée", 400);
+  }
+
+  if (order.status === "reçue") {
+    throw createHttpError("Vous avez deja validé cette commande", 400);
+  }
+
+  order.status = "reçue";
+  order.statusHistory.push({ status: "reçue", startDate: new Date() });
+  const updatedOrder = await order.save();
+
+  if (!updatedOrder) {
+    throw createHttpError("Erreur lors de la mise à jour de la commande", 500);
+  }
+
+  return updatedOrder;
 }
 
 async function getAllOrdersForAdmin(page = 1, filters = {}) {
@@ -209,4 +240,4 @@ async function getAllOrdersForAdmin(page = 1, filters = {}) {
   };
 }
 
-export { addOrder, getAllOrdersForAdmin, showOrderForUser };
+export { addOrder, getAllOrdersForAdmin, showOrderForUser, validateOrderShipping };

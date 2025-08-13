@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../_backend/config/db";
 import { jwtVerify } from "jose";
-import { showOrderForUser } from "../../../../_backend/controllers/orderController";
+import { validateOrderShipping } from "../../../../_backend/controllers/orderController";
 import { handleError } from "../../../../_backend/utils/helpers";
 
-export async function GET(request) {
+export async function POST(request) {
   try {
     await connectToDb();
 
@@ -20,15 +20,19 @@ export async function GET(request) {
       return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
     }
 
+    const data = await request.json();
 
+    const validateShipping = {
+      email: payload?.email,
+      orderId: data.orderId,
+    };
 
-
-    const result = await showOrderForUser(payload?.email);
+    const result = await validateOrderShipping(validateShipping);
     if (!result) {
       return NextResponse.json({ message: "Aucune commande trouvée" }, { status: 404 });
     }
 
-    const response = NextResponse.json(result);
+    const response = NextResponse.json({ message: "Commande validée." }, { status: 200 });
 
     return response;
   } catch (error) {

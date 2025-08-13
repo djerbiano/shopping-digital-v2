@@ -42,7 +42,7 @@ export default function MesCommandes() {
         <section aria-labelledby="section-orders" className={styles.myAccountContent}>
           <h3 id="section-orders">Liste de vos commandes</h3>
           {commandes.map((commande) => (
-            <SingleOrder key={commande._id} commande={commande} />
+            <SingleOrder key={commande._id} commande={commande} refreshOrders={getOrders}/>
           ))}
         </section>
       )}

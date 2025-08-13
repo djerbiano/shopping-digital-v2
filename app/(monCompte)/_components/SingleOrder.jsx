@@ -1,5 +1,35 @@
+"use client";
 import styles from "../myAccount.module.css";
-export default function SingleOrder({ commande }) {
+import { useState } from "react";
+import toast from "react-hot-toast";
+
+export default function SingleOrder({ commande, refreshOrders }) {
+  const [loading, setLoading] = useState(false);
+
+  const validateOrderShipping = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/orders/validateOrderShipping", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderId: commande?._id }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data?.message || "Une erreur est survenue.");
+      } else {
+        toast.success(data?.message || "cc.");
+        refreshOrders();
+      }
+    } catch (error) {
+      toast.error(error.message || "Une erreur est survenue.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <table className={styles.myAccountTable}>
       <thead>
@@ -30,7 +60,17 @@ export default function SingleOrder({ commande }) {
 
       <tfoot>
         <tr>
-          <td colSpan="3">{commande?.status !== "reçue" && <button>Confirmer la réception</button>}</td>
+          <td colSpan="3">
+            {commande?.status !== "reçue" && (
+              <button
+                onClick={validateOrderShipping}
+                disabled={loading || commande?.status === "payée"}
+                aria-label="Valider la réception"
+              >
+                {loading ? "En cours..." : "Valider la réception"}
+              </button>
+            )}
+          </td>
         </tr>
       </tfoot>
     </table>
