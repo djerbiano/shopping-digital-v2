@@ -32,7 +32,7 @@ export default function Login() {
     e.preventDefault();
     const error = validateForm(login);
     if (error) {
-      toast.error(error);
+      toast.error(error || "Une erreur est survenue");
       return;
     }
 
@@ -46,16 +46,16 @@ export default function Login() {
       });
       const data = await response.json();
       if (response.ok) {
-        toast.success(data.message || "Connexion réussie");
+        toast.success(data?.message || "Connexion réussie");
         setIsAuthenticated(true);
 
         router.replace("/mon-compte");
       } else {
-        toast.error(data.message || "Connexion echouée");
+        toast.error(data?.message || "Connexion echouée");
       }
     } catch (error) {
       console.error("Erreur serveur :", error);
-      toast.error(error.message || "Une erreur est survenue");
+      toast.error(error?.message || "Une erreur est survenue");
     } finally {
       setLogin({
         email: "",

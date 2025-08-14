@@ -19,13 +19,13 @@ export default function SingleOrder({ commande, refreshOrders }) {
       });
       const data = await response.json();
       if (!response.ok) {
-        toast.error(data?.message || "Une erreur est survenue.");
+        toast.error(data?.message || "Une erreur est survenue");
       } else {
         toast.success(data?.message || "cc.");
         refreshOrders();
       }
     } catch (error) {
-      toast.error(error.message || "Une erreur est survenue.");
+      toast.error(error.message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }

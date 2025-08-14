@@ -48,7 +48,7 @@ export default function Inscription() {
     e.preventDefault();
     const error = validateForm(formData);
     if (error) {
-      toast.error(error);
+      toast.error(error || "Une erreur est survenue");
       return;
     }
     try {
@@ -64,7 +64,7 @@ export default function Inscription() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success(data.message || "Inscription réussie");
+        toast.success(data?.message || "Inscription réussie");
 
         setFormData({
           email: "",
@@ -77,10 +77,10 @@ export default function Inscription() {
         await refreshAuth();
         router.replace("/mon-compte");
       } else {
-        toast.error(data.message || "Une erreur est survenue");
+        toast.error(data?.message || "Une erreur est survenue");
       }
     } catch (error) {
-      toast.error(error.message || "Une erreur est survenue");
+      toast.error(error?.message || "Une erreur est survenue");
     } finally {
       setIsLoading(false);
     }

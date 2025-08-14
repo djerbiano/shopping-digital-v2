@@ -32,14 +32,14 @@ export default function MonCompte() {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data?.message || "Une erreur est survenue.");
-        throw new Error(data?.message || "Erreur lors de la suppression.");
+        toast.error(data?.message || "Une erreur est survenue");
+        throw new Error(data?.message || "Erreur lors de la suppression");
       }
 
-      toast.success(data?.message || "Compte supprimé.");
+      toast.success(data?.message || "Compte supprimé");
       refreshAuth();
     } catch (err) {
-      toast.error(err.message || "Une erreur est survenue.");
+      toast.error(err?.message || "Une erreur est survenue");
       console.error("Erreur suppression :", err.message);
     }
   };

@@ -17,7 +17,7 @@ export default function HomeClient({ products }) {
 
   useEffect(() => {
     if (expired === "true") {
-      toast.error("Votre session a expiré, veuillez vous reconnecter.");
+      toast.error("Votre session a expiré, veuillez vous reconnecter");
        refreshAuth();
     }
   }, [expired]);

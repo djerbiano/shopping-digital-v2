@@ -36,7 +36,7 @@ export default function UpdateProfile({ setIsOpen, dataProfile }) {
       const Data = await res.json();
 
       if (res.ok) {
-        toast.success(Data?.message);
+        toast.success(Data?.message || "Mise à jour effectuée");
         refetchProfile();
         setIsOpen(false);
         setFormData({
@@ -49,11 +49,11 @@ export default function UpdateProfile({ setIsOpen, dataProfile }) {
           newPassword: "",
         });
       } else {
-        toast.error(Data?.message);
+        toast.error(Data?.message || "Une erreur est survenue");
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(error?.message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }

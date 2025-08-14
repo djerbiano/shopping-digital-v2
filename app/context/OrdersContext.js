@@ -28,13 +28,13 @@ export const OrdersProvider = ({ children }) => {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result?.message || "Une erreur est survenue lors de la récupération des commandes.");
+        toast.error(result?.message || "Une erreur est survenue lors de la récupération des commandes");
       } else {
         setOrdersUser(result);
       }
     } catch (error) {
       console.error("Erreur lors de la récupération du profil :", error);
-      toast.error(error.message || "Une erreur est survenue lors de la récupération des commandes.");
+      toast.error(error?.message || "Une erreur est survenue lors de la récupération des commandes");
     } finally {
       setLoadingOrders(false);
     }

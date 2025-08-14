@@ -25,7 +25,7 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
 
   const handlePaiement = async () => {
     if (billingAddressCheckbox && !billingAddress)
-      return toast.error("Veuillez renseigner votre adresse de livraison.");
+      return toast.error("Veuillez renseigner votre adresse de livraison");
     const cartItemsAndTotal = {
       cart: cartItems,
       totalPanier,
@@ -44,9 +44,9 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data?.message || "Une erreur est survenue.");
+        toast.error(data?.message || "Une erreur est survenue");
       } else {
-        toast.success("Commande effectuée.");
+        toast.success("Commande effectuée");
         setBillingAddressCheckbox(false);
         setBillingAddress("");
         setCardPayment(false);
@@ -55,7 +55,7 @@ export default function Paiement({ totalPanier, cartItems, setShowPayment }) {
         router.replace("/mon-compte/commandes");
       }
     } catch (error) {
-      toast.error(error.message || "Une erreur est survenue.");
+      toast.error(error?.message || "Une erreur est survenue");
     } finally {
       setLoading(false);
     }
