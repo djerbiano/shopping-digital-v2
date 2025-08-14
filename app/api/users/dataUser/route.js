@@ -18,7 +18,7 @@ export async function GET(request) {
     }
 
     // const result = await getDataUserById("test");
-    const result = await getDataUserById(payload?._id);
+    const result = await getDataUserById(payload._id);
 
     const response = NextResponse.json(result);
 

@@ -21,7 +21,7 @@ export async function DELETE(request) {
       return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
     }
 
-    const result = await deleteAccount(payload?._id);
+    const result = await deleteAccount(payload._id);
 
     if (result.deletedCount === 0) {
       return NextResponse.json({ message: "Aucun compte supprimé" }, { status: 400 });

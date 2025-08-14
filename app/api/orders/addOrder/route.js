@@ -23,8 +23,8 @@ export async function POST(request) {
     const data = await request.json();
 
     const cart = {
-      id: payload?._id,
-      email: payload?.email,
+      id: payload._id,
+      email: payload.email,
       total: data.totalPanier,
       billingAddress: data.billingAddress || "",
       products: data.cart,

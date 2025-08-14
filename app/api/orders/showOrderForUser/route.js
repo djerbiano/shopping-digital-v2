@@ -23,7 +23,7 @@ export async function GET(request) {
 
 
 
-    const result = await showOrderForUser(payload?.email);
+    const result = await showOrderForUser(payload.email);
     if (!result) {
       return NextResponse.json({ message: "Aucune commande trouvée" }, { status: 404 });
     }

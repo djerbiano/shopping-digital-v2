@@ -23,7 +23,7 @@ export async function POST(request) {
     const data = await request.json();
 
     const validateShipping = {
-      email: payload?.email,
+      email: payload.email,
       orderId: data.orderId,
     };
 

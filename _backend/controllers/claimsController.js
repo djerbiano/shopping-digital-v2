@@ -12,7 +12,7 @@ async function addClaim(claim) {
   validateObjectId(claimInformation);
 
   const existingClaim = await Claim.findOne({ order: claimInformation });
-  if (existingClaim) throw createHttpError("Une réclamation existe deja pour cette commande", 400);
+  if (existingClaim) throw createHttpError("Une réclamation existe déja pour cette commande", 400);
 
   const user = await User.findOne({ email });
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
@@ -20,8 +20,7 @@ async function addClaim(claim) {
   const order = await Order.findById(claimInformation);
   if (!order) throw createHttpError("Commande introuvable", 404);
 
-  if (order?.email !== email) throw createHttpError("Vous devez être l'auteur de la commande", 400);
-
+  if (order.email !== email) throw createHttpError("Vous devez être l'auteur de la commande", 400);
 
   const newClaim = new Claim({
     order: claimInformation,

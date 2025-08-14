@@ -40,10 +40,20 @@ async function getAllProductsForUser(page = 1, filters = {}) {
     },
   };
 }
+
+async function addProductToFavorites() {
+
+
+}
+async function removeProductFromFavorites() {
+
+}
+
+
 async function getProductById(id) {
   const product = await Product.findById(id);
   if (!product) throw createHttpError("Produit introuvable", 404);
   return product;
 }
 
-export { getAllProductsForUser, getProductById };
+export { getAllProductsForUser, getProductById, addProductToFavorites, removeProductFromFavorites };

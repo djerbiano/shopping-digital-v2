@@ -23,7 +23,7 @@ export async function POST(request) {
     const data = await request.json();
 
     const claim = {
-      email: payload?.email,
+      email: payload.email,
       claimInformation: data?.claimInformation,
       claimMessage: data?.claimMessage.trim(),
     };
