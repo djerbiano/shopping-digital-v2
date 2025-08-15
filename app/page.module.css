@@ -1,7 +1,7 @@
 .page {
   margin: 0 auto;
 }
-.lottieContainer{
+.lottieContainer {
   width: 150px;
   height: 150px;
   margin: auto;
@@ -306,6 +306,23 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
+.productCard .deleteIcon {
+  z-index: 1;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 40px;
+  color: var(--color-foreground);
+  background-color: var(--color-tertiary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.productCard .deleteIcon:hover {
+  color: var(--color-red);
+  transform: scale(1.2);
+}
+
 .imageContainer {
   aspect-ratio: 1/1;
   overflow: hidden;
@@ -408,14 +425,16 @@
   background-color: var(--color-tertiary);
   outline: 2px solid #000;
 }
-
 .heartIcon {
   width: 20px;
   height: 20px;
 }
-.heartFilled {
-  color: var(--color-primary);
+.favoriteButton:active,
+.favoriteButton:active svg {
+  fill: #ff0000;
+  transform: scale(1.2);
 }
+
 .cartButton {
   display: flex;
   align-items: center;
@@ -937,7 +956,7 @@
   background-color: var(--color-secondary);
   color: var(--color-tertiary);
 }
- .error {
+.error {
   color: var(--color-red);
 }
 .forgotPassword {

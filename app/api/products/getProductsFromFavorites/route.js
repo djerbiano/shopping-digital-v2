@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import connectToDb from "../../../../_backend/config/db";
-import { getDataUserById } from "../../../../_backend/controllers/usersController";
+import { getFavoritesProducts } from "../../../../_backend/controllers/productsController";
 import { handleError } from "../../../../_backend/utils/helpers";
 
 export async function GET(request) {
@@ -9,10 +9,12 @@ export async function GET(request) {
     await connectToDb();
     const token = request.cookies.get("access_token")?.value;
     if (!token) {
-      return NextResponse.json({ message: "Veuillez vous connecter pour afficher vos informations" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Veuillez vous connecter pour afficher vos produits favoris" },
+        { status: 401 }
+      );
     }
 
-   
     const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
     const { payload } = await jwtVerify(token, secret);
@@ -20,8 +22,7 @@ export async function GET(request) {
       return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
     }
 
-    // const result = await getDataUserById("test");
-    const result = await getDataUserById(payload._id);
+    const result = await getFavoritesProducts(payload._id);
 
     const response = NextResponse.json(result);
 

@@ -8,6 +8,7 @@ export async function DELETE(request) {
   try {
     await connectToDb();
     const token = request.cookies.get("access_token")?.value;
+    
 
     if (!token) {
       return NextResponse.json({ message: "Token manquant" }, { status: 401 });

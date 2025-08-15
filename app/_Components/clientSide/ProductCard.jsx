@@ -1,14 +1,28 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { FaHeart, FaRegHeart, FaShoppingCart } from "react-icons/fa";
-import styles from "../../page.module.css";
 import Image from "next/image";
+import styles from "../../page.module.css";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/AuthContext";
+import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import toast from "react-hot-toast";
 
 export default function ProductCard({ product }) {
+  const pathname = usePathname();
   const router = useRouter();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { isAuthenticated, refreshProductsInFavorites } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
+  const [counterAddToFavorites, setCounterAddToFavorites] = useState(0);
+  const [counterDeleteFromFavorites, setCounterDeleteFromFavorites] = useState(0);
+  const [deleteIcon, setDeleteIcon] = useState(false);
+
+  useEffect(() => {
+    if (pathname === "/favoris") {
+      setDeleteIcon(true);
+    }
+  }, [pathname]);
   const getPriorityStatus = (product) => {
     if (product?.isOnSale) return "sale";
     if (product?.isNewCollection) return "new";
@@ -16,20 +30,63 @@ export default function ProductCard({ product }) {
     return null;
   };
   const status = getPriorityStatus(product);
-  const handleFavoriteKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      setIsFavorite(!isFavorite);
+
+  const addToFavorite = async () => {
+    if (!isAuthenticated) return toast.error("Veuillez vous connecter pour ajouter ce produit aux favoris");
+
+    if (counterAddToFavorites < 3) {
+      setCounterAddToFavorites((prev) => prev + 1);
+      try {
+        const response = await fetch("/api/products/addProductToFavorites", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId: product._id }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error(data?.message || "Une erreur est survenue lors de l'ajout au favoris");
+        } else {
+          toast.success(data?.message || "Produit ajouté aux favoris");
+        }
+      } catch (error) {
+        toast.error(error?.message || "Une erreur est survenue lors de l'ajout au favoris");
+      }
+    } else {
+      toast.error("Vous avez atteint la limite d'ajout de favoris");
     }
   };
+  const removeFromFavorites = async () => {
+    if (!isAuthenticated) return toast.error("Veuillez vous connecter pour supprimer ce produit aux favoris");
 
-  const handleCartKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      // pour l'ajouter au panier
+    if (counterDeleteFromFavorites < 3) {
+      setCounterDeleteFromFavorites((prev) => prev + 1);
+      try {
+        const response = await fetch("/api/products/removeProductFromFavorites", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ productId: product._id }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error(data?.message || "Une erreur est survenue lors de la suppression du favoris");
+        } else {
+          toast.success(data?.message || "Produit supprimé du favoris");
+
+          refreshProductsInFavorites();
+        }
+      } catch (error) {
+        toast.error(error?.message || "Une erreur est survenue lors de la suppression du favoris");
+      }
+    } else {
+      toast.error("Vous avez atteint la limite de suppression de favoris");
     }
   };
-
   const getStatusStyle = (status) => {
     switch (status) {
       case "limited":
@@ -51,6 +108,8 @@ export default function ProductCard({ product }) {
       onMouseLeave={() => setIsHovered(false)}
       tabIndex={0}
     >
+      {deleteIcon && <MdDeleteForever className={styles.deleteIcon} onClick={removeFromFavorites} aria-hidden="true" />}
+
       {status && <span className={`${styles.statusBadge} ${getStatusStyle(status)}`}>{status.toUpperCase()}</span>}
 
       <div className={styles.imageContainer}>
@@ -71,22 +130,16 @@ export default function ProductCard({ product }) {
 
       <div className={`${styles.hoverOverlay} ${isHovered ? styles.overlayVisible : styles.overlayHidden}`}>
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
-          onKeyDown={handleFavoriteKeyDown}
+          onClick={addToFavorite}
           className={styles.favoriteButton}
-          aria-label={isFavorite ? `Retirer ${product?.title} des favoris` : `Ajouter ${product?.title} aux favoris`}
+          aria-label={`Ajouter ${product?.title} aux favoris`}
           tabIndex={0}
         >
-          {isFavorite ? (
-            <FaHeart className={`${styles.heartIcon} ${styles.heartFilled}`} aria-hidden="true" />
-          ) : (
-            <FaRegHeart className={styles.heartIcon} aria-hidden="true" />
-          )}
+          <FaHeart className={styles.heartIcon} aria-hidden="true" />
         </button>
 
         <button
           className={styles.cartButton}
-          onKeyDown={handleCartKeyDown}
           aria-label={`Acheter ${product?.title} pour ${price} €`}
           tabIndex={0}
           onClick={() => router.push(`/produits/${product._id}`)}
