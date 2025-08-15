@@ -11,11 +11,6 @@ export default function LinkIconHeader({ icons }) {
   const { isMenuOpen, setIsMenuOpen, isDesktop } = useMenuHamburger();
   const router = useRouter();
 
-  const handleMenuClick = () => {
-    setIsMenuOpen(false);
-  };
-
-  const handleNavigation = () => {};
   if (!isDesktop && !isMenuOpen) return null;
   return (
     <div className={styles.linkIconHeader} ref={icons}>
@@ -23,7 +18,6 @@ export default function LinkIconHeader({ icons }) {
         type="button"
         aria-label="Contactez-nous"
         onClick={() => {
-          handleMenuClick();
           router.push("/contact");
         }}
       >
@@ -34,7 +28,6 @@ export default function LinkIconHeader({ icons }) {
         type="button"
         aria-label="Panier"
         onClick={() => {
-          handleMenuClick();
           router.push("/panier");
         }}
       >
@@ -44,7 +37,6 @@ export default function LinkIconHeader({ icons }) {
         type="button"
         aria-label="Favoris"
         onClick={() => {
-          handleMenuClick();
           router.push("/favoris");
         }}
       >
@@ -54,7 +46,6 @@ export default function LinkIconHeader({ icons }) {
         type="button"
         aria-label="Mon compte"
         onClick={() => {
-          handleMenuClick();
           router.push("/connexion");
         }}
       >

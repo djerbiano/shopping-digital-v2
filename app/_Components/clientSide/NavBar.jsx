@@ -2,7 +2,7 @@
 import styles from "../../page.module.css";
 import InputSearchBar from "./InputSearchBar";
 import LinkIconHeader from "./LinkIconHeader";
-import {  useRef } from "react";
+import { useRef } from "react";
 import { useMenuHamburger } from "../../context/menuHamburgerContext";
 import { useFilterProducts } from "../../context/filterProductsContext";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ export default function NavBar() {
     Téléphonie: false,
   };
   const handleNavClick = (category) => {
-    setIsMenuOpen(false);
+   
 
     setCategories({
       ...resetCategories,
@@ -52,7 +52,6 @@ export default function NavBar() {
   };
   /* GSAP animation */
   useGSAP(() => {
- 
     const tl = gsap.timeline();
     // nav container animation
     if (container.current && isDesktop) {
@@ -89,6 +88,7 @@ export default function NavBar() {
       className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
       aria-label="Navigation principale"
       ref={container}
+      onClick={() => setIsMenuOpen(false)}
     >
       <InputSearchBar />
       {isMenuOpen && (

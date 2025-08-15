@@ -3,7 +3,12 @@ import styles from "../page.module.css";
 import { useState } from "react";
 import toast from "react-hot-toast";
 export default function Contact() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {

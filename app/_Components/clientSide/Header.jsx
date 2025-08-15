@@ -1,9 +1,9 @@
 "use client";
 import styles from "../../page.module.css";
 import { useMenuHamburger } from "../../context/menuHamburgerContext";
-
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { BsFillCartCheckFill } from "react-icons/bs";
 import NavBar from "./NavBar";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
@@ -18,8 +18,6 @@ export default function Header() {
   const container = useRef();
   const router = useRouter();
   useGSAP(() => {
-  
-
     gsap.set(container.current, { opacity: 0 });
 
     const textElements = container.current.querySelectorAll("h1");
@@ -69,6 +67,16 @@ export default function Header() {
         >
           Shopping <span>Digital</span>
         </h1>
+        <button
+          type="button"
+          aria-label="Panier"
+          className={styles.secondCartButton}
+          onClick={() => {
+            router.push("/panier");
+          }}
+        >
+          <BsFillCartCheckFill aria-hidden="true" focusable="false" />
+        </button>
       </div>
       <NavBar />
     </header>

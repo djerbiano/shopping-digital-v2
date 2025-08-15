@@ -33,11 +33,15 @@ export default function Favoris() {
         <>
           <section className={styles.favorisContainer} aria-labelledby="favoris">
             <h2 id="favoris">Vos produits favoris</h2>
-            <div className={styles.favorisContent}>
-              {productsInFavorites?.map((product) => (
-                <ProductCard key={product?._id} product={product} />
-              ))}
-            </div>
+            {productsInFavorites.length <= 0 ? (
+              <p>Aucun produit dans vos favoris</p>
+            ) : (
+              <div className={styles.favorisContent}>
+                {productsInFavorites?.map((product) => (
+                  <ProductCard key={product?._id} product={product} />
+                ))}
+              </div>
+            )}
           </section>
         </>
       )}

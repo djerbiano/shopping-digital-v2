@@ -28,6 +28,10 @@
 .burgerButton {
   display: none;
 }
+.iconHeader .secondCartButton {
+  display: none;
+}
+
 .iconHeader h1 {
   font-size: 24px;
   cursor: pointer;
@@ -1276,6 +1280,24 @@
     color: var(--color-primary);
     transform: scale(1.2);
   }
+  .iconHeader .secondCartButton {
+    display: flex;
+    position: absolute;
+    right: 0px;
+    cursor: pointer;
+    color: var(--color-tertiary);
+    background: none;
+    border: none;
+    font-size: 25px;
+  }
+  .iconHeader .secondCartButton svg {
+    transition: all 0.3s ease-in-out;
+  }
+  .iconHeader .secondCartButton svg:hover {
+    transform: scale(1.2);
+    color: var(--color-primary);
+  }
+
   .navHeader {
     display: none;
   }
