@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import Loading from "../../loading";
 
 export default function Login() {
-  const { isAuthenticated, setIsAuthenticated, loading } = useAuth();
+  const { isAuthenticated, refreshAuth, loading } = useAuth();
 
   const [login, setLogin] = useState({
     email: "",
@@ -47,7 +47,8 @@ export default function Login() {
       const data = await response.json();
       if (response.ok) {
         toast.success(data?.message || "Connexion réussie");
-        setIsAuthenticated(true);
+
+        refreshAuth();
 
         router.replace("/mon-compte");
       } else {

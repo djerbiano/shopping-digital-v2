@@ -12,7 +12,6 @@ export const AuthContext = createContext({
   setIsAuthenticated: throwMissingProviderError,
   isAdmin: false,
   loading: true,
-
   refreshProductsInFavorites: throwMissingProviderError,
   productsInFavorites: [],
 });

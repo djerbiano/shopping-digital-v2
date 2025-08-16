@@ -217,8 +217,22 @@ async function validateOrderShipping(validateShipping) {
   return updatedOrder;
 }
 
-async function getAllOrdersForAdmin(page = 1, filters = {}) {
-  const limit = 50;
+/*************** Start Admin Functions  **************/
+async function getAllOrdersForAdmin(idAdmin, page = 1, filters = {}) {
+  if (!idAdmin) {
+    throw createHttpError("idAdmin est requis", 404);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const limit = 5;
   const skip = (page - 1) * limit;
   const query = {};
 
@@ -228,7 +242,7 @@ async function getAllOrdersForAdmin(page = 1, filters = {}) {
 
   const totalOrders = await Order.countDocuments(query);
   const totalPages = Math.ceil(totalOrders / limit);
-  const orders = await Order.find(query).skip(skip).limit(limit);
+  const orders = await Order.find(query).skip(skip).limit(limit).sort({ createdAt: -1 });
 
   return {
     orders,
@@ -239,5 +253,7 @@ async function getAllOrdersForAdmin(page = 1, filters = {}) {
     },
   };
 }
+
+/*************** End Admin Functions  **************/
 
 export { addOrder, getAllOrdersForAdmin, showOrderForUser, validateOrderShipping };

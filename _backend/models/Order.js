@@ -35,14 +35,14 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["payée", "expédiée", "reçue"],
+      enum: ["payée", "expédiée", "reçue", "annulée"],
       default: "payée",
     },
     statusHistory: [
       {
         status: {
           type: String,
-          enum: ["payée", "expédiée", "reçue"],
+          enum: ["payée", "expédiée", "reçue" , "annulée"],
         },
         startDate: { type: Date, default: () => new Date() },
       },
