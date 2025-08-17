@@ -271,7 +271,54 @@ async function getOneOrdersForAdmin(idAdmin, orderId) {
 
   return order;
 }
+async function updateOneOrderForAdmin(idAdmin, newStatus, orderId) {
+  if ((!idAdmin, !orderId, !newStatus)) {
+    throw createHttpError("idAdmin, orderId et newStatus sont requis", 400);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const valideStatus = ["payée", "expédiée", "reçue", "annulée"];
+  if (!valideStatus.includes(newStatus)) {
+    throw createHttpError(
+      "Le statut de la commande doit être une des valeurs : 'payée', 'expédiée', 'reçue' ou 'annulée'",
+      400
+    );
+  }
+
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    {
+      $set: { status: newStatus },
+      $push: {
+        statusHistory: {
+          status: newStatus,
+        },
+      },
+    },
+    { new: true, runValidators: true }
+  ).populate("products.product");
+  if (!order) {
+    throw createHttpError("Commande introuvable", 404);
+  }
+
+  return order;
+}
 
 /*************** End Admin Functions  **************/
 
-export { addOrder, showOrderForUser, validateOrderShipping, getAllOrdersForAdmin, getOneOrdersForAdmin };
+export {
+  addOrder,
+  showOrderForUser,
+  validateOrderShipping,
+  getAllOrdersForAdmin,
+  getOneOrdersForAdmin,
+  updateOneOrderForAdmin,
+};

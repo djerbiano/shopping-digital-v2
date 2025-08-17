@@ -5,6 +5,16 @@ import toast from "react-hot-toast";
 
 export default function SingleOrder({ commande, refreshOrders }) {
   const [loading, setLoading] = useState(false);
+  function getStatusClass(status) {
+    switch (status) {
+      case "reçue":
+        return styles.statusValidated;
+      case "annulée":
+        return styles.statusCancelled;
+      default:
+        return "";
+    }
+  }
 
   const validateOrderShipping = async () => {
     setLoading(true);
@@ -44,7 +54,7 @@ export default function SingleOrder({ commande, refreshOrders }) {
         <tr>
           <td>{new Date(commande?.createdAt).toLocaleString("fr-FR", { timeZone: "Europe/Paris" })}</td>
           <td>{commande?.total} €</td>
-          <td className={commande?.status === "reçue" ? styles.statusValidated : ""}>{commande?.status}</td>
+          <td className={getStatusClass(commande?.status)}>{commande?.status}</td>
         </tr>
 
         <tr>
@@ -61,10 +71,10 @@ export default function SingleOrder({ commande, refreshOrders }) {
       <tfoot>
         <tr>
           <td colSpan="3">
-            {commande?.status !== "reçue" && (
+            {commande?.status !== "reçue" && commande?.status !== "annulée" && (
               <button
                 onClick={validateOrderShipping}
-                disabled={loading || commande?.status === "payée"}
+                disabled={loading || commande?.status === "payée" || commande?.status === "annulée"}
                 aria-label="Valider la réception"
               >
                 {loading ? "En cours..." : "Valider la réception"}

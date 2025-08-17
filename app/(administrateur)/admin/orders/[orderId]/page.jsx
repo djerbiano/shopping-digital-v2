@@ -7,10 +7,40 @@ import toast from "react-hot-toast";
 import BackBtn from "../../../_components/reusable/backBtn";
 
 export default function OneOrder() {
+  const [orderStatus, setOrderStatus] = useState("");
   const [oneOrder, setOneOrder] = useState({});
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
   const { orderId } = useParams();
+
+  const handleStatusChange = (e) => {
+    setOrderStatus(e.target.value);
+  };
+
+  const updateOrderStatus = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/admin/orders/update/${orderId}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newStatus: orderStatus }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data?.message || "Une erreur est survenue");
+        setErreur(data?.message || "Une erreur est survenue");
+      } else {
+        setOneOrder(data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const fetOneOrder = async () => {
     setLoading(true);
     try {
@@ -114,13 +144,18 @@ export default function OneOrder() {
           <h4 className={ordersStyles.ordersTableTitle}>Modifier le statut de la commande :</h4>
           <div className={ordersStyles.statusForm}>
             <label htmlFor="status">Statut de la commande</label>
-            <select name="status" id="status" defaultValue={oneOrder?.status}>
+            <select name="status" id="status" value={orderStatus} onChange={handleStatusChange}>
+              <option value="" disabled>
+                -- Choisir un statut --
+              </option>
               <option value="payée">payée</option>
               <option value="expédiée">expédiée</option>
               <option value="reçue">reçue</option>
               <option value="annulée">annulée</option>
             </select>
-            <button aria-label="Modifier la commande">Modifier</button>
+            <button aria-label="Modifier la commande" onClick={updateOrderStatus}>
+              Modifier
+            </button>
             <button aria-label="Supprimer la commande">Supprimer</button>
           </div>
         </>
