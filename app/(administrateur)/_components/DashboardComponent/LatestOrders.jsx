@@ -62,6 +62,7 @@ export default function LatestOrders() {
               date={order?.createdAt}
               email={order?.email}
               status={order?.status}
+              orderId={order?._id}
             />
           ))}
         </tbody>

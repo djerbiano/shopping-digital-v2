@@ -1,24 +1,18 @@
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../../_backend/config/db";
-import { jwtVerify } from "jose";
 import { getAllOrdersForAdmin } from "../../../../../_backend/controllers/orderController";
-import { handleError } from "../../../../../_backend/utils/helpers";
+import { handleError, verifyToken } from "../../../../../_backend/utils/helpers";
 
 export async function GET(request) {
   try {
     await connectToDb();
 
-    const token = request.cookies.get("access_token")?.value;
-    if (!token) {
-      return NextResponse.json({ message: "Token manquant" }, { status: 401 });
+    const { payload, error } = await verifyToken(request);
+
+    if (error) {
+      return error;
     }
 
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
-    const { payload } = await jwtVerify(token, secret);
-
-    if (!payload?._id) {
-      return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
-    }
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limitOrders = parseInt(searchParams.get("limitOrders") || "5", 10);

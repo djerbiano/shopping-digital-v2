@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 function generateToken(user) {
@@ -28,4 +29,24 @@ function handleError(error) {
 
   return NextResponse.json({ message: error.message || "Erreur serveur" }, { status: error.statusCode || 500 });
 }
-export { generateToken, validateObjectId, createHttpError, handleError };
+
+async function verifyToken(request) {
+  const token = request.cookies.get("access_token")?.value;
+  if (!token) {
+    return { error: NextResponse.json({ message: "Token manquant" }, { status: 401 }) };
+  }
+
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
+    const { payload } = await jwtVerify(token, secret);
+
+    if (!payload?._id) {
+      return { error: NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 }) };
+    }
+
+    return { payload };
+  } catch (err) {
+    return { error: NextResponse.json({ message: "Token invalide" }, { status: 401 }) };
+  }
+}
+export { generateToken, validateObjectId, createHttpError, handleError, verifyToken };

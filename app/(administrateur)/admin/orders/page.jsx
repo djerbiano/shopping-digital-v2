@@ -50,8 +50,8 @@ export default function Orders() {
         credentials: "include",
       });
 
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
         setOrders(data);
       } else {
         console.error(data.message || "Erreur lors de la récupération des commandes");

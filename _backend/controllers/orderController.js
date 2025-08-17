@@ -250,7 +250,28 @@ async function getAllOrdersForAdmin(idAdmin, limitOrders = 5, page = 1, queryOrd
     },
   };
 }
+async function getOneOrdersForAdmin(idAdmin, orderId) {
+  if ((!idAdmin, !orderId)) {
+    throw createHttpError("idAdmin et orderId sont requis", 404);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const order = await Order.findById(orderId).populate("products.product");
+  if (!order) {
+    throw createHttpError("Commande introuvable", 404);
+  }
+
+  return order;
+}
 
 /*************** End Admin Functions  **************/
 
-export { addOrder, showOrderForUser, validateOrderShipping, getAllOrdersForAdmin };
+export { addOrder, showOrderForUser, validateOrderShipping, getAllOrdersForAdmin, getOneOrdersForAdmin };

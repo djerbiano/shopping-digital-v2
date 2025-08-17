@@ -179,6 +179,14 @@
   font-size: 1rem;
 }
 
+.latestOrdersTable tbody .cursorPointer {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.latestOrdersTable tbody .cursorPointer:hover {
+  background-color: #f0f0f0;
+}
+
 .latestOrdersTable th,
 .latestOrdersTable td {
   border: 1px solid #ccc;
