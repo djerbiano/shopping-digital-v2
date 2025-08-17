@@ -1,8 +1,10 @@
 "use client";
 import styles from "../../../admin.module.css";
 import ordersStyles from "../orders.module.css";
+import { useModal } from "../../../../context/ModalContext";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import BackBtn from "../../../_components/reusable/backBtn";
 
@@ -12,6 +14,8 @@ export default function OneOrder() {
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
   const { orderId } = useParams();
+  const router = useRouter();
+  const { openModal } = useModal();
 
   const handleStatusChange = (e) => {
     setOrderStatus(e.target.value);
@@ -34,12 +38,50 @@ export default function OneOrder() {
         setErreur(data?.message || "Une erreur est survenue");
       } else {
         setOneOrder(data);
+        toast.success(data?.message || "Statut mis à jour");
+        setOrderStatus("");
       }
     } catch (error) {
+      toast.error(error?.message || "Une erreur est survenue");
       console.log(error);
     } finally {
       setLoading(false);
     }
+  };
+  const deleteOrderFunction = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/admin/orders/delete/${orderId}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data?.message || "Une erreur est survenue");
+        setErreur(data?.message || "Une erreur est survenue");
+      } else {
+        toast.success(data?.message || "Commande supprimée");
+        router.back();
+      }
+    } catch (error) {
+      toast.error(error?.message || "Une erreur est survenue");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleDeleteOrder = () => {
+    openModal({
+      content: (
+        <p>
+          Êtes-vous sûr de vouloir <strong>supprimer cette commande</strong> ? Cette action est irréversible.
+        </p>
+      ),
+      onYes: deleteOrderFunction,
+    });
   };
   const fetOneOrder = async () => {
     setLoading(true);
@@ -68,6 +110,7 @@ export default function OneOrder() {
   useEffect(() => {
     fetOneOrder();
   }, [orderId]);
+
   if (loading) {
     return <p>Chargement...</p>;
   }
@@ -153,10 +196,12 @@ export default function OneOrder() {
               <option value="reçue">reçue</option>
               <option value="annulée">annulée</option>
             </select>
-            <button aria-label="Modifier la commande" onClick={updateOrderStatus}>
+            <button aria-label="Modifier la commande" onClick={updateOrderStatus} disabled={!orderStatus || loading}>
               Modifier
             </button>
-            <button aria-label="Supprimer la commande">Supprimer</button>
+            <button aria-label="Supprimer la commande" onClick={handleDeleteOrder}>
+              Supprimer
+            </button>
           </div>
         </>
       )}

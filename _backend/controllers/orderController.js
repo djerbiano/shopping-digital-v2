@@ -21,7 +21,7 @@ async function addOrder(cart) {
     const { id, color, size, quantity } = line;
 
     if (!id || !color || !size || !Number.isInteger(quantity) || quantity <= 0) {
-      throw createHttpError(" Données invalides dans le panier", 400);
+      throw createHttpError("Données invalides dans le panier", 400);
     }
 
     const key = `${id}|${color}|${size}`; // unique key for product/color/size to accumulate quantity
@@ -48,10 +48,10 @@ async function addOrder(cart) {
       const prod = productMap.get(productId);
 
       if (!prod) {
-        throw createHttpError(`${prod.title} n'existe plus`, 404);
+        throw createHttpError(`Le produit n'existe plus (id: ${productId})`, 404);
       }
       if (!prod.stock) {
-        throw createHttpError(`"${prod.title} n'est plus proposé à la vente"`, 404);
+        throw createHttpError(`${prod.title} n'est plus proposé à la vente`, 404);
       }
       const colorObj = prod.colors.find((c) => c.color === color);
       if (!colorObj) {
@@ -60,7 +60,7 @@ async function addOrder(cart) {
 
       const sizeObj = colorObj.sizes.find((s) => s.size === size);
       if (!sizeObj || sizeObj.quantity < totalQuantity) {
-        throw createHttpError(` Stock insuffisant pour ${prod.title || productId} (${color}/${size})`, 409);
+        throw createHttpError(`Stock insuffisant pour ${prod.title || productId} (${color}/${size})`, 409);
       }
     }
     const enrichedProducts = cart.products.map((line) => {
@@ -117,7 +117,7 @@ async function addOrder(cart) {
       );
 
       if (!updateResult) {
-        throw createHttpError(`Stock insuffisant ou produit introuvable pour ${updateResult.title}`, 409);
+        throw createHttpError("Stock insuffisant ou produit introuvable", 409);
       }
       /********** Concurrency check start ********/
       const colorObj = updateResult.colors.find((c) => c.color === color);
@@ -172,7 +172,7 @@ async function addOrder(cart) {
 }
 async function showOrderForUser(email) {
   if (!email) {
-    throw createHttpError("Une adresse mail est requise", 404);
+    throw createHttpError("Une adresse mail est requise", 400);
   }
 
   const user = await User.findOne({ email });
@@ -189,7 +189,7 @@ async function showOrderForUser(email) {
 async function validateOrderShipping(validateShipping) {
   const { email, orderId } = validateShipping;
   if (!email || !orderId) {
-    throw createHttpError("email et orderId sont requis", 404);
+    throw createHttpError("email et orderId sont requis", 400);
   }
 
   const order = await Order.findById(orderId);
@@ -198,12 +198,12 @@ async function validateOrderShipping(validateShipping) {
     throw createHttpError("Commande introuvable", 404);
   }
 
-  if (order.status === "payée") {
-    throw createHttpError("La commande n'a pas encore été expédiée", 400);
+  if (order.status !== "expédiée") {
+    throw createHttpError("La commande doit être expédiée pour pouvoir la valider", 400);
   }
 
   if (order.status === "reçue") {
-    throw createHttpError("Vous avez deja validé cette commande", 400);
+    throw createHttpError("Vous avez déjà validé cette commande", 400);
   }
 
   order.status = "reçue";
@@ -221,7 +221,7 @@ async function validateOrderShipping(validateShipping) {
 
 async function getAllOrdersForAdmin(idAdmin, limitOrders = 5, page = 1, queryOrders = {}) {
   if (!idAdmin) {
-    throw createHttpError("idAdmin est requis", 404);
+    throw createHttpError("idAdmin est requis", 400);
   }
 
   const admin = await User.findById(idAdmin);
@@ -251,8 +251,8 @@ async function getAllOrdersForAdmin(idAdmin, limitOrders = 5, page = 1, queryOrd
   };
 }
 async function getOneOrdersForAdmin(idAdmin, orderId) {
-  if ((!idAdmin, !orderId)) {
-    throw createHttpError("idAdmin et orderId sont requis", 404);
+  if (!idAdmin || !orderId) {
+    throw createHttpError("idAdmin et orderId sont requis", 400);
   }
 
   const admin = await User.findById(idAdmin);
@@ -272,7 +272,7 @@ async function getOneOrdersForAdmin(idAdmin, orderId) {
   return order;
 }
 async function updateOneOrderForAdmin(idAdmin, newStatus, orderId) {
-  if ((!idAdmin, !orderId, !newStatus)) {
+  if (!idAdmin || !orderId || !newStatus) {
     throw createHttpError("idAdmin, orderId et newStatus sont requis", 400);
   }
 
@@ -300,6 +300,7 @@ async function updateOneOrderForAdmin(idAdmin, newStatus, orderId) {
       $push: {
         statusHistory: {
           status: newStatus,
+          startDate: new Date(),
         },
       },
     },
@@ -311,7 +312,27 @@ async function updateOneOrderForAdmin(idAdmin, newStatus, orderId) {
 
   return order;
 }
+async function deleteOneOrderForAdmin(idAdmin, orderId) {
+  if (!idAdmin || !orderId) {
+    throw createHttpError("idAdmin et orderId sont requis", 400);
+  }
 
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const order = await Order.findByIdAndDelete(orderId);
+  if (!order) {
+    throw createHttpError("Commande introuvable", 404);
+  }
+
+  return order;
+}
 /*************** End Admin Functions  **************/
 
 export {
@@ -321,4 +342,5 @@ export {
   getAllOrdersForAdmin,
   getOneOrdersForAdmin,
   updateOneOrderForAdmin,
+  deleteOneOrderForAdmin,
 };
