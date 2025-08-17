@@ -1,23 +1,47 @@
 "use client";
+import { useEffect, useState } from "react";
 import styles from "../../admin.module.css";
+import SkeletonLatestOrders from "./skeletonComponents/SkeletonLatestOrders";
 import OneLatestOrder from "./OneLatestOrder";
 import Pagination from "./Pagination";
-import { useOrders } from "../../../context/admin/adminOrdersContext";
 
 export default function LatestOrders() {
-  const { orders, loadingOrders, refetchOrders, currentPage, setCurrentPage } = useOrders();
+  const [orders, setOrders] = useState(null);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  if (loadingOrders) return <p>Chargement des commandes...</p>;
-  if (!orders || !orders.orders?.length) return <p>Aucune commande trouvée</p>;
+  const fetchOrders = async (page = 1) => {
+    setLoadingOrders(true);
+    try {
+      const response = await fetch(`/api/admin/orders/allOrders?page=${page}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setOrders(data);
+      } else {
+        console.error(data.message || "Erreur lors de la récupération des commandes");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (page) => {
-    const totalPages = Number(orders?.pagination?.totalPages) || 1;
-    if (page < 1 || page > totalPages || page === currentPage) return;
-
+    if (page < 1 || page > orders?.pagination?.totalPages || page === currentPage) return;
     setCurrentPage(page);
-
-    refetchOrders(page);
+    fetchOrders(page);
   };
+
+  if (loadingOrders) return <SkeletonLatestOrders count={5} />;
+  if (!orders || !orders.orders?.length) return <p>Aucune commande trouvée</p>;
 
   return (
     <section aria-labelledby="latest-orders-title">
@@ -26,25 +50,24 @@ export default function LatestOrders() {
       <table className={styles.latestOrdersTable}>
         <thead>
           <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Client</th>
-            <th scope="col">Email</th>
-            <th scope="col">Status</th>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {orders.orders.map((order) => (
+          {orders?.orders?.map((order) => (
             <OneLatestOrder
-              key={order._id || `${order.email}-${order.createdAt}`}
-              date={order.createdAt}
-              email={order.email}
-              status={order.status}
+              key={order?._id || `${order?.email}-${order?.createdAt}`}
+              date={order?.createdAt}
+              email={order?.email}
+              status={order?.status}
             />
           ))}
         </tbody>
       </table>
 
-      <Pagination pagination={orders.pagination} currentPage={currentPage} onPageChange={handlePageChange} />
+      <Pagination pagination={orders?.pagination} currentPage={currentPage} onPageChange={handlePageChange} />
     </section>
   );
 }

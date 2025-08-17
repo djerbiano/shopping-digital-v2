@@ -9,6 +9,7 @@ export default function InputSearchByEmail({ emailSearch, setEmailSearch }) {
       <input
         type="search"
         id="emailSearch"
+        name="email"
         placeholder="Rechercher par email..."
         value={emailSearch}
         onChange={(e) => setEmailSearch(e.target.value)}

@@ -218,7 +218,8 @@ async function validateOrderShipping(validateShipping) {
 }
 
 /*************** Start Admin Functions  **************/
-async function getAllOrdersForAdmin(idAdmin, page = 1, filters = {}) {
+
+async function getAllOrdersForAdmin(idAdmin, limitOrders = 5, page = 1, queryOrders = {}) {
   if (!idAdmin) {
     throw createHttpError("idAdmin est requis", 404);
   }
@@ -232,13 +233,9 @@ async function getAllOrdersForAdmin(idAdmin, page = 1, filters = {}) {
     throw createHttpError("L'utilisateur n'est pas un admin", 403);
   }
 
-  const limit = 5;
+  const limit = limitOrders;
   const skip = (page - 1) * limit;
-  const query = {};
-
-  if (Array.isArray(filters.status) && filters.status.length > 0) {
-    query.status = { $in: filters.status };
-  }
+  const query = queryOrders;
 
   const totalOrders = await Order.countDocuments(query);
   const totalPages = Math.ceil(totalOrders / limit);
@@ -256,4 +253,4 @@ async function getAllOrdersForAdmin(idAdmin, page = 1, filters = {}) {
 
 /*************** End Admin Functions  **************/
 
-export { addOrder, getAllOrdersForAdmin, showOrderForUser, validateOrderShipping };
+export { addOrder, showOrderForUser, validateOrderShipping, getAllOrdersForAdmin };
