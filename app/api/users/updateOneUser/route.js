@@ -27,7 +27,7 @@ export async function PATCH(request) {
 
     const updatedUser = await updateAccount(data);
 
-    const { password, updatedAt, __v, ...other } = updatedUser.toObject();
+    const { password,tokenRestPassword, updatedAt, __v, ...other } = updatedUser.toObject();
 
     return NextResponse.json({ message: "Compte mis à jour", user: other }, { status: 200 });
   } catch (error) {

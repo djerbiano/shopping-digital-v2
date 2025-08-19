@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import {
   User,
   validateRegisterUser,
@@ -8,6 +9,8 @@ import {
   validateNewPassword,
 } from "../models/Users.js";
 import { generateToken, validateObjectId, createHttpError } from "../utils/helpers.js";
+import sendResetPasswordLink from "../mails/sendResetPaswwordLink.js";
+
 async function createUser(body) {
   const data = {
     ...body,
@@ -30,7 +33,7 @@ async function createUser(body) {
 
   const token = generateToken(result);
   // exclude certain properties from the user object
-  const { password, updatedAt, __v, ...other } = result.toObject();
+  const { password, tokenRestPassword, updatedAt, __v, ...other } = result.toObject();
 
   return { ...other, token };
 }
@@ -52,9 +55,14 @@ async function loginByEmail(body) {
   if (!validPassword) throw createHttpError("Utilisateur ou mot de passe incorrect", 400);
 
   // exclude certain properties from the user object
-  const { password, updatedAt, __v, ...other } = user.toObject();
+  const { password, tokenRestPassword, updatedAt, __v, ...other } = user.toObject();
 
   const token = generateToken(user);
+
+  if (user.tokenRestPassword !== "unvalidate") {
+    user.tokenRestPassword = "unvalidate";
+    await user.save();
+  }
 
   return { ...other, token };
 }
@@ -67,7 +75,7 @@ async function getDataUserById(id) {
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
   // exclude certain properties from the user object
-  const { password, updatedAt, __v, ...other } = user.toObject();
+  const { password, tokenRestPassword, updatedAt, __v, ...other } = user.toObject();
 
   return { ...other };
 }
@@ -139,9 +147,9 @@ async function updateAccount(data) {
     // check if email already exists $ne = not equal
     const emailExists = await User.findOne({
       email: data.email,
-      _id: { $ne: new mongoose.Types.ObjectId(id) },
+      _id: { $ne: id },
     });
-    if (emailExists) throw createHttpError("Cet email est déjà utilisé", 400);
+    if (emailExists) throw createHttpError("Veuillez utiliser une autre adresse mail", 400);
 
     fieldToUpdate.email = data.email;
   }
@@ -183,4 +191,39 @@ async function updateAccount(data) {
   return updatedUser;
 }
 
-export { createUser, loginByEmail, getDataUserById, deleteAccount, updateAccount };
+async function resetPassword(email) {
+  if (!email) throw createHttpError("Veuillez fournir une adresse mail", 400);
+
+  const user = await User.findOne({ email });
+
+  const response =
+    "Un lien de réinitialisation vous sera envoyé si cette adresse email est associée à un compte. Pensez à vérifier vos spams/courriers indésirables";
+  if (!user) throw createHttpError(response, 200);
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+    },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "10m" }
+  );
+
+  const link = `${process.env.FRONTEND_URL}/mot-de-passe-oublie/${token}`;
+
+  const contactData = {
+    email: user.email,
+    lastName: user.lastName,
+    resetLink: link,
+  };
+  await sendResetPasswordLink(contactData);
+
+  if (user.tokenRestPassword !== "validate") {
+    user.tokenRestPassword = "validate";
+    await user.save();
+  }
+
+  return response;
+}
+
+export { createUser, loginByEmail, getDataUserById, deleteAccount, updateAccount, resetPassword };

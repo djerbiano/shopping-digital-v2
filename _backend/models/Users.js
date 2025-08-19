@@ -56,6 +56,11 @@ const UsersSchema = mongoose.Schema(
         ref: "Product",
       },
     ],
+    tokenRestPassword: {
+      type: String,
+      enum: ["validate", "unvalidate"],
+      default: "unvalidate",
+    },
   },
   { timestamps: true }
 );
