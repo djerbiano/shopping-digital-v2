@@ -31,7 +31,7 @@ export default function SingleOrder({ commande, refreshOrders }) {
       if (!response.ok) {
         toast.error(data?.message || "Une erreur est survenue");
       } else {
-        toast.success(data?.message || "cc.");
+        toast.success(data?.message || "Commande validéee");
         refreshOrders();
       }
     } catch (error) {

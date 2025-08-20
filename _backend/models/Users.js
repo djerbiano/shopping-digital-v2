@@ -56,7 +56,7 @@ const UsersSchema = mongoose.Schema(
         ref: "Product",
       },
     ],
-    tokenRestPassword: {
+    tokenResetPassword: {
       type: String,
       enum: ["validate", "unvalidate"],
       default: "unvalidate",

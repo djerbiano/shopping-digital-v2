@@ -33,7 +33,7 @@ async function createUser(body) {
 
   const token = generateToken(result);
   // exclude certain properties from the user object
-  const { password, tokenRestPassword, updatedAt, __v, ...other } = result.toObject();
+  const { password, tokenResetPassword, updatedAt, __v, ...other } = result.toObject();
 
   return { ...other, token };
 }
@@ -55,12 +55,12 @@ async function loginByEmail(body) {
   if (!validPassword) throw createHttpError("Utilisateur ou mot de passe incorrect", 400);
 
   // exclude certain properties from the user object
-  const { password, tokenRestPassword, updatedAt, __v, ...other } = user.toObject();
+  const { password, tokenResetPassword, updatedAt, __v, ...other } = user.toObject();
 
   const token = generateToken(user);
 
-  if (user.tokenRestPassword !== "unvalidate") {
-    user.tokenRestPassword = "unvalidate";
+  if (user.tokenResetPassword !== "unvalidate") {
+    user.tokenResetPassword = "unvalidate";
     await user.save();
   }
 
@@ -75,7 +75,7 @@ async function getDataUserById(id) {
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
   // exclude certain properties from the user object
-  const { password, tokenRestPassword, updatedAt, __v, ...other } = user.toObject();
+  const { password, tokenResetPassword, updatedAt, __v, ...other } = user.toObject();
 
   return { ...other };
 }
@@ -204,6 +204,7 @@ async function resetPassword(email) {
     {
       id: user._id,
       email: user.email,
+      token:"resetPassword"
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "10m" }
@@ -218,12 +219,42 @@ async function resetPassword(email) {
   };
   await sendResetPasswordLink(contactData);
 
-  if (user.tokenRestPassword !== "validate") {
-    user.tokenRestPassword = "validate";
+  if (user.tokenResetPassword !== "validate") {
+    user.tokenResetPassword = "validate";
     await user.save();
   }
 
   return response;
 }
+async function confirmResetPassword(dataConfirmResetPassword) {
+  //dataConfirmResetPassword = { password: password,id: payload.id}
 
-export { createUser, loginByEmail, getDataUserById, deleteAccount, updateAccount, resetPassword };
+  const password = dataConfirmResetPassword.password;
+  const id = dataConfirmResetPassword.id;
+
+  if (!password) throw createHttpError("Veuillez fournir un mot de passe", 400);
+
+  const { error } = validateNewPassword({ password: password });
+
+  if (error)
+    throw createHttpError(
+      error.details?.[0]?.message || "Une erreur est survenue lors de la modification du mot de passe",
+      400
+    );
+
+  const salt = await bcrypt.genSalt(10);
+  const newPassword = await bcrypt.hash(password, salt);
+
+  const user = await User.findOne({ _id: id });
+  if (!user) throw createHttpError("Utilisateur introuvable", 404);
+  if (user.tokenResetPassword !== "validate") {
+    throw createHttpError("Le lien de réinitialisation n'est plus valide ou a déjà été utilisé", 500);
+  }
+  user.password = newPassword;
+  user.tokenResetPassword = "unvalidate";
+  await user.save();
+
+  return { message: "Votre mot de passe a bien été modifié" };
+}
+
+export { createUser, loginByEmail, getDataUserById, deleteAccount, updateAccount, resetPassword, confirmResetPassword };
