@@ -103,6 +103,29 @@ async function deleteAccount(id) {
   return result;
 }
 
+async function deleteOneUserByAdmin(idAdmin, idUserToDelete) {
+  validateObjectId(idAdmin);
+  validateObjectId(idUserToDelete);
+
+  const admin = await User.findById(idAdmin);
+
+  if (!admin) throw createHttpError("Admin introuvable", 404);
+
+  if (!admin.isAdmin) throw createHttpError("L'utilisateur n'est pas un admin", 403);
+
+  const user = await User.findById(idUserToDelete);
+
+  if (!user) throw createHttpError("Utilisateur à supprimer introuvable", 404);
+
+  const result = await User.deleteOne({ _id: idUserToDelete });
+
+  if (result.deletedCount === 0) {
+    throw createHttpError("Impossible de supprimer le compte, veuillez réessayer plus tard", 500);
+  }
+
+  return result;
+}
+
 async function updateAccount(data) {
   const id = typeof data.id === "string" ? data.id : data.id.toString();
 
@@ -148,7 +171,7 @@ async function updateAccount(data) {
 
   if (data.email) {
     const { error } = validateNewMail({ email: data.email });
-    console.log(error);
+
     if (error)
       throw createHttpError(
         error.details?.[0]?.message || "Une erreur est survenue lors de la modification de l'email",
@@ -280,7 +303,11 @@ async function getAllUsersByAdmin(adminId, limitUsers = 5, page = 1, queryUsers 
 
   const totalUsers = await User.countDocuments(query);
   const totalPages = Math.ceil(totalUsers / limit);
-  const users = await User.find(query).skip(skip).limit(limit).sort({ createdAt: -1 }).select("-password -tokenResetPassword");
+  const users = await User.find(query)
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .select("-password -tokenResetPassword");
 
   return {
     users: users,
@@ -297,6 +324,7 @@ export {
   loginByEmail,
   getDataUserById,
   deleteAccount,
+  deleteOneUserByAdmin,
   updateAccount,
   resetPassword,
   confirmResetPassword,

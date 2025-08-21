@@ -5,6 +5,7 @@ import userStyles from "../../_components/UsersComponents/usersComponent.module.
 import UserDetailsModal from "../../_components/UsersComponents/UserDetailsModal";
 import InputSearchByEmail from "../../_components/reusable/inputSearchByEmail";
 import Pagination from "../../_components/DashboardComponent/Pagination";
+import toast from "react-hot-toast";
 
 export default function Users() {
   const mounted = useRef(false);
@@ -37,10 +38,13 @@ export default function Users() {
       const data = await response.json();
       if (response.ok) {
         setUsers(data);
+        toast.success("Utilisateurs chargés");
       } else {
+        toast.error(data.message || "Une erreur est survenue lors de la récupération des utilisateurs");
         console.error(data.message || "Une erreur est survenue lors de la récupération des utilisateurs");
       }
     } catch (error) {
+      toast.error(error.message || "Une erreur est survenue lors de la récupération des utilisateurs");
       console.error(error);
     } finally {
       setLoadingUsers(false);
@@ -74,13 +78,13 @@ export default function Users() {
       <h3 id="section-users">Utilisateurs</h3>
 
       <InputSearchByEmail emailSearch={emailSearch} setEmailSearch={setEmailSearch} functionToCall={fetchUsers} />
-      <label htmlFor="limitUsers">Nombre de commandes par page</label>
+      <label htmlFor="limitUsers">Nombre d'utilisateurs par page</label>
       <select
         name="limitUsers"
         id="limitUsers"
         value={limitUsers}
         aria-label="Nombre d'utilisateurs par page"
-        // className={userStyles.select}
+        className={userStyles.selectPageUsers}
         onChange={(e) => {
           setPage(1);
           setLimitUsers(Number(e.target.value));
@@ -109,31 +113,39 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {users?.users?.map((user) => (
-            <tr
-              key={user._id}
-              className={userStyles.clickableRow}
-              role="button"
-              aria-label={` Voir les détails de l'utilisateur ${user.name} ${user.lastName}`}
-              tabIndex={selectedUser ? -1 : 0}
-              onKeyDown={(e) => {
-                if ((e.key === "Enter" || e.key === " " || e.key === "Escape") && !selectedUser) {
-                  setSelectedUser(user);
-                }
-              }}
-              onClick={() => setSelectedUser(user)}
-            >
-              <td data-label="Nom">{user.lastName}</td>
-              <td data-label="Prénom">{user.name}</td>
-              <td data-label="Téléphone">{user.phone}</td>
-              <td data-label="Email">{user.email}</td>
-              <td data-label="Adresse">{user.address}</td>
-              <td data-label="Email validé">{user.validateEmail ? "✅" : "❌"}</td>
+          {users?.users?.length <= 0 ? (
+            <tr>
+              <td colSpan="6">Aucun utilisateur trouvé</td>
             </tr>
-          ))}
+          ) : (
+            users?.users?.map((user) => (
+              <tr
+                key={user._id}
+                className={userStyles.clickableRow}
+                role="button"
+                aria-label={` Voir les détails de l'utilisateur ${user.name} ${user.lastName}`}
+                tabIndex={selectedUser ? -1 : 0}
+                onKeyDown={(e) => {
+                  if ((e.key === "Enter" || e.key === " " || e.key === "Escape") && !selectedUser) {
+                    setSelectedUser(user);
+                  }
+                }}
+                onClick={() => setSelectedUser(user)}
+              >
+                <td data-label="Nom">{user.lastName}</td>
+                <td data-label="Prénom">{user.name}</td>
+                <td data-label="Téléphone">{user.phone}</td>
+                <td data-label="Email">{user.email}</td>
+                <td data-label="Adresse">{user.address}</td>
+                <td data-label="Email validé">{user.validateEmail ? "✅" : "❌"}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-      {selectedUser && <UserDetailsModal user={selectedUser} onClose={() => setSelectedUser(null)} />}
+      {selectedUser && (
+        <UserDetailsModal user={selectedUser} onClose={() => setSelectedUser(null)} refetchUsers={fetchUsers} />
+      )}
       {users?.pagination?.totalPages > 1 && (
         <Pagination pagination={users?.pagination} currentPage={page} onPageChange={setPage} />
       )}
