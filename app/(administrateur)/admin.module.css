@@ -314,6 +314,8 @@
 
 .adminContent .searchBar {
   margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
 }
 .adminContent .searchBar input {
   width: 100%;

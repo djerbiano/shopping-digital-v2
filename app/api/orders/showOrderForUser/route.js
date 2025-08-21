@@ -20,10 +20,7 @@ export async function GET(request) {
       return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
     }
 
-
-
-
-    const result = await showOrderForUser(payload.email);
+    const result = await showOrderForUser(payload);
     if (!result) {
       return NextResponse.json({ message: "Aucune commande trouvée" }, { status: 404 });
     }

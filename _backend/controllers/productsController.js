@@ -52,6 +52,8 @@ async function addProductToFavorites(dataFavorites) {
   const user = await User.findById(userId);
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
+  if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour ajouter un produit aux favoris", 400);
+
   const product = await Product.findById(productId);
   if (!product) throw createHttpError("Produit introuvable", 404);
 
@@ -74,6 +76,8 @@ async function removeProductFromFavorites(dataFavorites) {
   const user = await User.findById(userId);
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
+  if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour supprimer un produit favoris", 400);
+
   const product = await Product.findById(productId);
   if (!product) throw createHttpError("Produit introuvable", 404);
 
@@ -94,6 +98,8 @@ async function getFavoritesProducts(userId) {
 
   const user = await User.findById(userId);
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
+
+  if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour voir vos favoris", 400);
 
   const favoritesProductsIds = user.favoritesProduct;
   

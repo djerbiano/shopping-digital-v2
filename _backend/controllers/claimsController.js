@@ -17,6 +17,8 @@ async function addClaim(claim) {
   const user = await User.findOne({ email });
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
+  if (email !== user.email) throw createHttpError("Vous devez vous connecter pour faire une réclamation", 400);
+
   const order = await Order.findById(claimInformation);
   if (!order) throw createHttpError("Commande introuvable", 404);
 

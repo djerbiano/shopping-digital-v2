@@ -28,7 +28,7 @@ export async function GET(request) {
       }
     }
 
-    if (isNaN(limitOrders) || limitOrders < 0) {
+    if (isNaN(limitOrders) || limitOrders <= 0) {
       return NextResponse.json({ message: "Limite de commandes invalide" }, { status: 400 });
     }
 

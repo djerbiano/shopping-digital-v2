@@ -67,6 +67,12 @@ export default function Orders() {
     fetchOrders();
   }, [page, limitOrders, data.status]);
 
+  useEffect(() => {
+    if (data.email === "") {
+      fetchOrders();
+    }
+  }, [data.email]);
+
   if (loadingOrders) {
     return (
       <section aria-labelledby="section-orders" className={styles.adminContent}>
@@ -79,7 +85,12 @@ export default function Orders() {
   return (
     <section aria-labelledby="section-orders" className={styles.adminContent}>
       <h3 id="section-orders">Commandes</h3>
-      <InputSearchByEmail emailSearch={data.email} setEmailSearch={(value) => setData({ ...data, email: value })} />
+
+      <InputSearchByEmail
+        emailSearch={data.email}
+        setEmailSearch={(value) => setData({ ...data, email: value })}
+        functionToCall={fetchOrders}
+      />
 
       <label htmlFor="orders" className={styles.srOnly}>
         Filtrer par statut:
@@ -122,10 +133,6 @@ export default function Orders() {
         <option value="50">50</option>
         <option value="100">100</option>
       </select>
-
-      <button type="button" onClick={fetchOrders} aria-label="Rechercher" className={styles.searchButton}>
-        Rechercher
-      </button>
 
       <table className={ordersStyles.ordersTable}>
         <thead>

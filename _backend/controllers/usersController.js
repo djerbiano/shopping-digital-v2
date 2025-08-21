@@ -10,6 +10,7 @@ import {
 } from "../models/Users.js";
 import { generateToken, validateObjectId, createHttpError } from "../utils/helpers.js";
 import sendResetPasswordLink from "../mails/sendResetPaswwordLink.js";
+import Users from "@/app/(administrateur)/admin/users/page.jsx";
 
 async function createUser(body) {
   const data = {
@@ -74,6 +75,9 @@ async function getDataUserById(id) {
 
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
+  if (id !== user._id.toString() && !user.isAdmin)
+    throw createHttpError("Vous n'avez pas le droit de voir ce compte", 404);
+
   // exclude certain properties from the user object
   const { password, tokenResetPassword, updatedAt, __v, ...other } = user.toObject();
 
@@ -86,6 +90,9 @@ async function deleteAccount(id) {
   const user = await User.findOne({ _id: id });
 
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
+
+  if (id !== user._id.toString() && !user.isAdmin)
+    throw createHttpError("Vous n'avez pas le droit de supprimer ce compte", 404);
 
   const result = await User.deleteOne({ _id: id });
 
@@ -104,6 +111,9 @@ async function updateAccount(data) {
   const user = await User.findById(id);
 
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
+
+  if (id !== user._id.toString() && !user.isAdmin)
+    throw createHttpError("Vous n'avez pas le droit de modifier ce compte", 404);
 
   // field can be updated : email, name, lastName, phone, address, password.
 
@@ -204,7 +214,7 @@ async function resetPassword(email) {
     {
       id: user._id,
       email: user.email,
-      token:"resetPassword"
+      token: "resetPassword",
     },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "10m" }
@@ -257,4 +267,38 @@ async function confirmResetPassword(dataConfirmResetPassword) {
   return { message: "Votre mot de passe a bien été modifié" };
 }
 
-export { createUser, loginByEmail, getDataUserById, deleteAccount, updateAccount, resetPassword, confirmResetPassword };
+async function getAllUsersByAdmin(adminId, limitUsers = 5, page = 1, queryUsers = {}) {
+  if (!adminId) throw createHttpError("Veuillez fournir un identifiant d'administrateur", 400);
+
+  const admin = await User.findById(adminId);
+  if (!admin) throw createHttpError("Administrateur introuvable", 404);
+  if (!admin.isAdmin) throw createHttpError("Vous n'avez pas le droit de voir cette liste", 404);
+
+  const limit = limitUsers;
+  const skip = (page - 1) * limit;
+  const query = queryUsers;
+
+  const totalUsers = await User.countDocuments(query);
+  const totalPages = Math.ceil(totalUsers / limit);
+  const users = await User.find(query).skip(skip).limit(limit).sort({ createdAt: -1 }).select("-password -tokenResetPassword");
+
+  return {
+    users: users,
+    pagination: {
+      totalUsers: totalUsers,
+      totalPages,
+      currentPage: page,
+    },
+  };
+}
+
+export {
+  createUser,
+  loginByEmail,
+  getDataUserById,
+  deleteAccount,
+  updateAccount,
+  resetPassword,
+  confirmResetPassword,
+  getAllUsersByAdmin,
+};

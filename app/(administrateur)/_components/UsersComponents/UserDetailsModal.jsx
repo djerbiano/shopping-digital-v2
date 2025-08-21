@@ -12,7 +12,6 @@ export default function UserDetailsModal({ user, onClose }) {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " " || e.key === "Escape") {
               onClose();
-              
             }
           }}
         >
@@ -21,7 +20,7 @@ export default function UserDetailsModal({ user, onClose }) {
         <h3 id="modal-title">Détails de l'utilisateur</h3>
 
         <div className={userStyles.userDetailsWrapper}>
-          <div className={userStyles.avatarContainer}>
+          {/* <div className={userStyles.avatarContainer}>
             <Image
               src={`/${user.avatar}`}
               alt={`Avatar de ${user.name}`}
@@ -29,7 +28,7 @@ export default function UserDetailsModal({ user, onClose }) {
               height={200}
               className={userStyles.avatar}
             />
-          </div>
+          </div> */}
           <div className={userStyles.userDetailsInfo}>
             <p>
               <strong>ID:</strong> {user._id}
@@ -62,7 +61,10 @@ export default function UserDetailsModal({ user, onClose }) {
               <strong>Favoris:</strong> {user.favoritesProduct.join(", ") || "Aucun"}
             </p>
             <p>
-              <strong>Créé le:</strong> {new Date(user.createdAt).toLocaleString()}
+              <strong>Créé le:</strong>{" "}
+              {new Date(user.createdAt).toLocaleString("fr-FR", {
+                timeZone: "Europe/Paris",
+              })}
             </p>
           </div>
         </div>
