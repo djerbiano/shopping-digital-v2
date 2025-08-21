@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../admin.module.css";
 import productsStyles from "../../_components/ProductsComponent/productsComponent.module.css";
-import { CiSettings } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import UpdateBtn from "../../_components/reusable/updateBtn";
+import toast from "react-hot-toast";
 
 const fakeProducts = [
   {
@@ -356,35 +356,83 @@ const fakeProducts = [
 
 export default function Products() {
   const router = useRouter();
-  const [showFilter, setShowFilter] = useState(false);
-  const [filters, setFilters] = useState({
+  const [products, setProducts] = useState([]);
+  const [limitProducts, setLimitProducts] = useState(50);
+  const [page, setPage] = useState(1);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [category, setCategory] = useState({
+    selectedCategory: "",
+  });
+  const [filtersAdvanced, setFiltersAdvanced] = useState({
     isOnSale: false,
     isTopSeller: false,
     isNewCollection: false,
     isLimitedEdition: false,
-    isOutOfStock: false,
+    outOfStock: false,
   });
   const filterLabels = {
     isOnSale: "En promotion",
     isTopSeller: "Top ventes",
     isNewCollection: "Nouvelle collection",
     isLimitedEdition: "Édition limitée",
-    isOutOfStock: "En rupture de stock",
+    outOfStock: "En rupture de stock",
   };
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const categories = ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie"];
+  const fetchProducts = async () => {
+    const queryProducts = {};
 
-  const filteredProducts = fakeProducts.filter(
-    (p) =>
-      (!filters.isOnSale || p.isOnSale) &&
-      (!filters.isTopSeller || p.isTopSeller) &&
-      (!filters.isNewCollection || p.isNewCollection) &&
-      (!filters.isLimitedEdition || p.isLimitedEdition) &&
-      (!filters.isOutOfStock || !p.stock) &&
-      (!selectedCategory || p.category === selectedCategory)
-  );
+    if (category.selectedCategory !== "") queryProducts.category = category.selectedCategory;
+
+    const validStatuses = ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie"];
+    if (category.selectedCategory !== "" && validStatuses.includes(category.selectedCategory)) {
+      queryProducts.category = category.selectedCategory;
+    }
+    if (filtersAdvanced.isOnSale) queryProducts.isOnSale = filtersAdvanced.isOnSale;
+    if (filtersAdvanced.isTopSeller) queryProducts.isTopSeller = filtersAdvanced.isTopSeller;
+    if (filtersAdvanced.isNewCollection) queryProducts.isNewCollection = filtersAdvanced.isNewCollection;
+    if (filtersAdvanced.isLimitedEdition) queryProducts.isLimitedEdition = filtersAdvanced.isLimitedEdition;
+    if (filtersAdvanced.outOfStock) queryProducts.stock = !filtersAdvanced.outOfStock;
+
+    const params = new URLSearchParams();
+    params.set("page", page);
+    params.set("limitProducts", limitProducts);
+
+    if (Object.keys(queryProducts).length > 0) {
+      params.set("queryProducts", JSON.stringify(queryProducts));
+    }
+
+    const endpoint = `/api/admin/products?${params.toString()}`;
+
+    try {
+      setLoadingProducts(true);
+      const response = await fetch(endpoint, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Produits chargés");
+        setProducts(data);
+      } else {
+        toast.error(data.message || "Une erreur est survenue lors de la récupération des produits");
+        console.error(data.message || "Erreur lors de la récupération des commandes");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [category, filtersAdvanced, page, limitProducts]);
+
+  const [showFilter, setShowFilter] = useState(false);
 
   const handleFilterChange = (key) => {
-    setFilters((prev) => ({
+    setFiltersAdvanced((prev) => ({
       ...prev,
       [key]: !prev[key],
     }));
@@ -393,6 +441,7 @@ export default function Products() {
   const handleProductClick = (id) => {
     router.push(`/admin/products/${id}`);
   };
+
   return (
     <section aria-labelledby="section-products" className={styles.adminContent}>
       <h3 id="section-products">Produits</h3>
@@ -404,31 +453,32 @@ export default function Products() {
       </div>
 
       <div className={productsStyles.filterRow}>
-        <label htmlFor="categoryFilter" className={styles.srOnly}>
+        <label htmlFor="category" className={styles.srOnly}>
           Filtrer par catégorie :
         </label>
         <select
-          id="categoryFilter"
+          id="category"
           name="category"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          value={category.selectedCategory}
+          onChange={(e) => setCategory({ selectedCategory: e.target.value })}
         >
           <option value="">Toutes catégories</option>
-          {[...new Set(fakeProducts.map((p) => p.category))].map((cat) => (
+          {categories?.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
           ))}
         </select>
+
         <div className={productsStyles.filterDropdown}>
           <button onClick={() => setShowFilter(!showFilter)} className={productsStyles.filterButton}>
             Filtres avancés
           </button>
           {showFilter && (
             <div className={productsStyles.checkboxFilters}>
-              {Object.keys(filters).map((key) => (
+              {Object.keys(filtersAdvanced).map((key) => (
                 <label key={key}>
-                  <input type="checkbox" checked={filters[key]} onChange={() => handleFilterChange(key)} />
+                  <input type="checkbox" checked={filtersAdvanced[key]} onChange={() => handleFilterChange(key)} />
                   {filterLabels[key]}
                 </label>
               ))}
@@ -452,21 +502,27 @@ export default function Products() {
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => (
-            <tr key={product._id}>
-              <td data-label="Catégorie">{product.category}</td>
-              <td data-label="Nom">{product.title}</td>
-              <td data-label="Prix">{product.regularPrice} €</td>
-              <td data-label="Promo">{product.isOnSale ? "✅" : "❌"}</td>
-              <td data-label="Prix promo">{product.salePrice ? `${product.salePrice} €` : "-"}</td>
-              <td data-label="Top vente">{product.isTopSeller ? "✅" : "❌"}</td>
-              <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
-              <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
-              <td data-label="Modifier">
-                <UpdateBtn action={() => handleProductClick(product._id)} text="Modifier le produit" />
-              </td>
+          {products?.products?.length <= 0 ? (
+            <tr>
+              <td colSpan="9">Aucun produit trouvé</td>
             </tr>
-          ))}
+          ) : (
+            products?.products?.map((product) => (
+              <tr key={product._id}>
+                <td data-label="Catégorie">{product.category}</td>
+                <td data-label="Nom">{product.title}</td>
+                <td data-label="Prix">{product.regularPrice} €</td>
+                <td data-label="Promo">{product.isOnSale ? "✅" : "❌"}</td>
+                <td data-label="Prix promo">{product.salePrice ? `${product.salePrice} €` : "-"}</td>
+                <td data-label="Top vente">{product.isTopSeller ? "✅" : "❌"}</td>
+                <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
+                <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
+                <td data-label="Modifier">
+                  <UpdateBtn action={() => handleProductClick(product._id)} text="Modifier le produit" />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </section>

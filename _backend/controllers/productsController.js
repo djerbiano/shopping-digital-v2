@@ -52,7 +52,8 @@ async function addProductToFavorites(dataFavorites) {
   const user = await User.findById(userId);
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
-  if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour ajouter un produit aux favoris", 400);
+  if (userId !== user._id.toString())
+    throw createHttpError("Vous devez vous connecter pour ajouter un produit aux favoris", 400);
 
   const product = await Product.findById(productId);
   if (!product) throw createHttpError("Produit introuvable", 404);
@@ -76,7 +77,8 @@ async function removeProductFromFavorites(dataFavorites) {
   const user = await User.findById(userId);
   if (!user) throw createHttpError("Utilisateur introuvable", 404);
 
-  if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour supprimer un produit favoris", 400);
+  if (userId !== user._id.toString())
+    throw createHttpError("Vous devez vous connecter pour supprimer un produit favoris", 400);
 
   const product = await Product.findById(productId);
   if (!product) throw createHttpError("Produit introuvable", 404);
@@ -102,7 +104,7 @@ async function getFavoritesProducts(userId) {
   if (userId !== user._id.toString()) throw createHttpError("Vous devez vous connecter pour voir vos favoris", 400);
 
   const favoritesProductsIds = user.favoritesProduct;
-  
+
   const products = await Product.find({ _id: { $in: favoritesProductsIds } });
 
   return products;
@@ -113,6 +115,37 @@ async function getProductById(id) {
   if (!product) throw createHttpError("Produit introuvable", 404);
   return product;
 }
+async function getAllProductsForAdmin(idAdmin, limitProducts = 50, page = 1, queryProducts = {}) {
+  if (!idAdmin) {
+    throw createHttpError("idAdmin est requis", 400);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const limit = limitProducts;
+  const skip = (page - 1) * limit;
+  const query = queryProducts;
+
+  const totalProducts = await Product.countDocuments(query);
+  const totalPages = Math.ceil(totalProducts / limit);
+  const products = await Product.find(query).skip(skip).limit(limit).sort({ createdAt: -1 });
+
+  return {
+    products,
+    pagination: {
+      totalProducts: totalProducts,
+      totalPages,
+      currentPage: page,
+    },
+  };
+}
 
 export {
   getAllProductsForUser,
@@ -120,4 +153,5 @@ export {
   addProductToFavorites,
   removeProductFromFavorites,
   getFavoritesProducts,
+  getAllProductsForAdmin,
 };
