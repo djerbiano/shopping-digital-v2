@@ -146,7 +146,7 @@ export default function Users() {
       {selectedUser && (
         <UserDetailsModal user={selectedUser} onClose={() => setSelectedUser(null)} refetchUsers={fetchUsers} />
       )}
-      {users?.pagination?.totalPages > 1 && (
+      {users?.pagination?.totalPages > 0 && (
         <Pagination pagination={users?.pagination} currentPage={page} onPageChange={setPage} />
       )}
     </section>

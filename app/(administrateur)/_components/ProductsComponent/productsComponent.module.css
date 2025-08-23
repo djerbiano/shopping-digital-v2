@@ -99,15 +99,15 @@
   font-size: 16px;
 }
 
+.formUpdate select,
 .formUpdate input[type="text"],
 .formUpdate input[type="number"],
-.formUpdate select,
 .formUpdate input[type="file"] {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 16px;
-  max-width: 400px;
+  width: 100%;
 }
 
 .formUpdate input[type="checkbox"] {
@@ -134,6 +134,7 @@
   flex-direction: column;
   gap: 10px;
 }
+
 .formActions {
   display: flex;
   gap: 12px;
@@ -154,10 +155,31 @@
 .formActions button:hover {
   background-color: #2563eb;
 }
+.formActions .deleteBtn {
+  background-color: var(--color-red);
+  color: white;
+  margin-left: auto;
+  transition: background-color 0.2s ease;
+}
+.formActions .deleteBtn:hover {
+  background-color: #b91c1c;
+}
 .formUpdate .imageFieldset {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.descriptionFieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.descriptionFieldset textarea {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
 }
 .imagePreviewGrid {
   display: flex;

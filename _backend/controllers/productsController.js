@@ -1,6 +1,6 @@
 import Product from "../../_backend/models/Product";
 import { User } from "../../_backend/models/Users";
-import { createHttpError, validateObjectId } from "../../_backend/utils/helpers";
+import { createHttpError, validateObjectId, deletePictures } from "../../_backend/utils/helpers";
 
 async function getAllProductsForUser(page = 1, filters = {}) {
   const limit = 50;
@@ -146,7 +146,107 @@ async function getAllProductsForAdmin(idAdmin, limitProducts = 50, page = 1, que
     },
   };
 }
+async function updateProductByAdmin(idAdmin, productId, updates) {
+  if (!idAdmin) {
+    throw createHttpError("idAdmin est requis", 400);
+  }
 
+  if (!productId) {
+    throw createHttpError("productId est requis", 400);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+  const updateFields = {};
+  const simpleFields = [
+    "title",
+    "category",
+    "stock",
+    "regularPrice",
+    "salePrice",
+    "isLimitedEdition",
+    "isNewCollection",
+    "isOnSale",
+    "isTopSeller",
+    "colors",
+  ];
+
+  for (const key of simpleFields) {
+    if (updates[key] !== undefined) {
+      if (key === "regularPrice" || key === "salePrice") {
+        const value = Number(updates[key]);
+        if (isNaN(value)) {
+          throw createHttpError(`Le champ ${key} doit être un nombre`, 400);
+        }
+        if (value < 0) {
+          throw createHttpError(`Le prix ${key} ne peut pas être négatif`, 400);
+        }
+        updateFields[key] = value;
+      } else {
+        updateFields[key] = updates[key];
+      }
+    }
+  }
+
+  for (const key in updates) {
+    if (key.includes(".")) {
+      updateFields[key] = updates[key];
+    }
+  }
+
+  if (Object.keys(updateFields).length === 0) {
+    throw createHttpError("Aucun champ valide à mettre à jour", 400);
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    { $set: updateFields },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedProduct) throw createHttpError("Produit introuvable", 404);
+
+  return updatedProduct;
+}
+async function deleteProductByAdmin(idAdmin, productId) {
+  if (!idAdmin) {
+    throw createHttpError("idAdmin est requis", 400);
+  }
+
+  if (!productId) {
+    throw createHttpError("productId est requis", 400);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw createHttpError("Produit introuvable", 404);
+  }
+
+  const deletedProduct = await Product.findByIdAndDelete(productId);
+  if (!deletedProduct) {
+    throw createHttpError("Erreur lors de la suppression du produit", 500);
+  }
+  Object.values(product.pictures).map((picture) => {
+    deletePictures(picture);
+  });
+
+  return { message: "Produit et images supprimés avec succès" };
+}
 export {
   getAllProductsForUser,
   getProductById,
@@ -154,4 +254,6 @@ export {
   removeProductFromFavorites,
   getFavoritesProducts,
   getAllProductsForAdmin,
+  updateProductByAdmin,
+  deleteProductByAdmin,
 };

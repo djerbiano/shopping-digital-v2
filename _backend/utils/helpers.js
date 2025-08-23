@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import { jwtVerify } from "jose";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+const path = require("path");
+const fs = require("fs").promises;
 function generateToken(user) {
   return jwt.sign(
     {
@@ -49,4 +51,16 @@ async function verifyToken(request) {
     return { error: NextResponse.json({ message: "Token invalide" }, { status: 401 }) };
   }
 }
-export { generateToken, validateObjectId, createHttpError, handleError, verifyToken };
+
+async function deletePictures(picture) {
+  if (picture !== "avatarDefault.jpg") {
+    const picturePath = path.resolve(process.cwd(), "public", picture);
+    await fs.unlink(picturePath);
+
+    //if picture is not delete from path , give the name of the picture to the next function
+
+    
+
+  }
+}
+export { generateToken, validateObjectId, createHttpError, handleError, verifyToken, deletePictures };

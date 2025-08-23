@@ -1,14 +1,17 @@
 "use client";
 import styles from "../../admin.module.css";
 import ordersStyles from "./orders.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ViewBtn from "../../_components/reusable/viewBtn";
 import InputSearchByEmail from "../../_components/reusable/inputSearchByEmail";
 import Pagination from "../../_components/DashboardComponent/Pagination";
+import toast from "react-hot-toast";
 
 export default function Orders() {
+  const mounted = useRef(false);
   const router = useRouter();
+  const [error, setError] = useState(null);
   const [orders, setOrders] = useState([]);
   const [limitOrders, setLimitOrders] = useState(5);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -53,10 +56,13 @@ export default function Orders() {
       const data = await response.json();
       if (response.ok) {
         setOrders(data);
+        toast.success("Commandes chargées");
       } else {
-        console.error(data.message || "Erreur lors de la récupération des commandes");
+        setError(data?.message);
+        console.error(data?.message || "Erreur lors de la récupération des commandes");
       }
     } catch (error) {
+      setError(error.message);
       console.error(error);
     } finally {
       setLoadingOrders(false);
@@ -64,12 +70,18 @@ export default function Orders() {
   };
 
   useEffect(() => {
+    setError(null);
     fetchOrders();
   }, [page, limitOrders, data.status]);
 
   useEffect(() => {
-    if (data.email === "") {
-      fetchOrders();
+    if (mounted.current) {
+      if (data.email === "") {
+        setError(null);
+        fetchOrders();
+      }
+    } else {
+      mounted.current = true;
     }
   }, [data.email]);
 
@@ -164,7 +176,8 @@ export default function Orders() {
           )}
         </tbody>
       </table>
-      {orders?.pagination?.totalPages > 1 && (
+      {error && <p>{error}</p>}
+      {orders?.pagination?.totalPages > 0 && (
         <Pagination pagination={orders?.pagination} currentPage={page} onPageChange={setPage} />
       )}
     </section>
