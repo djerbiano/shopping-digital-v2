@@ -2,6 +2,8 @@ import connectToDb from "../_backend/config/db";
 import { getAllProductsForUser } from "../_backend/controllers/productsController";
 import HomeWrapper from "./_Components/clientSide/HomeWrapper";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function Home() {
   await connectToDb();
 
