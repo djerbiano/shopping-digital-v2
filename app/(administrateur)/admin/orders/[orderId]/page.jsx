@@ -5,16 +5,16 @@ import { useModal } from "../../../../context/ModalContext";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import BackBtn from "../../../_components/reusable/backBtn";
+import toast from "react-hot-toast";
 
 export default function OneOrder() {
+  const router = useRouter();
   const [orderStatus, setOrderStatus] = useState("");
   const [oneOrder, setOneOrder] = useState({});
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(null);
   const { orderId } = useParams();
-  const router = useRouter();
   const { openModal } = useModal();
 
   const handleStatusChange = (e) => {
@@ -196,10 +196,10 @@ export default function OneOrder() {
               <option value="reçue">reçue</option>
               <option value="annulée">annulée</option>
             </select>
-            <button aria-label="Modifier la commande" onClick={updateOrderStatus} disabled={!orderStatus || loading}>
+            <button type="button" aria-label="Modifier la commande" onClick={updateOrderStatus} disabled={!orderStatus || loading}>
               Modifier
             </button>
-            <button aria-label="Supprimer la commande" onClick={handleDeleteOrder}>
+            <button type="button" aria-label="Supprimer la commande" onClick={handleDeleteOrder}>
               Supprimer
             </button>
           </div>

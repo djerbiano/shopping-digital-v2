@@ -9,6 +9,9 @@
   padding: 12px;
   text-align: left;
 }
+.userTable td:last-child {
+  text-align: center;
+}
 .userTable thead {
   background-color: #f5f5f5;
 }

@@ -1,126 +1,133 @@
 "use client";
-import BackBtn from "@/app/(administrateur)/_components/reusable/backBtn";
 import styles from "../../../admin.module.css";
 import claimsStyles from "../claims.module.css";
-import { useRouter } from "next/navigation";
+import { useModal } from "../../../../context/ModalContext";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import BackBtn from "@/app/(administrateur)/_components/reusable/backBtn";
+
 export default function Claims() {
   const router = useRouter();
-  const fackeClaim = {
-    _id: "670b300dac5a2511063b0cfe",
-    status: "En attente",
-    order: {
-      _id: "670ad03962c4e9da42d41aa5",
-      products: [
-        {
-          product: "6587b4c4f47cf256dd5b6fef",
-          color: "Bleu",
-          size: '7"',
-          quantity: 1,
-          price: 699,
-          _id: "670ad03962c4e9da42d41aa6",
-        },
-      ],
-      user: "659f87d69822ba170095ea38",
-      email: "jean@hotmail.fr",
-      status: "reçue",
-      statusHistory: [
-        {
-          status: "payée",
-          startDate: "2024-10-12T19:38:33.305Z",
-          _id: "670ad03962c4e9da42d41aa7",
-        },
-        {
-          status: "expédiée",
-          startDate: "2024-10-13T01:49:03.718Z",
-          _id: "670b2a0c8f7415d01f7c553c",
-        },
-        {
-          status: "reçue",
-          startDate: "2024-10-13T01:49:03.718Z",
-          _id: "670b2a138f7415d01f7c5558",
-        },
-        {
-          status: "expédiée",
-          startDate: "2024-10-13T01:49:03.718Z",
-          _id: "670b2a688f7415d01f7c55c3",
-        },
-        {
-          status: "expédiée",
-          startDate: "2024-10-13T01:49:03.718Z",
-          _id: "670b2aaa8f7415d01f7c5660",
-        },
-        {
-          status: "reçue",
-          startDate: "2024-10-20T19:56:08.893Z",
-          _id: "6715605850de4a3e5a6794e7",
-        },
-      ],
-      total: 699,
-      billingAddress: "1 rue de paris 75000 Paris",
-      shippingAddress: "1 rue de paris 75000 Paris",
-      trackingNumber: "670ad03962c4e9da42d41aa8",
-      createdAt: "2024-10-12T19:38:33.311Z",
-      updatedAt: "2024-10-20T19:56:08.907Z",
-      __v: 5,
-    },
-    messages: [
-      {
-        userId: "659f87d69822ba170095ea38",
-        message: "Bonjour, je suis satisfait de votre commande",
-        _id: "670b300dac5a2511063b0cff",
-        startDate: "2024-10-13T02:27:25.746Z",
-      },
-    ],
-    createdAt: "2024-10-13T02:27:25.749Z",
-    updatedAt: "2024-10-13T02:27:25.749Z",
-    __v: 0,
+  const [claimStatus, setClaimStatus] = useState("");
+  const [oneClaim, setOneClaim] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [erreur, setErreur] = useState(null);
+  const { claimId } = useParams();
+  const { openModal } = useModal();
+  const validStatuses = ["En attente", "Traitement", "Cloturer"];
+  const handleStatusChange = (e) => {
+    setClaimStatus(e.target.value);
   };
+
+  const updateClaimStatus = async () => {
+    console.log(claimStatus);
+  };
+  const deleteclaimFunction = async () => {
+    console.log(`Réclamation n°${claimId} supprimée`);
+  };
+  const handleDeleteClaim = () => {
+    openModal({
+      content: (
+        <p>
+          Êtes-vous sûr de vouloir <strong>supprimer cette réclamation</strong> ? Cette action est irréversible.
+        </p>
+      ),
+      onYes: deleteclaimFunction,
+    });
+  };
+  const fetchOneClaim = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/admin/claims/${claimId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error(data?.message || "Une erreur est survenue");
+        setErreur(data?.message || "Une erreur est survenue");
+      } else {
+        setOneClaim(data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchOneClaim();
+  }, [claimId]);
+
+  if (loading) {
+    return <p>Chargement...</p>;
+  }
+
   return (
     <section aria-labelledby="section-claims" className={styles.adminContent}>
       <BackBtn />
-      <h3 id="section-claims">Réclamation de {fackeClaim.order.email}</h3>
 
-      <div className={claimsStyles.claimContainer}>
-        <div className={claimsStyles.claimStatus}>
-          <h4>Statut de la réclamation</h4>
-          <p>{fackeClaim.status}</p>
-        </div>
+      {erreur ? (
+        <p>{erreur}</p>
+      ) : (
+        <>
+          <h3 id="section-claims">Réclamation de {oneClaim?.order?.email}</h3>
 
-        <div className={claimsStyles.claimOrder}>
-          <h4>Commande ID</h4>
-          <p>{fackeClaim.order._id}</p>
-          <button
-            className={claimsStyles.claimOrderBtn}
-            type="button"
-            aria-label="Consulter la commande"
-            title="Consulter la commande"
-            onClick={() => router.push(`/admin/orders/${fackeClaim.order._id}`)}
-          >
-            Voir la commande
-          </button>
-        </div>
+          <div className={claimsStyles.claimContainer}>
+            <div className={claimsStyles.claimStatus}>
+              <h4>Statut de la réclamation</h4>
+              <p>{oneClaim?.status}</p>
+            </div>
 
-        <div className={claimsStyles.claimMessage}>
-          <h4>Message de {fackeClaim.order.email}</h4>
-          {fackeClaim.messages.map((m) => (
-            <p key={m._id}>
-              {new Date(m.startDate).toLocaleString()} ➤ {m.message}
-            </p>
-          ))}
-        </div>
-      </div>
+            <div className={claimsStyles.claimOrder}>
+              <h4>Commande ID</h4>
+              <p>{oneClaim?.order?._id}</p>
+              <button
+                className={claimsStyles.claimOrderBtn}
+                type="button"
+                aria-label="Consulter la commande"
+                title="Consulter la commande"
+                onClick={() => router.push(`/admin/orders/${oneClaim?.order?._id}`)}
+              >
+                Voir la commande
+              </button>
+            </div>
 
-      <h4 className={claimsStyles.claimsTableTitle}>Modifier le statut de la réclamation :</h4>
-      <div className={claimsStyles.statusForm}>
-        <label htmlFor="status">Statut de la réclamation</label>
-        <select name="status" id="status" defaultValue={fackeClaim.status}>
-          <option value="En attente">En attente</option>
-          <option value="Traitement">Traitement</option>
-          <option value="Cloturer">Cloturer</option>
-        </select>
-        <button aria-label="Modifier la réclamation">Modifier</button>
-        <button aria-label="Supprimer la réclamation">Supprimer</button>
-      </div>
+            <div className={claimsStyles.claimMessage}>
+              <h4>Message de {oneClaim?.order?.email}</h4>
+              {oneClaim?.messages?.map((m) => (
+                <p key={m._id}>
+                  {new Date(m?.startDate).toLocaleString()} ➤ {m?.message}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <h4 className={claimsStyles.claimsTableTitle}>Modifier le statut de la réclamation :</h4>
+          <div className={claimsStyles.statusForm}>
+            <label htmlFor="status">Statut de la réclamation</label>
+            <select name="status" id="status" value={claimStatus} onChange={handleStatusChange}>
+              <option value="" disabled>
+                -- Choisir un statut --
+              </option>
+              {validStatuses.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+            <button type="button" aria-label="Modifier la réclamation" onClick={updateClaimStatus}>
+              Modifier
+            </button>
+            <button type="button" aria-label="Supprimer la réclamation" onClick={handleDeleteClaim}>
+              Supprimer
+            </button>
+          </div>
+        </>
+      )}
     </section>
   );
 }

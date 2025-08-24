@@ -4,12 +4,14 @@ import productsStyles from "../../../_components/ProductsComponent/productsCompo
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useModal } from "../../../../context/ModalContext";
 import BackBtn from "../../../_components/reusable/backBtn";
 import toast from "react-hot-toast";
 
 const categories = ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie"];
 
 export default function SingleProduct() {
+  const { openModal } = useModal();
   const router = useRouter();
   const [product, setProduct] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -98,6 +100,16 @@ export default function SingleProduct() {
     } finally {
       setIsLoading(false);
     }
+  };
+  const handleDelete = () => {
+    openModal({
+      content: (
+        <p>
+          Êtes-vous sûr de vouloir <strong>supprimer ce produit</strong> ? Cette action est irréversible.
+        </p>
+      ),
+      onYes: deleteProduct,
+    });
   };
   useEffect(() => {
     fetchProduct();
@@ -274,7 +286,7 @@ export default function SingleProduct() {
               </button>
               <button
                 type="button"
-                onClick={deleteProduct}
+                onClick={handleDelete}
                 aria-label="Supprimer le produit"
                 className={productsStyles.deleteBtn}
               >

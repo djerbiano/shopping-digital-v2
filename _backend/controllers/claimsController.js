@@ -34,5 +34,66 @@ async function addClaim(claim) {
 
   return result;
 }
+async function getAllClaimsForAdmin(idAdmin, limitClaims = 5, page = 1, queryClaims = {}) {
+  console.log(queryClaims);
+  if (!idAdmin) {
+    throw createHttpError("idAdmin est requis", 400);
+  }
 
-export { addClaim };
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const limit = limitClaims;
+  const skip = (page - 1) * limit;
+  const query = queryClaims;
+
+  const totalClaims = await Order.countDocuments(query);
+  const totalPages = Math.ceil(totalClaims / limit);
+  let claims = await Claim.find(query.status ? { status: query.status } : {})
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .populate("order");
+
+  if (query.email) {
+    claims = claims.filter((claim) => claim.order && claim.order.email === query.email);
+  }
+
+  return {
+    claims,
+    pagination: {
+      totalClaims,
+      totalPages,
+      currentPage: page,
+    },
+  };
+}
+async function getOneClaimForAdmin(idAdmin, claimId) {
+  if (!idAdmin || !claimId) {
+    throw createHttpError("idAdmin et claimId sont requis", 400);
+  }
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const claim = await Claim.findById(claimId).populate("order");
+  if (!claim) {
+    throw createHttpError("Réclamation introuvable", 404);
+  }
+
+  return claim;
+}
+
+export { addClaim, getAllClaimsForAdmin, getOneClaimForAdmin };
