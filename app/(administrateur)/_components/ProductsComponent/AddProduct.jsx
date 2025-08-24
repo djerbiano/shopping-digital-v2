@@ -312,12 +312,12 @@ export default function AddProduct({ onClose }) {
           {colors.map((color, colorIndex) => (
             <div key={colorIndex} className={styles.colorItem}>
               <div className={styles.colorHeader}>
-                <label htmlFor="color" className={styles.srOnly}>
+                <label htmlFor={`color-${colorIndex}`} className={styles.srOnly}>
                   Nom de la couleur *
                 </label>
                 <input
                   type="text"
-                  id="color"
+                  id={`color-${colorIndex}`}
                   placeholder="Nom de la couleur *"
                   value={color.color}
                   onChange={(e) => updateColor(colorIndex, e.target.value)}
@@ -333,23 +333,23 @@ export default function AddProduct({ onClose }) {
               <div className={styles.sizesContainer}>
                 {color.sizes.map((size, sizeIndex) => (
                   <div key={sizeIndex} className={styles.sizeRow}>
-                    <label htmlFor="size" className={styles.srOnly}>
+                    <label htmlFor={`size-${colorIndex}-${sizeIndex}`} className={styles.srOnly}>
                       Taille
                     </label>
                     <input
                       type="text"
-                      id="size"
+                      id={`size-${colorIndex}-${sizeIndex}`}
                       placeholder="Taille (ex: S, M, L, 38, 39...) *"
                       value={size.size}
                       onChange={(e) => updateSize(colorIndex, sizeIndex, "size", e.target.value)}
                       className={styles.sizeInput}
                     />
-                    <label htmlFor="quantity" className={styles.srOnly}>
+                    <label htmlFor={`quantity-${colorIndex}-${sizeIndex}`} className={styles.srOnly}>
                       Quantité
                     </label>
                     <input
                       type="number"
-                      id="quantity"
+                      id={`quantity-${colorIndex}-${sizeIndex}`}
                       placeholder="Quantité"
                       value={size.quantity}
                       onChange={(e) => updateSize(colorIndex, sizeIndex, "quantity", e.target.value)}
@@ -428,14 +428,14 @@ export default function AddProduct({ onClose }) {
         </fieldset>
 
         <div className={styles.formActions}>
+          <button type="submit" disabled={loading} className={styles.submitButton}>
+            {loading ? "En cours..." : "Ajouter le produit"}
+          </button>
           {onClose && (
             <button type="button" onClick={onClose} className={styles.cancelButton}>
               Annuler
             </button>
           )}
-          <button type="submit" disabled={loading} className={styles.submitButton}>
-            {loading ? "En cours..." : "Ajouter le produit"}
-          </button>
         </div>
       </form>
     </div>

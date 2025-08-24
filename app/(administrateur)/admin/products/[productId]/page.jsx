@@ -221,7 +221,7 @@ export default function SingleProduct() {
                       alt={`Image ${key}`}
                       sizes="(max-width: 768px) 100vw, 120px"
                       fill
-                      priority
+                      // priority
                     />
                   </div>
                 ))}

@@ -119,7 +119,7 @@ export default function ProductCard({ product }) {
           height={400}
           alt={product?.title || "Image produit"}
           className={styles.productImage}
-          priority
+          // priority
         />
       </div>
 

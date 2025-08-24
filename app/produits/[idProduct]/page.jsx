@@ -146,7 +146,7 @@ export default function DisplaySelectedProduct() {
             alt={`Image du produit ${dataContent?.title}`}
             width={300}
             height={300}
-            priority
+            // priority
             className={styles.bannerImage}
           />
         ) : null}
@@ -165,7 +165,7 @@ export default function DisplaySelectedProduct() {
                 alt={`Miniature 1 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}
-                priority
+                // priority
               />
             </div>
           )}
@@ -182,7 +182,7 @@ export default function DisplaySelectedProduct() {
                 alt={`Miniature 2 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}
-                priority
+                // priority
               />
             </div>
           )}
@@ -199,7 +199,7 @@ export default function DisplaySelectedProduct() {
                 alt={`Miniature 3 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}
-                priority
+                // priority
               />
             </div>
           )}

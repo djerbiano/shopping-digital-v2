@@ -121,7 +121,7 @@ export default function Panier() {
                           alt={dbProduct?.title}
                           width={400}
                           height={400}
-                          priority
+                          // priority
                         />
                       </div>
 
