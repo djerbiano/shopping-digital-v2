@@ -46,7 +46,7 @@ export default function DisplaySelectedProduct() {
 
   useEffect(() => {
     if (dataContent?.pictures?.pic1) {
-      setShowPicture(`/${dataContent.pictures.pic1}`);
+      setShowPicture(`${dataContent.pictures.pic1}`);
     } else {
       setShowPicture(null);
     }
@@ -158,10 +158,10 @@ export default function DisplaySelectedProduct() {
               onKeyDown={handleAccessibleClick}
               role="button"
               aria-label="Voir miniature 1"
-              onClick={() => handleThumbnailClick(`/${dataContent.pictures.pic1}`)}
+              onClick={() => handleThumbnailClick(`${dataContent.pictures.pic1}`)}
             >
               <Image
-                src={`/${dataContent.pictures.pic1}`}
+                src={`${dataContent.pictures.pic1}`}
                 alt={`Miniature 1 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}
@@ -175,10 +175,10 @@ export default function DisplaySelectedProduct() {
               onKeyDown={handleAccessibleClick}
               role="button"
               aria-label="Voir miniature 2"
-              onClick={() => handleThumbnailClick(`/${dataContent.pictures.pic2}`)}
+              onClick={() => handleThumbnailClick(`${dataContent.pictures.pic2}`)}
             >
               <Image
-                src={`/${dataContent.pictures.pic2}`}
+                src={`${dataContent.pictures.pic2}`}
                 alt={`Miniature 2 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}
@@ -192,10 +192,10 @@ export default function DisplaySelectedProduct() {
               onKeyDown={handleAccessibleClick}
               role="button"
               aria-label="Voir miniature 3"
-              onClick={() => handleThumbnailClick(`/${dataContent.pictures.pic3}`)}
+              onClick={() => handleThumbnailClick(`${dataContent.pictures.pic3}`)}
             >
               <Image
-                src={`/${dataContent.pictures.pic3}`}
+                src={`${dataContent.pictures.pic3}`}
                 alt={`Miniature 3 du produit ${dataContent?.title}`}
                 width={200}
                 height={200}

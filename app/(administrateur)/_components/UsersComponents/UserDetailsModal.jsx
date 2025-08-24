@@ -62,7 +62,7 @@ export default function UserDetailsModal({ user, onClose, refetchUsers }) {
         <div className={userStyles.userDetailsWrapper}>
           {/* <div className={userStyles.avatarContainer}>
             <Image
-              src={`/${user.avatar}`}
+              src={`${user.avatar}`}
               alt={`Avatar de ${user.name}`}
               width={200}
               height={200}

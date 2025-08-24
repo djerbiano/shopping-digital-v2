@@ -5,11 +5,13 @@ import productsStyles from "../../_components/ProductsComponent/productsComponen
 import { useRouter } from "next/navigation";
 import UpdateBtn from "../../_components/reusable/updateBtn";
 import Pagination from "../../_components/DashboardComponent/Pagination";
+import AddProduct from "../../_components/ProductsComponent/AddProduct";
 import toast from "react-hot-toast";
 
 export default function Products() {
   const router = useRouter();
   const [error, setError] = useState(null);
+  const [showAddProductComponent, setShowAddProductComponent] = useState(false);
   const [products, setProducts] = useState([]);
   const [limitProducts, setLimitProducts] = useState(5);
   const [page, setPage] = useState(1);
@@ -109,120 +111,126 @@ export default function Products() {
   }
 
   return (
-    <section aria-labelledby="section-products" className={styles.adminContent}>
-      <h3 id="section-products">Produits</h3>
+    <>
+      {showAddProductComponent ? (
+        <AddProduct setShowAddProductComponent={setShowAddProductComponent} categories={categories} onClose={() => setShowAddProductComponent(false)} />
+      ) : (
+        <section aria-labelledby="section-products" className={styles.adminContent}>
+          <h3 id="section-products">Produits</h3>
 
-      <div className={productsStyles.actionsRow}>
-        <div className={productsStyles.rightActions}>
-          <button>Ajouter un produit</button>
-        </div>
-      </div>
-
-      <div className={productsStyles.filterRow}>
-        <label htmlFor="category" className={styles.srOnly}>
-          Filtrer par catégorie :
-        </label>
-        <select
-          id="category"
-          name="category"
-          value={category.selectedCategory}
-          onChange={(e) => {
-            setCategory({ selectedCategory: e.target.value });
-            setPage(1);
-          }}
-        >
-          <option value="">Toutes catégories</option>
-          {categories?.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-
-        <div className={productsStyles.filterDropdown}>
-          <button onClick={() => setShowFilter(!showFilter)} className={productsStyles.filterButton}>
-            Filtres avancés
-          </button>
-          {showFilter && (
-            <div className={productsStyles.checkboxFilters}>
-              {Object.keys(filtersAdvanced).map((key) => (
-                <label key={key}>
-                  <input type="checkbox" checked={filtersAdvanced[key]} onChange={() => handleFilterChange(key)} />
-                  {filterLabels[key]}
-                </label>
-              ))}
+          <div className={productsStyles.actionsRow}>
+            <div className={productsStyles.rightActions}>
+              <button onClick={() => setShowAddProductComponent(true)}>Ajouter un produit</button>
             </div>
-          )}
-        </div>
+          </div>
 
-        <label htmlFor="limitProducts" aria-hidden="true">
-          Nombre de produits par page
-        </label>
-        <select
-          name="limitProducts"
-          id="limitProducts"
-          value={limitProducts}
-          aria-label="Nombre de commandes par page"
-          className={productsStyles.productsSelect}
-          onChange={(e) => {
-            setPage(1);
-            setLimitProducts(e.target.value);
-          }}
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20">20</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </div>
+          <div className={productsStyles.filterRow}>
+            <label htmlFor="category" className={styles.srOnly}>
+              Filtrer par catégorie :
+            </label>
+            <select
+              id="category"
+              name="category"
+              value={category.selectedCategory}
+              onChange={(e) => {
+                setCategory({ selectedCategory: e.target.value });
+                setPage(1);
+              }}
+            >
+              <option value="">Toutes catégories</option>
+              {categories?.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
 
-      <table className={productsStyles.productsTable}>
-        <thead>
-          <tr>
-            <th>Catégorie</th>
-            <th>Nom</th>
-            <th>Prix</th>
-            <th>Promo</th>
-            <th>Prix promo</th>
-            <th>Top vente</th>
-            <th>Nouvelle collection</th>
-            <th>Édition limitée</th>
-            <th>Modifier</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products?.products?.length <= 0 ? (
-            <tr>
-              <td colSpan="9">Aucun produit trouvé</td>
-            </tr>
-          ) : (
-            products?.products?.map((product) => (
-              <tr key={product._id}>
-                <td data-label="Catégorie">{product.category}</td>
-                <td data-label="Nom">{product.title}</td>
-                <td data-label="Prix">{product.regularPrice} €</td>
-                <td data-label="Promo">{product.isOnSale ? "✅" : "❌"}</td>
-                <td data-label="Prix promo">{product.salePrice ? `${product.salePrice} €` : "-"}</td>
-                <td data-label="Top vente">{product.isTopSeller ? "✅" : "❌"}</td>
-                <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
-                <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
-                <td data-label="Modifier">
-                  <UpdateBtn action={() => handleProductClick(product._id)} text="Modifier le produit" />
-                </td>
+            <div className={productsStyles.filterDropdown}>
+              <button onClick={() => setShowFilter(!showFilter)} className={productsStyles.filterButton}>
+                Filtres avancés
+              </button>
+              {showFilter && (
+                <div className={productsStyles.checkboxFilters}>
+                  {Object.keys(filtersAdvanced).map((key) => (
+                    <label key={key}>
+                      <input type="checkbox" checked={filtersAdvanced[key]} onChange={() => handleFilterChange(key)} />
+                      {filterLabels[key]}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <label htmlFor="limitProducts" aria-hidden="true">
+              Nombre de produits par page
+            </label>
+            <select
+              name="limitProducts"
+              id="limitProducts"
+              value={limitProducts}
+              aria-label="Nombre de commandes par page"
+              className={productsStyles.productsSelect}
+              onChange={(e) => {
+                setPage(1);
+                setLimitProducts(e.target.value);
+              }}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+
+          <table className={productsStyles.productsTable}>
+            <thead>
+              <tr>
+                <th>Catégorie</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Promo</th>
+                <th>Prix promo</th>
+                <th>Top vente</th>
+                <th>Nouvelle collection</th>
+                <th>Édition limitée</th>
+                <th>Modifier</th>
               </tr>
-            ))
+            </thead>
+            <tbody>
+              {products?.products?.length <= 0 ? (
+                <tr>
+                  <td colSpan="9">Aucun produit trouvé</td>
+                </tr>
+              ) : (
+                products?.products?.map((product) => (
+                  <tr key={product._id}>
+                    <td data-label="Catégorie">{product.category}</td>
+                    <td data-label="Nom">{product.title}</td>
+                    <td data-label="Prix">{product.regularPrice} €</td>
+                    <td data-label="Promo">{product.isOnSale ? "✅" : "❌"}</td>
+                    <td data-label="Prix promo">{product.salePrice ? `${product.salePrice} €` : "-"}</td>
+                    <td data-label="Top vente">{product.isTopSeller ? "✅" : "❌"}</td>
+                    <td data-label="Nouvelle collection">{product.isNewCollection ? "✅" : "❌"}</td>
+                    <td data-label="Édition limitée">{product.isLimitedEdition ? "✅" : "❌"}</td>
+                    <td data-label="Modifier">
+                      <UpdateBtn action={() => handleProductClick(product._id)} text="Modifier le produit" />
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+          {error && <p>{error}</p>}
+          {products?.products?.length > 0 && (
+            <Pagination pagination={products?.pagination} currentPage={page} onPageChange={setPage} />
           )}
-        </tbody>
-      </table>
-      {error && <p>{error}</p>}
-      {products?.products?.length > 0 && (
-        <Pagination pagination={products?.pagination} currentPage={page} onPageChange={setPage} />
+        </section>
       )}
-    </section>
+    </>
   );
 }

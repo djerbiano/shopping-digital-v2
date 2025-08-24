@@ -117,7 +117,7 @@ export default function Panier() {
                     <div className={styles.panierItemContent}>
                       <div className={styles.panierItemImage} onClick={() => router.push(`/produits/${dbProduct._id}`)}>
                         <Image
-                          src={`/${dbProduct?.pictures?.pic1}`}
+                          src={`${dbProduct?.pictures?.pic1}`}
                           alt={dbProduct?.title}
                           width={400}
                           height={400}

@@ -114,7 +114,7 @@ export default function ProductCard({ product }) {
 
       <div className={styles.imageContainer}>
         <Image
-          src={`/${product?.pictures?.pic1}`}
+          src={`${product?.pictures?.pic1}`}
           width={400}
           height={400}
           alt={product?.title || "Image produit"}

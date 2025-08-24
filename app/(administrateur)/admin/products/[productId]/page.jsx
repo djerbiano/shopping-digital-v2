@@ -217,7 +217,7 @@ export default function SingleProduct() {
                 {Object.entries(product?.pictures || {})?.map(([key, filename]) => (
                   <div key={key} className={productsStyles.imageItem}>
                     <Image
-                      src={`/${filename}`}
+                      src={`${filename}`}
                       alt={`Image ${key}`}
                       sizes="(max-width: 768px) 100vw, 120px"
                       fill

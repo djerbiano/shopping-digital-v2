@@ -2,8 +2,7 @@ import jwt from "jsonwebtoken";
 import { jwtVerify } from "jose";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
-const path = require("path");
-const fs = require("fs").promises;
+import { del } from "@vercel/blob";
 function generateToken(user) {
   return jwt.sign(
     {
@@ -52,15 +51,32 @@ async function verifyToken(request) {
   }
 }
 
-async function deletePictures(picture) {
-  if (picture !== "avatarDefault.jpg") {
-    const picturePath = path.resolve(process.cwd(), "public", picture);
-    await fs.unlink(picturePath);
+async function deletePictures(pictures) {
+  if (!pictures) return true;
 
-    //if picture is not delete from path , give the name of the picture to the next function
+  try {
+    const deletePromises = [];
 
-    
+    if (pictures.pic1 && !pictures.pic1.includes("avatarDefault")) {
+      deletePromises.push(del(pictures.pic1));
+    }
 
+    if (pictures.pic2 && !pictures.pic2.includes("avatarDefault")) {
+      deletePromises.push(del(pictures.pic2));
+    }
+
+    if (pictures.pic3 && !pictures.pic3.includes("avatarDefault")) {
+      deletePromises.push(del(pictures.pic3));
+    }
+
+    if (deletePromises.length > 0) {
+      await Promise.all(deletePromises);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Erreur suppression images:", error.message);
+    return false;
   }
 }
 export { generateToken, validateObjectId, createHttpError, handleError, verifyToken, deletePictures };
