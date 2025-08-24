@@ -1,18 +1,27 @@
 "use client";
 import styles from "../../page.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import ProductSkeleton from "./loader/ProductSkeleton";
 
 export default function BestSellers({ products }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+
   const handleNextSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % products.length);
   };
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + products.length) % products.length);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % products.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [products]);
+
+
 
   if (!products.length) return;
   return (

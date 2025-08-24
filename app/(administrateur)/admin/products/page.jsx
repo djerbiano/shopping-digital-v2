@@ -113,7 +113,10 @@ export default function Products() {
   return (
     <>
       {showAddProductComponent ? (
-        <AddProduct setShowAddProductComponent={setShowAddProductComponent} categories={categories} onClose={() => setShowAddProductComponent(false)} />
+        <AddProduct setShowAddProductComponent={setShowAddProductComponent} categories={categories} onClose={() => {
+          setShowAddProductComponent(false);
+          fetchProducts();
+        }} />
       ) : (
         <section aria-labelledby="section-products" className={styles.adminContent}>
           <h3 id="section-products">Produits</h3>
