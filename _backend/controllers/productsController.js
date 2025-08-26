@@ -30,6 +30,11 @@ async function getAllProductsForUser(page = 1, filters = {}) {
     }
   }
 
+  //search by title
+  if (filters.search) {
+    query.title = { $regex: filters.search, $options: "i" };
+  }
+
   const totalProducts = await Product.countDocuments(query);
   const totalPages = Math.ceil(totalProducts / limit);
   const products = await Product.find(query).skip(skip).limit(limit);

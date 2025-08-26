@@ -27,9 +27,12 @@ export async function PATCH(request) {
 
     const updatedUser = await updateAccount(data);
 
-    const { password,tokenResetPassword, updatedAt, __v, ...other } = updatedUser.toObject();
+    const { password, tokenResetPassword, updatedAt, __v, ...other } = updatedUser.toObject();
 
-    return NextResponse.json({ message: "Compte mis à jour", user: other }, { status: 200 });
+    return NextResponse.json(
+      { message: "Compte mis à jour, Veuillez vous reconnecter pour avoir les nouvelles informations", user: other },
+      { status: 200 }
+    );
   } catch (error) {
     return handleError(error);
   }

@@ -165,7 +165,7 @@ export default function Claims() {
                 <td>{claim?.order?.total} €</td>
                 <td>{claim?.createdAt?.slice(0, 10)}</td>
                 <td>
-                  <ViewBtn action={() => router.push(`/admin/claims/${claim._id}`)} text="Voir" />
+                  <ViewBtn action={() => router.push(`/admin/claims/${claim?._id}`)} text="Voir" />
                 </td>
               </tr>
             ))

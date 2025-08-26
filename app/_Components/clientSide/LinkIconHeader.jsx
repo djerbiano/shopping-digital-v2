@@ -19,6 +19,7 @@ export default function LinkIconHeader({ icons }) {
         aria-label="Contactez-nous"
         onClick={() => {
           router.push("/contact");
+          setIsMenuOpen(false);
         }}
       >
         <MdHeadsetMic aria-hidden="true" focusable="false" />
@@ -29,6 +30,7 @@ export default function LinkIconHeader({ icons }) {
         aria-label="Panier"
         onClick={() => {
           router.push("/panier");
+          setIsMenuOpen(false);
         }}
       >
         <BsFillCartCheckFill aria-hidden="true" focusable="false" />
@@ -38,6 +40,7 @@ export default function LinkIconHeader({ icons }) {
         aria-label="Favoris"
         onClick={() => {
           router.push("/favoris");
+          setIsMenuOpen(false);
         }}
       >
         <MdFavorite aria-hidden="true" focusable="false" />
@@ -47,6 +50,7 @@ export default function LinkIconHeader({ icons }) {
         aria-label="Mon compte"
         onClick={() => {
           router.push("/connexion");
+          setIsMenuOpen(false);
         }}
       >
         <FaUserAlt aria-hidden="true" focusable="false" />

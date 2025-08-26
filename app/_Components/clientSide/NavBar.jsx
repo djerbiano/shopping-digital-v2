@@ -41,8 +41,6 @@ export default function NavBar() {
     Téléphonie: false,
   };
   const handleNavClick = (category) => {
-   
-
     setCategories({
       ...resetCategories,
       ...(category || {}),
@@ -88,7 +86,6 @@ export default function NavBar() {
       className={`${styles.navHeader} ${styles.navMobile} ${isMenuOpen ? styles.open : ""} `}
       aria-label="Navigation principale"
       ref={container}
-      onClick={() => setIsMenuOpen(false)}
     >
       <InputSearchBar />
       {isMenuOpen && (
@@ -98,7 +95,10 @@ export default function NavBar() {
               key={item.label}
               type="button"
               aria-label={item.label}
-              onClick={() => handleNavClick(item.category)}
+              onClick={() => {
+                handleNavClick(item.category);
+                setIsMenuOpen(false);
+              }}
               ref={addToRefs}
             >
               {item.label}

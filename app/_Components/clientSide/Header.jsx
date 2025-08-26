@@ -3,6 +3,7 @@ import styles from "../../page.module.css";
 import { useMenuHamburger } from "../../context/menuHamburgerContext";
 import { useRef, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { RiCloseLargeLine } from "react-icons/ri";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import NavBar from "./NavBar";
 import gsap from "gsap";
@@ -52,7 +53,11 @@ export default function Header() {
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <GiHamburgerMenu aria-hidden="true" />
+          {isMenuOpen ? (
+            <RiCloseLargeLine aria-hidden="true" focusable="false" />
+          ) : (
+            <GiHamburgerMenu aria-hidden="true" focusable="false" />
+          )}
         </button>
         <h1
           className={!animStarted ? styles.textHiddenBeforeAnim : ""}

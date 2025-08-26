@@ -14,6 +14,12 @@ export async function GET(req) {
       throw createHttpError("Le paramètre page doit être un entier positif", 400);
     }
 
+    const SearcheByTitle = searchParams.get("search");
+    if (SearcheByTitle) {
+      const result = await getAllProductsForUser(page, { search: SearcheByTitle });
+      return NextResponse.json(result);
+    }
+
     const categoryParams = searchParams.getAll("category");
     const allowedCategories = ["Homme", "Femme", "Informatique", "TvSon", "Téléphonie"];
     if (!categoryParams.every((cat) => allowedCategories.includes(cat))) {
@@ -32,6 +38,7 @@ export async function GET(req) {
     if (minPrice !== null && maxPrice !== null && Number(minPrice) > Number(maxPrice)) {
       throw createHttpError("minPrice ne peut pas être supérieur à maxPrice", 400);
     }
+
     const filters = {
       categories: categoryParams.length > 0 ? categoryParams : [],
       minPrice: minPrice !== null ? Number(minPrice) : undefined,
