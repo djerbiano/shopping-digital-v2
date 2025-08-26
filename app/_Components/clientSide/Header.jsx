@@ -61,12 +61,16 @@ export default function Header() {
         </button>
         <h1
           className={!animStarted ? styles.textHiddenBeforeAnim : ""}
-          onClick={() => router.push("/")}
+          onClick={() => {
+            router.push("/");
+            setIsMenuOpen(false);
+          }}
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               router.push("/");
+              setIsMenuOpen(false);
             }
           }}
         >
@@ -78,6 +82,7 @@ export default function Header() {
           className={styles.secondCartButton}
           onClick={() => {
             router.push("/panier");
+            setIsMenuOpen(false);
           }}
         >
           <BsFillCartCheckFill aria-hidden="true" focusable="false" />

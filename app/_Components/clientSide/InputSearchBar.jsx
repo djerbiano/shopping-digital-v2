@@ -36,7 +36,7 @@ export default function InputSearchBar() {
         onChange={(e) => setInputValue(e.target.value)}
       />
 
-      {inputValue.length >= 2 && <ResultsView search={inputValue} setInputValue={setInputValue} inputRef={inputRef} />}
+      {inputValue.length >= 2 && <ResultsView search={inputValue} setInputValue={setInputValue} inputRef={inputRef} setIsMenuOpen={setIsMenuOpen} />}
     </div>
   );
 }

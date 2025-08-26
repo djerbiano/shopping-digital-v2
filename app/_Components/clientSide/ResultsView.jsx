@@ -2,7 +2,7 @@
 import styles from "../../page.module.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-export default function ResultsView({ search, setInputValue, inputRef }) {
+export default function ResultsView({ search, setInputValue, inputRef ,setIsMenuOpen}) {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +56,7 @@ export default function ResultsView({ search, setInputValue, inputRef }) {
   const handlNextPage = (e) => {
     e.preventDefault();
     setPage((prevPage) => prevPage + 1);
+    setIsMenuOpen(false);
   };
 
   const handlProductClick = (productId) => {
@@ -63,6 +64,7 @@ export default function ResultsView({ search, setInputValue, inputRef }) {
       inputRef.current.blur();
     }
     router.push(`/produits/${productId}`);
+    setIsMenuOpen(false);
     setInputValue("");
   };
 
