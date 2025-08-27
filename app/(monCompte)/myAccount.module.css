@@ -184,6 +184,10 @@
 .updateProfile form .formGroup input {
   width: 100%;
 }
+
+.updateProfile form .formGroup .warning{
+  color: red;
+}
 .claimForm {
   width: 100%;
   display: flex;

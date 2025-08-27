@@ -16,7 +16,7 @@ export async function GET(request) {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
     const { payload } = await jwtVerify(token, secret);
 
-    if (!payload?.email) {
+    if (!payload?._id) {
       return NextResponse.json({ message: "Token invalide ou mal formé" }, { status: 401 });
     }
 

@@ -171,21 +171,21 @@ async function addOrder(cart) {
   }
 }
 async function showOrderForUser(data) {
-  if (!data.email) {
-    throw createHttpError("Une adresse mail est requise", 400);
+  if (!data._id) {
+    throw createHttpError("Un id est requis", 400);
   }
 
-  const user = await User.findOne({ email: data.email });
+  const user = await User.findOne({ _id: data._id });
 
   if (!user) {
     throw createHttpError("Utilisateur introuvable", 404);
   }
 
-  if (data.email !== user.email && !user.isAdmin) {
+  if (data._id !== user._id.toString() && !user.isAdmin) {
     throw createHttpError("Vous n'avez pas le droit de voir ces commandes", 404);
   }
 
-  const orders = await Order.find({ email: data.email }).populate("products.product").sort({ createdAt: -1 });
+  const orders = await Order.find({ email: user.email }).populate("products.product").sort({ createdAt: -1 });
 
   return orders;
 }
