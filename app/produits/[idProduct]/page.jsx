@@ -1,7 +1,7 @@
 "use client";
 import styles from "../../page.module.css";
 import Image from "next/image";
-import Collapse from "@/app/_Components/clientSide/Collapse";
+import Collapse from "../../_Components/clientSide/Collapse";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import SkeletonProductIdPage from "../../_Components/clientSide/SkeletonElements/SkeletonProductIdPage/SkeletonProductIdPage";

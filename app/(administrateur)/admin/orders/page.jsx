@@ -166,7 +166,7 @@ export default function Orders() {
               <tr key={order?._id}>
                 <td data-label="Email">{order?.email}</td>
                 <td data-label="Statut">{order?.status}</td>
-                <td data-label="Total">{order?.total}</td>
+                <td data-label="Total">{order?.total} €</td>
                 <td data-label="Date">{order?.createdAt?.slice(0, 10)}</td>
                 <td data-label="Actions">
                   <ViewBtn action={() => router.push(`/admin/orders/${order?._id}`)} text="Voir la commande" />

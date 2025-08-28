@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/app/loading";
+import Loading from "../../loading";
 import dynamic from "next/dynamic";
 
 const HomeClient = dynamic(() => import("./HomeClient"), {

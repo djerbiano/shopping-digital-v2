@@ -1,10 +1,11 @@
 "use client";
 import styles from "../../../admin.module.css";
-import claimsStyles from "../claims.module.css";
 import { useModal } from "../../../../context/ModalContext";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import BackBtn from "@/app/(administrateur)/_components/reusable/backBtn";
+import claimsStyles from "../claims.module.css";
+import BackBtn from "../../../_components/reusable/backBtn";
+import toast from "react-hot-toast";
 
 export default function Claims() {
   const router = useRouter();
@@ -20,10 +21,60 @@ export default function Claims() {
   };
 
   const updateClaimStatus = async () => {
-    console.log(claimStatus);
+    if (claimStatus === "" || !validStatuses.includes(claimStatus)) {
+      toast.error("Veuillez choisir un statut valide");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch("/api/admin/claims/update", {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ claimStatus, claimId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setErreur(data?.message || "Une erreur est survenue");
+      } else {
+        toast.success(data?.message || "Statut mis à jour");
+        setClaimStatus("");
+        fetchOneClaim();
+      }
+    } catch (error) {
+      setErreur(error?.message || "Une erreur est survenue");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   const deleteclaimFunction = async () => {
-    console.log(`Réclamation n°${claimId} supprimée`);
+    setLoading(true);
+    try {
+      const response = await fetch("/api/admin/claims/delete", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ claimId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setErreur(data?.message || "Une erreur est survenue");
+      } else {
+        toast.success(data?.message || "Réclamation supprimée");
+        router.replace("/admin/claims");
+      }
+    } catch (error) {
+      setErreur(error?.message || "Une erreur est survenue");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   const handleDeleteClaim = () => {
     openModal({
@@ -53,6 +104,7 @@ export default function Claims() {
         setOneClaim(data);
       }
     } catch (error) {
+      setErreur(error?.message || "Une erreur est survenue");
       console.log(error);
     } finally {
       setLoading(false);
@@ -65,7 +117,7 @@ export default function Claims() {
   if (loading) {
     return <p>Chargement...</p>;
   }
-
+  const CompteUndefined = oneClaim?.order?.email === undefined;
   return (
     <section aria-labelledby="section-claims" className={styles.adminContent}>
       <BackBtn />
@@ -74,7 +126,7 @@ export default function Claims() {
         <p>{erreur}</p>
       ) : (
         <>
-          <h3 id="section-claims">Réclamation de {oneClaim?.order?.email}</h3>
+          <h3 id="section-claims">Réclamation de {oneClaim?.order?.email || "[La commande a été supprimée]"}</h3>
 
           <div className={claimsStyles.claimContainer}>
             <div className={claimsStyles.claimStatus}>
@@ -84,20 +136,23 @@ export default function Claims() {
 
             <div className={claimsStyles.claimOrder}>
               <h4>Commande ID</h4>
-              <p>{oneClaim?.order?._id}</p>
+              <p>{oneClaim?.order?._id || "[La commande a été supprimée]"}</p>
               <button
+                disabled={CompteUndefined}
                 className={claimsStyles.claimOrderBtn}
                 type="button"
                 aria-label="Consulter la commande"
                 title="Consulter la commande"
-                onClick={() => router.push(`/admin/orders/${oneClaim?.order?._id}`)}
+                onClick={() => {
+                  CompteUndefined ? "" : router.push(`/admin/orders/${oneClaim?.order?._id}`);
+                }}
               >
                 Voir la commande
               </button>
             </div>
 
             <div className={claimsStyles.claimMessage}>
-              <h4>Message de {oneClaim?.order?.email}</h4>
+              <h4>Message de {oneClaim?.order?.email || "[La commande a été supprimée]"}</h4>
               {oneClaim?.messages?.map((m) => (
                 <p key={m._id}>
                   {new Date(m?.startDate).toLocaleString()} ➤ {m?.message}

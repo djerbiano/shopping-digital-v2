@@ -160,9 +160,9 @@ export default function Claims() {
           ) : (
             claims?.claims?.map((claim) => (
               <tr key={claim?._id}>
-                <td>{claim?.order?.email}</td>
+                <td>{claim?.order?.email || "La commande a été supprimée"}</td>
                 <td>{claim?.status}</td>
-                <td>{claim?.order?.total} €</td>
+                <td>{claim?.order?.total || 0} €</td>
                 <td>{claim?.createdAt?.slice(0, 10)}</td>
                 <td>
                   <ViewBtn action={() => router.push(`/admin/claims/${claim?._id}`)} text="Voir" />

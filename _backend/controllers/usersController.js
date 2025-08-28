@@ -10,7 +10,6 @@ import {
 } from "../models/Users.js";
 import { generateToken, validateObjectId, createHttpError } from "../utils/helpers.js";
 import sendResetPasswordLink from "../mails/sendResetPaswwordLink.js";
-import Users from "@/app/(administrateur)/admin/users/page.jsx";
 
 async function createUser(body) {
   const data = {

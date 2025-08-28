@@ -96,4 +96,67 @@ async function getOneClaimForAdmin(idAdmin, claimId) {
   return claim;
 }
 
-export { addClaim, getAllClaimsForAdmin, getOneClaimForAdmin };
+async function updateClaimStatus(idAdmin, newStatus, claimId) {
+  if (!idAdmin || !newStatus || !claimId) {
+    throw createHttpError("idAdmin, claimId et newStatus sont requis", 400);
+  }
+
+  validateObjectId(claimId);
+
+  validateObjectId(idAdmin);
+
+  const validStatuses = ["En attente", "Traitement", "Cloturer"];
+
+  if (!validStatuses.includes(newStatus)) {
+    throw createHttpError("Veuillez choisir un statut valide", 400);
+  }
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const claim = await Claim.findById(claimId);
+  if (!claim) {
+    throw createHttpError("Réclamation introuvable", 404);
+  }
+
+  claim.status = newStatus;
+  const result = await claim.save();
+  if (!result) {
+    throw createHttpError("Une erreur est survenue lors de la mise à jour de la réclamation", 500);
+  }
+
+  return result;
+}
+
+async function deleteOneClaim(idAdmin, claimId) {
+  if (!idAdmin || !claimId) {
+    throw createHttpError("idAdmin et claimId sont requis", 400);
+  }
+
+  validateObjectId(claimId);
+
+  validateObjectId(idAdmin);
+
+  const admin = await User.findById(idAdmin);
+  if (!admin) {
+    throw createHttpError("Admin introuvable", 404);
+  }
+
+  if (!admin.isAdmin) {
+    throw createHttpError("L'utilisateur n'est pas un admin", 403);
+  }
+
+  const claim = await Claim.deleteOne({ _id: claimId });
+  if (claim.deletedCount === 0) {
+    throw createHttpError("Impossible de supprimer la réclamation, veuillez réessayer plus tard", 500);
+  }
+
+  return { message: "Réclamation supprimée avec succès" };
+}
+
+export { addClaim, getAllClaimsForAdmin, getOneClaimForAdmin, updateClaimStatus, deleteOneClaim };
