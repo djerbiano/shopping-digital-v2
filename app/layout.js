@@ -25,7 +25,43 @@ export const metadata = {
     "e-commerce France",
     "boutique digitale",
   ],
-  robots: "all",
+  authors: [{ name: "Shopping Digital", url: "https://shopping-digital.vercel.app" }],
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  openGraph: {
+    title: "Shopping Digital - Vêtements, Tech & Accessoires Tendances",
+    description: "Boutique en ligne tout-en-un : smartphones, ordinateurs, montres, sacs & mode à petits prix.",
+    url: "https://shopping-digital.vercel.app",
+    siteName: "Shopping Digital",
+    images: [
+      {
+        url: "https://shopping-digital.vercel.app/og-image.png",
+        width: 1592,
+        height: 830,
+        alt: "Shopping Digital - Boutique en ligne",
+      },
+    ],
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shopping Digital - Vêtements, Tech & Accessoires Tendances",
+    description: "Boutique en ligne tout-en-un : smartphones, ordinateurs, montres, sacs & mode à petits prix.",
+    images: ["https://shopping-digital.vercel.app/og-image.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
